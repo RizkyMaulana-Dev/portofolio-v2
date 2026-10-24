@@ -1,0 +1,21 @@
+# build
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor
+.vscode/
+
+# env
+.env
+
+# agentic
+.claude/
