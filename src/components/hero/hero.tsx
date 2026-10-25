@@ -20,7 +20,7 @@ export function Hero() {
       ref={heroRef}
       id="hero"
       className="relative"
-      style={{ height: "300vh" }}
+      style={{ height: "200vh" }}
       aria-label="Hero"
     >
       <div
