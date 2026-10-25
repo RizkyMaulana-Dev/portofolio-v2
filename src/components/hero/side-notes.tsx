@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTime, useScroll } from "framer-motion";
+import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { hero } from "@/content/hero";
+import { useSectionProgress } from "@/lib/use-section-progress";
 
 export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -21,11 +22,7 @@ export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement | 
 }
 
 function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end end"],
-  });
-  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.6 });
+  const smooth = useSectionProgress(heroRef);
   const time = useTime();
   const y = useMotionValue(0);
   const x = useMotionValue(0);
@@ -90,11 +87,7 @@ function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> })
 }
 
 function RightNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end end"],
-  });
-  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.6 });
+  const smooth = useSectionProgress(heroRef);
   const time = useTime();
   const y = useMotionValue(0);
   const x = useMotionValue(0);

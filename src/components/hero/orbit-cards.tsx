@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTime, useScroll } from "framer-motion";
+import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { OrbitCard as OrbitCardView } from "./orbit-card";
 import { hero, type OrbitCard } from "@/content/hero";
 import { computeCard, getCardCount, getOrbitConfig, type StageSize } from "@/lib/orbit";
 import { useStageSize } from "@/lib/use-stage-size";
+import { useSectionProgress } from "@/lib/use-section-progress";
 
 function AnimatedOrbitCard({
   card,
@@ -27,11 +28,7 @@ function AnimatedOrbitCard({
 
   const stageSize = useStageSize();
   const time = useTime();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.6 });
+  const smoothProgress = useSectionProgress(containerRef);
 
   const prefersReduced =
     typeof window !== "undefined" &&
@@ -120,7 +117,6 @@ export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTM
 
   return (
     <div
-      ref={containerRef as React.Ref<HTMLDivElement>}
       className="absolute inset-0 pointer-events-none overflow-hidden"
       style={{ height: "100%" }}
     >
