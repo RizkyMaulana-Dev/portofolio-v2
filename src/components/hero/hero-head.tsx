@@ -26,7 +26,7 @@ export function HeroHead() {
     <img
       src="/images/hero-head.png"
       alt=""
-      className="relative z-[4] mx-auto w-[65%] md:w-[52%] min-w-[240px] max-w-[600px] object-contain pointer-events-none"
+      className="relative z-[4] -mx-6 w-[calc(100%_+_3rem)] max-w-none md:mx-auto md:w-[52%] md:max-w-[600px] min-w-[240px] object-contain pointer-events-none"
       aria-hidden="true"
     />
   ) : (

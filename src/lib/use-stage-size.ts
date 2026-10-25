@@ -7,10 +7,9 @@ export interface StageSize {
 }
 
 export function useStageSize(): StageSize {
-  const [size, setSize] = useState<StageSize>({
-    width: typeof window !== "undefined" ? window.innerWidth : 1440,
-    height: typeof window !== "undefined" ? window.innerHeight : 900,
-  });
+  // Keep the server and first client render identical (hydration), then
+  // measure the real viewport in the effect below.
+  const [size, setSize] = useState<StageSize>({ width: 1440, height: 900 });
 
   const handleResize = useCallback(() => {
     setSize({ width: window.innerWidth, height: window.innerHeight });

@@ -10,9 +10,8 @@ import { hero } from "@/content/hero";
 import { useSectionProgress } from "@/lib/use-section-progress";
 
 export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  if (isMobile) return null;
-
+  // Rendered on the server too; the notes are hidden below lg via CSS.
+  // (A `window.innerWidth` branch here causes a hydration mismatch.)
   return (
     <>
       <LeftNote heroRef={heroRef} />

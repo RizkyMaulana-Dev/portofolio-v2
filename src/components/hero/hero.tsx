@@ -35,7 +35,7 @@ export function Hero() {
         <HeroNavbar />
 
         {/* Main content area - flex column to push head to bottom */}
-        <div className="flex-1 flex flex-col items-center justify-end px-6 md:px-10 lg:px-16 pb-0 gap-4 mt-[56px] md:mt-[80px]">
+        <div className="flex-1 flex flex-col items-center justify-between px-6 md:px-10 lg:px-16 pb-0 gap-4 mt-[92px] md:mt-[96px]">
           <HeroCopy />
           <HeroHead />
         </div>

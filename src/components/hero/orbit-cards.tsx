@@ -8,6 +8,7 @@ import { hero, type OrbitCard } from "@/content/hero";
 import { computeCard, getCardCount, getOrbitConfig, type StageSize } from "@/lib/orbit";
 import { useStageSize } from "@/lib/use-stage-size";
 import { useSectionProgress } from "@/lib/use-section-progress";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 function AnimatedOrbitCard({
   card,
@@ -30,26 +31,20 @@ function AnimatedOrbitCard({
   const time = useTime();
   const smoothProgress = useSectionProgress(containerRef);
 
-  const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReduced = usePrefersReducedMotion();
 
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (prefersReduced || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const cfg = getOrbitConfig(stageSize.width);
-    cfg.centerY = stageSize.height * 0.66;
+    // Mobile: bigger head (full width) puts the face lower, so drop the pivot
+    const centerFactor = stageSize.width < 768 ? 0.8 : 0.66;
+    cfg.centerY = stageSize.height * centerFactor;
 
     let lastFront: boolean | null = null;
-    let raf: number;
-    const update = () => {
-      const p = smoothProgress.get();
-      const t = time.get() / 1000;
-      const size: StageSize = stageSize;
-      const res = computeCard(i, p, t, size, cfg);
-
+    const apply = (res: ReturnType<typeof computeCard>) => {
       x.set(res.x);
       y.set(res.y);
       scale.set(res.scale);
@@ -63,7 +58,22 @@ function AnimatedOrbitCard({
         cardRef.current.style.zIndex = res.front ? "5" : "2";
         lastFront = res.front;
       }
+    };
 
+    // Reduced motion: one static pose, no animation loop. Same markup as the
+    // animated version (a separate render branch breaks hydration when the
+    // media query resolves during React's hydration pass).
+    if (prefersReduced) {
+      apply(computeCard(i, 0, 0, stageSize, cfg));
+      return;
+    }
+
+    let raf: number;
+    const update = () => {
+      const p = smoothProgress.get();
+      const t = time.get() / 1000;
+      const size: StageSize = stageSize;
+      apply(computeCard(i, p, t, size, cfg));
       raf = requestAnimationFrame(update);
     };
 
@@ -71,25 +81,13 @@ function AnimatedOrbitCard({
     return () => cancelAnimationFrame(raf);
   }, [i, smoothProgress, time, stageSize, containerRef, prefersReduced]);
 
-  if (prefersReduced) {
-    return (
-      <motion.div
-        className={cn(
-          "absolute left-1/2 top-[66%] -translate-x-1/2 -translate-y-1/2",
-          "w-[clamp(9.5rem,15vw,14rem)]"
-        )}
-        style={{ opacity: 1 }}
-      >
-        <OrbitCardView {...card} />
-      </motion.div>
-    );
-  }
-
   return (
     <motion.div
       ref={cardRef}
       className={cn(
-        "absolute left-0 top-0 will-change-transform z-[2]"
+        "absolute left-0 top-0 will-change-transform z-[2]",
+        // Center the card on its orbit point (mobile only; desktop keeps its tuned offset)
+        "-translate-x-1/2 -translate-y-1/2 md:translate-x-0 md:translate-y-0"
       )}
       style={{ x, y, scale, opacity, filter: blur }}
     >
@@ -107,13 +105,8 @@ function AnimatedOrbitCard({
 export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
   const stageSize = useStageSize();
   const cardCount = useMemo(() => getCardCount(stageSize.width), [stageSize.width]);
-  const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const cardsToShow = prefersReduced
-    ? hero.cards.slice(0, 6)
-    : hero.cards.slice(0, cardCount);
+  const cardsToShow = hero.cards.slice(0, cardCount);
 
   return (
     <div

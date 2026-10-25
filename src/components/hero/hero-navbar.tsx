@@ -1,11 +1,30 @@
 "use client";
 
 import { useState } from "react";
+import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { hero } from "@/content/hero";
+
+const MENU_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const menuList: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.055, delayChildren: 0.1 },
+  },
+};
+
+const menuItem: Variants = {
+  hidden: { opacity: 0, x: 18 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.38, ease: MENU_EASE },
+  },
+};
 
 export function HeroNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -65,39 +84,71 @@ export function HeroNavbar() {
               <Menu className="h-5 w-5" aria-hidden="true" />
             </button>
           </SheetTrigger>
-          <SheetContent className="w-[300px] p-0">
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between p-6 border-b border-border">
+
+          <SheetContent
+            showClose={false}
+            className="w-[300px] max-w-[85vw] border-0 bg-transparent p-0 shadow-none"
+          >
+            <SheetTitle className="sr-only">Menu</SheetTitle>
+
+            {/* The whole panel is draggable: swipe right to dismiss. */}
+            <motion.div
+              className="flex h-full w-full flex-col bg-background shadow-xl"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={{ left: 0, right: 0.55 }}
+              dragDirectionLock
+              onDragEnd={(_, info) => {
+                if (info.offset.x > 90 || info.velocity.x > 550) {
+                  setMobileOpen(false);
+                }
+              }}
+            >
+              <div className="flex justify-center pt-3" aria-hidden="true">
+                <span className="h-1 w-10 rounded-full bg-foreground/15" />
+              </div>
+
+              <div className="flex items-center justify-between p-6 pt-3 border-b border-border">
                 <span className="text-lg font-semibold">{hero.brand}</span>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-full p-2 hover:bg-muted"
+                  className={cn(
+                    "rounded-full p-2 hover:bg-muted transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  )}
                   aria-label="Close menu"
                 >
                   <X className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
-              <nav className="flex flex-col gap-1 p-6 pt-4">
+
+              <motion.nav
+                className="flex flex-col gap-1 p-6 pt-4"
+                variants={menuList}
+                initial="hidden"
+                animate="show"
+              >
                 {hero.nav.map((item) => (
-                  <a
+                  <motion.a
                     key={item.label}
+                    variants={menuItem}
                     href={item.href}
                     className="py-3 text-base font-medium text-foreground hover:text-muted-foreground"
                     onClick={() => setMobileOpen(false)}
                   >
                     {item.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <div className="pt-4">
+                <motion.div variants={menuItem} className="pt-4">
                   <Button className="w-full" asChild>
-                    <a href={hero.navCta.href}>
+                    <a href={hero.navCta.href} onClick={() => setMobileOpen(false)}>
                       {hero.navCta.label}
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </Button>
-                </div>
-              </nav>
-            </div>
+                </motion.div>
+              </motion.nav>
+            </motion.div>
           </SheetContent>
         </Sheet>
       </div>
