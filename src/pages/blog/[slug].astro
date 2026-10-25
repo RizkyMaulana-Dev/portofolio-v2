@@ -1,0 +1,144 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { PostArt } from '../../components/blog/post-art';
+import { formatBlogDate } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const currentIndex = posts.findIndex((entry) => entry.id === post.id);
+const nextPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
+---
+
+<BlogLayout
+  title={`${post.data.title} · Rizky Maulana`}
+  description={post.data.description}
+  ogType="article"
+>
+  <article class="pb-24">
+    <div class="mx-auto max-w-[1280px] px-6 pt-10 md:px-10 md:pt-16 lg:px-16 lg:pt-20">
+      <a
+        href="/blog"
+        class="inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+      >
+        <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
+        All notes
+      </a>
+
+      <header class="mt-10 max-w-[1000px] md:mt-14">
+        <div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_180px] md:items-start">
+          <div>
+            <p class="text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60">
+              {post.data.category}
+              <span aria-hidden="true" class="mx-2 text-foreground/30">
+                /
+              </span>
+              {formatBlogDate(post.data.date)}
+            </p>
+            <h1 class="mt-4 pb-1 text-balance font-display text-[clamp(3rem,7vw,6.4rem)] leading-[0.95] tracking-[-0.035em]">
+              {post.data.title}
+            </h1>
+          </div>
+
+          <div class="hidden border-l border-[var(--color-border)] pl-5 md:block">
+            <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+              Words
+            </p>
+            <p class="mt-1 text-sm text-foreground">Rizky Maulana</p>
+            <p class="mt-5 text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+              Reading
+            </p>
+            <p class="mt-1 text-sm text-foreground">{post.data.readingTime}</p>
+          </div>
+        </div>
+
+        <p class="mt-6 max-w-[60ch] text-base leading-relaxed text-foreground/60 md:text-lg">
+          {post.data.description}
+        </p>
+        <p class="mt-4 flex items-center justify-between gap-4 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:hidden">
+          <span>Words by Rizky Maulana</span>
+          <span class="whitespace-nowrap">{post.data.readingTime}</span>
+        </p>
+      </header>
+
+      <div class="relative mt-10 aspect-[4/3] overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-surface shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] sm:aspect-[16/9] lg:mt-12 lg:aspect-[16/7]">
+        <PostArt accent={post.data.accent} mark={post.data.mark} />
+        <div class="pointer-events-none absolute inset-x-5 top-4 flex items-center justify-between gap-4 md:inset-x-6 md:top-5">
+          <span class="inline-flex items-center rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm">
+            {post.data.category}
+          </span>
+          <span class="text-right text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/65">
+            {formatBlogDate(post.data.date)}
+          </span>
+        </div>
+      </div>
+
+      <div class="prose-editorial mx-auto mt-14 max-w-[680px] md:mt-20">
+        <Content />
+      </div>
+
+      <div class="mx-auto mt-16 max-w-[680px] border-t border-[var(--color-border)] pt-6 md:mt-20">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+              Filed under
+            </p>
+            <ul class="mt-3 flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <li class="rounded-full border border-[var(--color-border)] px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/60">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {nextPost && (
+            <a
+              href={`/blog/${nextPost.id}`}
+              class="group max-w-[360px] border-t border-[var(--color-border)] pt-4 transition-colors hover:border-foreground focus-visible:border-foreground focus-visible:outline-none md:border-t-0 md:pt-0 md:text-right"
+            >
+              <span class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+                Next note
+              </span>
+              <span class="mt-2 flex items-start justify-between gap-4 font-display text-[1.7rem] leading-[1.02] tracking-[-0.01em] md:justify-end md:text-right">
+                {nextPost.data.title}
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="mt-1 h-4 w-4 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
+              </span>
+            </a>
+          )}
+        </div>
+
+        <a
+          href="/blog"
+          class="mt-10 inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+        >
+          <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
+          Back to all notes
+        </a>
+      </div>
+    </div>
+  </article>
+</BlogLayout>

@@ -1,32 +1,38 @@
 ---
 import '../styles/globals.css';
 import { hero } from '../content/hero';
+import { Footer } from '../components/footer/footer';
 
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  lang?: 'id' | 'en';
 }
 
 const {
   title = hero.brand.replace('°', ''),
   description = hero.subheadline,
+  ogType = 'website',
+  lang = 'id',
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="id">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Rizky Maulana" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:site_name" content={title} />
+    <meta property="og:site_name" content="Rizky Maulana" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -41,7 +47,8 @@ const {
       rel="stylesheet"
     />
   </head>
-  <body class="min-h-screen bg-background text-foreground font-ui antialiased">
+  <body id="top" class="min-h-screen bg-background text-foreground font-ui antialiased">
     <slot />
+    <Footer />
   </body>
 </html>
