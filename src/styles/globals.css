@@ -3,6 +3,7 @@
 @theme {
   /* Colors - DESIGN.md §3.1 */
   --color-background: oklch(0.97 0.01 80);  /* #F6F4EF */
+  --color-surface: oklch(0.985 0.006 85);    /* #FAF8F3 — lifted sheet surface */
   --color-foreground: oklch(0.07 0 0);       /* #111111 */
   --color-muted-foreground: oklch(0.55 0.02 60); /* #8A8780 */
   --color-card: oklch(1 0 0 / 0.55);         /* rgba(255,255,255,.55) */
