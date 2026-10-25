@@ -3,12 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import { SmoothScroll } from '../components/providers/smooth-scroll';
 import { Hero } from '../components/hero/hero';
 import { About } from '../components/about/about';
+import { Work } from '../components/work/work';
 ---
 
 <Layout title="Rizky Maulana — Portfolio">
   <SmoothScroll client:load>
     <Hero client:load />
     <About client:visible />
-    <section class="h-svh w-full" aria-hidden="true"></section>
+    <Work />
   </SmoothScroll>
 </Layout>
