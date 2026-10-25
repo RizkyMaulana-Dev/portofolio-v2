@@ -1,271 +1,279 @@
-import { ArrowUpRight, Play } from 'lucide-react';
+'use client';
+
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { videos, type VideoAccent, type VideoClip, type VideoEntry } from '@/content/videos';
+import { copyTextToClipboard } from '@/lib/clipboard';
+import { formatClipIndex, getClipShareUrl } from '@/lib/feed';
+import { videos, type VideoClip, type VideoComment } from '@/content/videos';
+import { FeedSheet, type FeedPanelMode } from '@/components/videos/feed-sheet';
+import { FeedSlide } from '@/components/videos/feed-slide';
 
-const FILL: Record<VideoAccent, string> = {
-  sun: 'bg-sun/80',
-  rose: 'bg-rose/80',
-  sky: 'bg-sky/80',
-  violet: 'bg-violet/80',
-  lime: 'bg-lime/80',
-};
-
-const ACCENT_HEX: Record<VideoAccent, string> = {
-  sun: '#FFD36B',
-  rose: '#FF9FC0',
-  sky: '#8FD3FF',
-  violet: '#B9A2FF',
-  lime: '#D7F56B',
-};
-
-const GRID_STYLE = {
-  backgroundImage:
-    'linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)',
-  backgroundSize: '32px 32px',
-};
-
-const SCANLINE_STYLE = {
-  backgroundImage:
-    'repeating-linear-gradient(to bottom, rgb(17 17 17 / 0.035) 0px, rgb(17 17 17 / 0.035) 1px, transparent 1px, transparent 5px)',
-};
-
-function ArtBackdrop({ entry, compact = false }: { entry: VideoEntry; compact?: boolean }) {
-  const accent = ACCENT_HEX[entry.accent];
-
-  return (
-    <>
-      <div className="absolute inset-0" style={GRID_STYLE} />
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(circle at ${compact ? '10%' : '8%'} 6%, ${accent}b8 0%, ${accent}3d 36%, transparent 68%)`,
-        }}
-      />
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          background: `radial-gradient(circle at 94% 96%, ${accent}99 0%, transparent 58%)`,
-        }}
-      />
-    </>
-  );
+interface FeedPanel {
+  mode: FeedPanelMode;
+  clip: VideoClip;
+  index: number;
 }
 
-function VideoArt({ entry }: { entry: VideoEntry }) {
-  const fill = FILL[entry.accent];
-
-  if (entry.visual === 'horizon') {
-    return (
-      <div aria-hidden="true" className="relative h-[58%] w-[78%]">
-        <span
-          className={cn(
-            'absolute top-[6%] left-1/2 aspect-square w-[54%] -translate-x-1/2 rounded-full shadow-[0_22px_60px_-28px_rgb(0_0_0/0.35)]',
-            fill
-          )}
-        />
-        <span className="bg-foreground/20 absolute inset-x-0 top-[62%] h-px" />
-        <span className="border-foreground/10 absolute bottom-[6%] left-[10%] h-[20%] w-[46%] rounded-t-[10px] border bg-white/35" />
-        <span className="border-foreground/10 absolute right-[8%] bottom-[6%] h-[12%] w-[24%] rounded-t-[6px] border bg-white/25" />
-        <span className="bg-foreground/20 absolute top-[62%] left-1/2 h-6 w-px" />
-      </div>
-    );
-  }
-
-  if (entry.visual === 'portal') {
-    return (
-      <div aria-hidden="true" className="relative h-[62%] w-[52%]">
-        <span className="border-foreground/10 absolute inset-0 overflow-hidden rounded-t-full rounded-b-[24px] border bg-white/30">
-          <span className={cn('absolute inset-x-0 bottom-0 h-[64%]', fill)} />
-          <span className="bg-foreground/15 absolute inset-x-0 bottom-[34%] h-px" />
-        </span>
-        <span className="bg-foreground/60 absolute top-[24%] -right-4 h-3 w-3 translate-x-full rounded-full" />
-        <span className="bg-foreground/70 absolute top-0 left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full" />
-      </div>
-    );
-  }
-
-  if (entry.visual === 'fold') {
-    return (
-      <div aria-hidden="true" className="relative h-[58%] w-[64%]">
-        <span className="border-foreground/10 absolute top-[18%] left-[2%] h-[62%] w-[62%] -rotate-6 rounded-[18px] border bg-white/40" />
-        <span className="border-foreground/10 bg-surface/80 absolute top-[8%] right-[2%] h-[62%] w-[62%] rotate-6 rounded-[18px] border" />
-        <span
-          className={cn(
-            'border-foreground/[0.07] absolute bottom-[2%] left-[20%] h-[62%] w-[62%] rotate-12 rounded-[18px] border',
-            fill
-          )}
-        />
-      </div>
-    );
-  }
-
-  if (entry.visual === 'meter') {
-    return (
-      <div aria-hidden="true" className="flex h-[56%] items-end gap-2 md:gap-3">
-        {[34, 62, 48, 84, 56].map((height, index) => (
-          <span
-            key={height}
-            className={cn('w-3 rounded-full md:w-4', index === 3 ? fill : 'bg-foreground/10')}
-            style={{ height: `${height}%` }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div aria-hidden="true" className="relative aspect-square h-[56%]">
-      <span className="border-foreground/10 absolute inset-0 rounded-full border" />
-      <span className="border-foreground/[0.07] absolute inset-[12%] rounded-full border" />
-      <span className={cn('absolute inset-[32%] rounded-full', fill)} />
-      <span className="bg-foreground/70 absolute top-0 left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full" />
-    </div>
-  );
-}
-
-function FeaturedVideo({
-  entry,
-  href,
-  label,
-  total,
-}: {
-  entry: VideoEntry;
-  href: string;
-  label: string;
-  total: number;
-}) {
-  return (
-    <div>
-      <a
-        href={href}
-        aria-label={`${entry.title} — ${label}`}
-        className="video-feed-card group bg-surface focus-visible:ring-ring relative block overflow-hidden rounded-[28px] border border-[var(--color-border)] shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
-        <div className="relative aspect-[9/16] w-full overflow-hidden">
-          <div className="absolute inset-0 transition-[filter,transform] duration-700 ease-out group-hover:scale-[1.035] group-hover:blur-[7px] group-focus-visible:scale-[1.035] group-focus-visible:blur-[7px]">
-            <ArtBackdrop entry={entry} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <VideoArt entry={entry} />
-            </div>
-            <div className="absolute inset-0 opacity-35" style={SCANLINE_STYLE} />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/[0.02] via-transparent to-black/[0.14]" />
-          </div>
-
-          <div
-            aria-hidden="true"
-            className="bg-foreground/0 group-hover:bg-foreground/[0.08] group-focus-visible:bg-foreground/[0.08] pointer-events-none absolute inset-0 transition-colors duration-500"
-          />
-
-          <div className="text-foreground/55 pointer-events-none absolute inset-x-4 top-4 flex items-center justify-between text-[9px] font-medium tracking-[0.2em] uppercase md:inset-x-5 md:top-5">
-            <span className="inline-flex items-center gap-2">
-              <span aria-hidden="true" className="bg-foreground/60 h-1.5 w-1.5 rounded-full" />
-              Featured clip
-            </span>
-            <span>{entry.duration}</span>
-          </div>
-
-          <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between md:inset-x-5 md:bottom-5">
-            <span className="text-foreground/70 inline-flex items-center rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium tracking-[0.16em] uppercase backdrop-blur-sm">
-              {entry.category}
-            </span>
-            <span className="text-foreground/70 hidden h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white/60 backdrop-blur-sm md:flex">
-              <Play aria-hidden="true" className="h-3 w-3 fill-current" />
-            </span>
-          </div>
-
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-6">
-            <span className="video-feed-cta bg-foreground text-background inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[10px] font-medium tracking-[0.16em] whitespace-nowrap uppercase opacity-100 shadow-xl transition-all duration-500 ease-out">
-              {label}
-              <ArrowUpRight aria-hidden="true" className="h-3 w-3" />
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <div className="mt-5 border-t border-[var(--color-border)] pt-4">
-        <div className="flex items-start justify-between gap-5">
-          <div>
-            <p className="text-muted-foreground text-[10px] font-medium tracking-[0.18em] uppercase">
-              {entry.category}
-              <span aria-hidden="true" className="text-muted-foreground/40 mx-2">
-                /
-              </span>
-              {entry.date}
-            </p>
-            <h3 className="font-display mt-2 text-[clamp(1.8rem,3vw,2.25rem)] leading-[0.95] tracking-[-0.01em]">
-              {entry.title}
-            </h3>
-          </div>
-          <p className="text-muted-foreground/70 shrink-0 pt-0.5 text-right text-[10px] tracking-[0.18em] uppercase">
-            01
-            <span aria-hidden="true" className="text-muted-foreground/40">
-              {' '}
-              / {String(total).padStart(2, '0')}
-            </span>
-          </p>
-        </div>
-        <p className="text-muted-foreground mt-3 max-w-[36ch] text-xs leading-relaxed">
-          {entry.description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function ClipRow({ clip, index }: { clip: VideoClip; index: number }) {
-  return (
-    <li className="border-b border-[var(--color-border)]">
-      <a
-        href={clip.href}
-        className="group focus-visible:ring-ring grid grid-cols-[1.25rem_3.5rem_minmax(0,1fr)_auto] items-center gap-3 py-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:grid-cols-[1.5rem_4.25rem_minmax(0,1fr)_auto] md:gap-5 md:py-5"
-      >
-        <span className="text-muted-foreground/60 self-start pt-1 text-[9px] font-medium tracking-[0.16em]">
-          {String(index + 2).padStart(2, '0')}
-        </span>
-
-        <div className="bg-surface relative aspect-[9/16] w-14 overflow-hidden rounded-[14px] border border-[var(--color-border)] md:w-[68px] lg:w-[76px]">
-          <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
-            <ArtBackdrop entry={clip} compact />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <VideoArt entry={clip} />
-            </div>
-            <div className="absolute inset-0 opacity-30" style={SCANLINE_STYLE} />
-          </div>
-          <span className="bg-foreground/65 text-background absolute right-1.5 bottom-1.5 rounded-full px-1.5 py-0.5 text-[7px] font-medium tracking-[0.08em] backdrop-blur-sm">
-            {clip.duration}
-          </span>
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-muted-foreground text-[9px] font-medium tracking-[0.18em] uppercase">
-            {clip.category}
-            <span aria-hidden="true" className="text-muted-foreground/40 mx-2">
-              /
-            </span>
-            {clip.date}
-          </p>
-          <h3 className="font-display mt-1.5 text-[1.55rem] leading-none tracking-[-0.01em] md:text-[1.75rem]">
-            {clip.title}
-          </h3>
-          <p className="text-muted-foreground mt-1.5 hidden text-[11px] leading-snug md:block">
-            {clip.description}
-          </p>
-        </div>
-
-        <span className="text-foreground/60 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] transition-colors duration-300">
-          <ArrowUpRight
-            aria-hidden="true"
-            className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
-        </span>
-      </a>
-    </li>
-  );
-}
+const LIKES_STORAGE_KEY = 'rizky-feed-likes-v1';
+const WHEEL_QUIET_MS = 220;
 
 export function Videos() {
-  const totalClips = videos.clips.length + 1;
+  const feedRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const toastTimeout = useRef<number | null>(null);
+  const wheelAccum = useRef(0);
+  const wheelReset = useRef<number | null>(null);
+  const wheelLock = useRef(false);
+  const wheelLockTimer = useRef<number | null>(null);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [liked, setLiked] = useState<Record<string, boolean>>({});
+  const [likesReady, setLikesReady] = useState(false);
+  const [shares, setShares] = useState<Record<string, number>>(() =>
+    Object.fromEntries(videos.clips.map(clip => [clip.slug, clip.shares]))
+  );
+  const [comments, setComments] = useState<Record<string, VideoComment[]>>(() =>
+    Object.fromEntries(videos.clips.map(clip => [clip.slug, clip.comments]))
+  );
+  const [panel, setPanel] = useState<FeedPanel | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const totalClips = videos.clips.length;
   const totalLabel = `${String(totalClips).padStart(2, '0')} clips`;
+  const activeClip = videos.clips[activeIndex];
+
+  useEffect(() => {
+    const restored: Record<string, boolean> = {};
+
+    try {
+      const stored = window.localStorage.getItem(LIKES_STORAGE_KEY);
+      const parsed: unknown = stored ? JSON.parse(stored) : null;
+      if (parsed && typeof parsed === 'object') {
+        for (const clip of videos.clips) {
+          if ((parsed as Record<string, unknown>)[clip.slug] === true) {
+            restored[clip.slug] = true;
+          }
+        }
+      }
+    } catch {
+      // Ignore unavailable or malformed storage and keep the in-memory state.
+    }
+
+    setLiked(restored);
+    setLikesReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!likesReady) return;
+
+    try {
+      window.localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(liked));
+    } catch {
+      // Ignore unavailable storage.
+    }
+  }, [liked, likesReady]);
+
+  useEffect(() => {
+    const root = feedRef.current;
+    if (!root) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const nextIndex = Number((entry.target as HTMLElement).dataset.index);
+          if (Number.isInteger(nextIndex)) setActiveIndex(nextIndex);
+        }
+      },
+      { root, threshold: 0.55 }
+    );
+
+    for (const slide of slideRefs.current) {
+      if (slide) observer.observe(slide);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const clipSlug = new URL(window.location.href).searchParams.get('clip');
+    if (!clipSlug) return;
+
+    const index = videos.clips.findIndex(clip => clip.slug === clipSlug);
+    const root = feedRef.current;
+    if (index < 0 || !root) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.scrollTo({
+        top: index * root.clientHeight,
+        behavior: reduced ? 'auto' : 'smooth',
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (toastTimeout.current) window.clearTimeout(toastTimeout.current);
+      if (wheelReset.current) window.clearTimeout(wheelReset.current);
+      if (wheelLockTimer.current) window.clearTimeout(wheelLockTimer.current);
+    },
+    []
+  );
+
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    if (toastTimeout.current) window.clearTimeout(toastTimeout.current);
+    toastTimeout.current = window.setTimeout(() => setToast(null), 2400);
+  }, []);
+
+  const goTo = useCallback(
+    (index: number) => {
+      const root = feedRef.current;
+      if (!root) return;
+      const target = Math.max(0, Math.min(index, totalClips - 1));
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.scrollTo({
+        top: target * root.clientHeight,
+        behavior: reduced ? 'auto' : 'smooth',
+      });
+    },
+    [totalClips]
+  );
+
+  useEffect(() => {
+    const feed = feedRef.current;
+    if (!feed) return;
+
+    const releaseWheelLock = () => {
+      if (wheelLockTimer.current) window.clearTimeout(wheelLockTimer.current);
+      wheelLockTimer.current = window.setTimeout(() => {
+        wheelLock.current = false;
+        wheelAccum.current = 0;
+      }, WHEEL_QUIET_MS);
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      if (event.ctrlKey || event.deltaY === 0) return;
+
+      // Normalize line/page wheel modes so one mouse notch behaves like a pixel wheel.
+      const unit =
+        event.deltaMode === WheelEvent.DOM_DELTA_LINE
+          ? 16
+          : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+            ? feed.clientHeight
+            : 1;
+      const delta = event.deltaY * unit;
+
+      const atStart = activeIndex <= 0;
+      const atEnd = activeIndex >= totalClips - 1;
+      const leavingFeed = (delta > 0 && atEnd) || (delta < 0 && atStart);
+      if (leavingFeed && !wheelLock.current) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      // Absorb the inertia tail of one gesture before accepting the next one.
+      if (wheelLock.current) {
+        releaseWheelLock();
+        return;
+      }
+
+      wheelAccum.current += delta;
+
+      if (wheelReset.current) window.clearTimeout(wheelReset.current);
+      wheelReset.current = window.setTimeout(() => {
+        wheelAccum.current = 0;
+      }, 140);
+
+      if (Math.abs(wheelAccum.current) < 40) return;
+
+      const direction = wheelAccum.current > 0 ? 1 : -1;
+      wheelAccum.current = 0;
+      wheelLock.current = true;
+      goTo(activeIndex + direction);
+      releaseWheelLock();
+    };
+
+    feed.addEventListener('wheel', handleWheel, { passive: false });
+    return () => feed.removeEventListener('wheel', handleWheel);
+  }, [activeIndex, goTo, totalClips]);
+
+  function handleFeedKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.target !== event.currentTarget) return;
+
+    if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+      event.preventDefault();
+      goTo(activeIndex + 1);
+    } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+      event.preventDefault();
+      goTo(activeIndex - 1);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      goTo(0);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      goTo(totalClips - 1);
+    }
+  }
+
+  function toggleLike(slug: string) {
+    setLiked(current => ({ ...current, [slug]: !current[slug] }));
+  }
+
+  function bumpShare(slug: string) {
+    setShares(current => ({ ...current, [slug]: (current[slug] ?? 0) + 1 }));
+  }
+
+  async function shareClip(clip: VideoClip) {
+    const shareUrl = getClipShareUrl(clip.slug, window.location.href);
+    const payload = {
+      title: `${clip.title} — Rizky Maulana`,
+      text: clip.description,
+      url: shareUrl,
+    };
+
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share(payload);
+        bumpShare(clip.slug);
+        showToast('Clip shared.');
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
+    }
+
+    const copied = await copyTextToClipboard(shareUrl);
+    if (copied) {
+      bumpShare(clip.slug);
+      showToast('Link copied to clipboard.');
+    } else {
+      showToast('Could not copy the link.');
+    }
+  }
+
+  function addComment(slug: string, text: string) {
+    const comment: VideoComment = {
+      id: `${slug}-${Date.now()}`,
+      author: 'You',
+      meta: 'Now',
+      text,
+    };
+
+    setComments(current => ({
+      ...current,
+      [slug]: [comment, ...(current[slug] ?? [])],
+    }));
+  }
+
+  function openPanel(mode: FeedPanelMode, clip: VideoClip, index: number) {
+    setToast(null);
+    setPanel({ mode, clip, index });
+  }
 
   return (
     <section
@@ -273,13 +281,16 @@ export function Videos() {
       aria-labelledby="videos-heading"
       className="relative border-t border-[var(--color-border)]"
     >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[820px] overflow-hidden"
+      >
         <div className="absolute top-24 -left-[14%] h-[520px] w-[520px] rounded-full bg-[var(--color-blob-2)] opacity-35 blur-[160px]" />
-        <div className="absolute -right-[12%] bottom-0 h-[440px] w-[440px] rounded-full bg-[var(--color-blob-1)] opacity-25 blur-[150px]" />
+        <div className="absolute top-[42%] -right-[12%] h-[440px] w-[440px] rounded-full bg-[var(--color-blob-1)] opacity-25 blur-[150px]" />
       </div>
 
-      <div className="relative mx-auto max-w-[1280px] px-6 py-20 md:px-10 md:py-28 lg:px-16 lg:py-32">
-        <header className="grid gap-8 border-b border-[var(--color-border)] pb-10 md:grid-cols-[minmax(0,1fr)_340px] md:items-end md:gap-12 md:pb-14 lg:gap-20">
+      <div className="relative mx-auto max-w-[1280px] px-6 pt-20 pb-12 md:px-10 md:pt-28 md:pb-16 lg:px-16 lg:pt-32">
+        <header className="grid gap-8 md:grid-cols-[minmax(0,1fr)_340px] md:items-end md:gap-12 lg:gap-20">
           <div>
             <p className="text-muted-foreground flex items-center gap-2.5 text-[10px] font-medium tracking-[0.26em] uppercase">
               <span aria-hidden="true" className="bg-foreground h-1 w-1 rounded-full" />
@@ -302,43 +313,136 @@ export function Videos() {
             <p className="text-muted-foreground/70 text-[10px] tracking-[0.18em] uppercase">
               {totalLabel} · {videos.period}
             </p>
-          </div>
-        </header>
-
-        <div className="mt-12 grid gap-14 md:mt-16 md:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] md:items-start md:gap-10 lg:mt-20 lg:gap-16">
-          <FeaturedVideo
-            entry={videos.featured}
-            href={videos.feedHref}
-            label={videos.feedLabel}
-            total={totalClips}
-          />
-
-          <div>
-            <div className="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4">
-              <div>
-                <p className="text-muted-foreground text-[10px] font-medium tracking-[0.26em] uppercase">
-                  More from the feed
-                </p>
-                <p className="text-muted-foreground/80 mt-2 max-w-[32ch] text-xs leading-relaxed">
-                  A running index of recent posts, kept in the order they landed.
-                </p>
-              </div>
-              <p className="text-muted-foreground/70 shrink-0 pb-0.5 text-[10px] tracking-[0.18em] uppercase">
-                {String(videos.clips.length).padStart(2, '0')} clips
-              </p>
-            </div>
-
-            <ol aria-label="More from the feed">
-              {videos.clips.map((clip, index) => (
-                <ClipRow key={clip.title} clip={clip} index={index} />
-              ))}
-            </ol>
-
-            <p className="text-muted-foreground/55 mt-5 text-[10px] tracking-[0.18em] uppercase">
-              New clips appear here as they’re posted.
+            <p className="text-muted-foreground/60 flex items-center gap-2 text-[10px] tracking-[0.12em] uppercase">
+              <ArrowDown aria-hidden="true" className="h-3 w-3" strokeWidth={1.6} />
+              {videos.scrollHint}
             </p>
           </div>
+        </header>
+      </div>
+
+      <div className="relative border-y border-[var(--color-border)]">
+        <p className="sr-only" aria-live="polite">
+          {activeClip ? `Clip ${activeIndex + 1} of ${totalClips}: ${activeClip.title}` : undefined}
+        </p>
+
+        <div
+          id="videos-feed"
+          ref={feedRef}
+          data-lenis-prevent
+          role="region"
+          aria-label="Vertical video feed"
+          tabIndex={0}
+          onKeyDown={handleFeedKeyDown}
+          className="feed-viewport bg-surface focus-visible:ring-foreground/30 relative h-[100svh] min-h-[620px] [scroll-snap-type:y_mandatory] overflow-x-hidden overflow-y-auto focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+        >
+          {videos.clips.map((clip, index) => (
+            <div
+              key={clip.slug}
+              ref={node => {
+                slideRefs.current[index] = node;
+              }}
+              data-index={index}
+              data-active={activeIndex === index ? 'true' : 'false'}
+              className="feed-slide h-full w-full"
+            >
+              <FeedSlide
+                clip={clip}
+                index={index}
+                total={totalClips}
+                handle={videos.handle}
+                liked={Boolean(liked[clip.slug])}
+                likeCount={clip.likes + (liked[clip.slug] ? 1 : 0)}
+                commentCount={comments[clip.slug]?.length ?? 0}
+                shareCount={shares[clip.slug] ?? clip.shares}
+                onLike={() => toggleLike(clip.slug)}
+                onComments={() => openPanel('comments', clip, index)}
+                onShare={() => void shareClip(clip)}
+                onCode={() => openPanel('code', clip, index)}
+              />
+            </div>
+          ))}
         </div>
+
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-30">
+          <div className="mx-auto max-w-[1280px] px-5 pt-[max(1rem,env(safe-area-inset-top))] md:px-10 md:pt-6 lg:px-16">
+            <div className="flex items-center gap-4">
+              <p className="text-foreground/70 shrink-0 text-[9px] font-medium tracking-[0.18em] uppercase">
+                Rizky° <span className="text-foreground/35">/ Feed</span>
+              </p>
+
+              <div
+                role="group"
+                aria-label="Feed progress"
+                className="pointer-events-auto flex min-w-0 flex-1 items-center gap-1"
+              >
+                {videos.clips.map((clip, index) => (
+                  <button
+                    key={clip.slug}
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-label={`Go to clip ${index + 1}: ${clip.title}`}
+                    aria-current={activeIndex === index ? 'step' : undefined}
+                    className="group focus-visible:ring-foreground/35 flex h-6 min-w-0 flex-1 items-center rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+                  >
+                    <span
+                      className={cn(
+                        'h-[2px] w-full transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                        activeIndex === index
+                          ? 'bg-foreground/70'
+                          : 'bg-foreground/15 group-hover:bg-foreground/35 group-focus-visible:bg-foreground/45'
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <p className="text-foreground/60 shrink-0 text-[9px] font-medium tracking-[0.16em]">
+                {formatClipIndex(activeIndex + 1)}
+                <span aria-hidden="true" className="text-foreground/30">
+                  {' '}
+                  / {formatClipIndex(totalClips)}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-[1280px] px-6 py-8 md:px-10 md:py-10 lg:px-16">
+        <div className="flex flex-col gap-3 border-b border-[var(--color-border)] pb-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-muted-foreground flex items-center gap-2 text-[10px] font-medium tracking-[0.18em] uppercase">
+            <span aria-hidden="true" className="bg-foreground/55 h-1 w-1 rounded-full" />
+            End of feed · {totalLabel} · {videos.period}
+          </p>
+          <p className="text-muted-foreground/65 text-[10px] tracking-[0.12em] uppercase">
+            New clips appear here as they’re posted.
+          </p>
+        </div>
+      </div>
+
+      <FeedSheet
+        mode={panel?.mode ?? null}
+        clip={panel?.clip ?? null}
+        index={panel?.index ?? 0}
+        total={totalClips}
+        comments={panel ? (comments[panel.clip.slug] ?? []) : []}
+        onClose={() => setPanel(null)}
+        onAddComment={text => {
+          if (panel) addComment(panel.clip.slug, text);
+        }}
+      />
+
+      <div
+        role="status"
+        aria-live="polite"
+        className="pointer-events-none fixed inset-x-0 bottom-6 z-[60] flex justify-center px-4"
+      >
+        {toast ? (
+          <div className="bg-foreground text-background animate-overlay-in rounded-full px-4 py-2.5 text-xs tracking-[0.02em] shadow-[0_18px_50px_-20px_rgb(0_0_0/0.6)]">
+            {toast}
+          </div>
+        ) : null}
       </div>
     </section>
   );

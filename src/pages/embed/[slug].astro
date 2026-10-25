@@ -1,0 +1,98 @@
+---
+import '../../styles/globals.css';
+import { FeedArt } from '../../components/videos/feed-art';
+import { videos, type VideoClip } from '../../content/videos';
+
+export function getStaticPaths() {
+  return videos.clips.map(clip => ({
+    params: { slug: clip.slug },
+    props: { clip },
+  }));
+}
+
+interface Props {
+  clip: VideoClip;
+}
+
+const { clip } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{clip.title} — Rizky Maulana</title>
+    <meta name="description" content={clip.description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background text-foreground font-ui min-h-screen overflow-hidden antialiased">
+    <main class="relative h-[100svh] w-full overflow-hidden">
+      <FeedArt entry={clip} />
+
+      <span
+        aria-hidden="true"
+        class="font-display text-foreground/[0.065] pointer-events-none absolute top-[13%] right-[-2%] text-[clamp(7rem,22vw,21rem)] leading-none whitespace-nowrap italic select-none"
+      >
+        {clip.mark}
+      </span>
+
+      <div
+        aria-hidden="true"
+        class="from-background via-background/65 pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t to-transparent"
+      >
+      </div>
+
+      <div class="absolute inset-x-0 top-0 z-10 px-5 pt-[max(1rem,env(safe-area-inset-top))]">
+        <div class="flex items-center justify-between gap-4">
+          <p class="text-foreground/65 text-[9px] font-medium tracking-[0.18em] uppercase">
+            Rizky° <span class="text-foreground/35">/ Clip</span>
+          </p>
+          <a
+            href={`/?clip=${clip.slug}#videos-feed`}
+            target="_blank"
+            rel="noreferrer"
+            class="border-foreground/10 bg-surface/80 text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 inline-flex items-center rounded-full border px-3 py-1.5 text-[9px] font-medium tracking-[0.14em] uppercase transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
+          >
+            Open feed
+          </a>
+        </div>
+      </div>
+
+      <div class="absolute inset-x-0 bottom-0 z-10 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <div class="mx-auto max-w-[420px]">
+          <div class="text-foreground/65 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9px] font-medium tracking-[0.18em] uppercase">
+            <span class="border-foreground/10 bg-surface/80 text-foreground/75 inline-flex items-center rounded-full border px-2.5 py-1">
+              {clip.category}
+            </span>
+            <span aria-hidden="true" class="text-foreground/30">/</span>
+            <span>{clip.date}</span>
+            <span aria-hidden="true" class="text-foreground/30">/</span>
+            <span>{clip.duration}</span>
+          </div>
+
+          <h1
+            class="font-display mt-4 text-[clamp(2.5rem,9vw,3.4rem)] leading-[0.9] tracking-[-0.03em] text-balance"
+          >
+            {clip.title}
+          </h1>
+
+          <p class="text-muted-foreground mt-3 max-w-[34ch] text-[13px] leading-relaxed">
+            {clip.description}
+          </p>
+
+          <p class="text-foreground/45 mt-4 text-[9px] font-medium tracking-[0.18em] uppercase">
+            @rizkymaulana
+          </p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
