@@ -1,3 +1,15 @@
+export interface OrbitCard {
+  title: string;
+  caption: string;
+  accent: string;
+  icon: string;
+}
+
+export interface SideNote {
+  title: string;
+  caption: string;
+}
+
 export const hero = {
   brand: "Rizky°",
   nav: [
@@ -19,16 +31,14 @@ export const hero = {
     { title: "Work", caption: "Selected projects.", accent: "sky", icon: "Briefcase" },
     { title: "Notes", caption: "Think in public.", accent: "sun", icon: "NotebookPen" },
     { title: "Craft", caption: "Details that matter.", accent: "rose", icon: "PenTool" },
-  ],
+  ] as OrbitCard[],
   sideNotes: [
     { title: "Turn thoughts into progress.", caption: "Capture, organise and do more." },
     { title: "Ideas, anytime, anywhere.", caption: "Sync across all your devices." },
-  ],
+  ] as SideNote[],
   trust: "Dipercaya 50+ klien di seluruh dunia.",
   tagline: ["Less chaos.", "More clarity."],
   sticker: "A MORE FOCUSED YOU • EVERYDAY • ",
-} as const;
+};
 
 export type HeroContent = typeof hero;
-export type OrbitCard = typeof hero.cards[0];
-export type SideNote = typeof hero.sideNotes[0];

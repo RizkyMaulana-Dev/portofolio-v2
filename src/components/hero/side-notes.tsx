@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTime, useScroll } from "motion/react";
+import { motion, useMotionValue, useSpring, useTime, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { hero } from "@/content/hero";
 
-export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement> }) {
+export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   if (isMobile) return null;
 
@@ -20,7 +20,7 @@ export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement> }
   );
 }
 
-function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement> }) {
+function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end end"],
@@ -89,7 +89,7 @@ function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement> }) {
   );
 }
 
-function RightNote({ heroRef }: { heroRef: React.RefObject<HTMLElement> }) {
+function RightNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end end"],

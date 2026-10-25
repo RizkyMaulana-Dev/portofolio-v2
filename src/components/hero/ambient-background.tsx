@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion, useMotionValue, useTime } from "motion/react";
+import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function AmbientBackground() {

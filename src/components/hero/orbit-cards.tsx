@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTime, useScroll } from "motion/react";
+import { motion, useMotionValue, useSpring, useTime, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { OrbitCard as OrbitCardView } from "./orbit-card";
+import { hero, type OrbitCard } from "@/content/hero";
 import { computeCard, getCardCount, getOrbitConfig, type StageSize } from "@/lib/orbit";
-import { OrbitCard } from "./orbit-card";
-import { hero, type OrbitCard as OrbitCardData } from "@/content/hero";
 import { useStageSize } from "@/lib/use-stage-size";
 
 function AnimatedOrbitCard({
@@ -13,9 +13,9 @@ function AnimatedOrbitCard({
   i,
   containerRef,
 }: {
-  card: OrbitCardData;
+  card: OrbitCard;
   i: number;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLElement | null>;
 }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -83,7 +83,7 @@ function AnimatedOrbitCard({
         )}
         style={{ opacity: 1 }}
       >
-        <OrbitCard {...card} />
+        <OrbitCardView {...card} />
       </motion.div>
     );
   }
@@ -100,14 +100,14 @@ function AnimatedOrbitCard({
           stacking context so front cards (z-5) really pass in front of the head (z-4) */}
       <div style={{ perspective: 1200 }}>
         <motion.div style={{ rotateY: rotY, rotateZ: rotZ }}>
-          <OrbitCard {...card} />
+          <OrbitCardView {...card} />
         </motion.div>
       </div>
     </motion.div>
   );
 }
 
-export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTMLElement> }) {
+export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
   const stageSize = useStageSize();
   const cardCount = useMemo(() => getCardCount(stageSize.width), [stageSize.width]);
   const prefersReduced =
@@ -120,13 +120,13 @@ export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTM
 
   return (
     <div
-      ref={containerRef}
+      ref={containerRef as React.Ref<HTMLDivElement>}
       className="absolute inset-0 pointer-events-none overflow-hidden"
       style={{ height: "100%" }}
     >
       <div className="absolute inset-0">
         {cardsToShow.map((card, i) => (
-          <AnimatedOrbitCard key={i} card={card} i={i} containerRef={containerRef} />
+          <AnimatedOrbitCard key={i} card={card} i={i} containerRef={containerRef as React.RefObject<HTMLElement>} />
         ))}
       </div>
     </div>
