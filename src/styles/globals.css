@@ -123,4 +123,17 @@
   .ring-orbit {
     @apply border border-[var(--color-border)];
   }
+
+  @media (hover: hover) and (min-width: 768px) {
+    .video-feed-card .video-feed-cta {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+
+    .video-feed-card:hover .video-feed-cta,
+    .video-feed-card:focus-visible .video-feed-cta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
