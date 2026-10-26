@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { FeedExperience } from '../components/feed/feed-experience';
+import { videos } from '../content/videos';
+---
+
+<Layout title="Feed — Rizky Maulana" description={videos.intro}>
+  <FeedExperience client:load />
+</Layout>

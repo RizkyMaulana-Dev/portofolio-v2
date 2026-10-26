@@ -31,20 +31,22 @@ export interface VideoFeedContent {
   heading: [string, string];
   intro: string;
   period: string;
+  feedHref: string;
+  feedLabel: string;
   handle: string;
-  scrollHint: string;
   clips: VideoClip[];
 }
 
-// Placeholder feed. Swap the clip URLs and copy when the real TikTok posts are ready.
+// Placeholder feed. Replace the artwork and copy when the real TikTok posts are ready.
 export const videos: VideoFeedContent = {
   eyebrow: 'Video feed — TikTok',
   heading: ['Life, in', 'vertical.'],
   intro:
     'Process notes, studio fragments, and small observations—recorded vertically and posted before I overthink them.',
   period: '2025—now',
+  feedHref: '/feed',
+  feedLabel: 'View feed',
   handle: '@rizkymaulana',
-  scrollHint: 'Scroll inside the frame. Each clip snaps into place.',
   clips: [
     {
       slug: 'a-week-in-the-studio',
