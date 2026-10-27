@@ -8,12 +8,23 @@ export interface FooterLink {
   href: string;
 }
 
+export interface SiteContentData {
+  name: string;
+  email: string;
+  availability: string;
+  location: string;
+  footerHeading: [string, string];
+  socials: SocialLink[];
+  footerNav: FooterLink[];
+}
+
 // Placeholder contact details and social URLs. Replace these with the real ones.
-export const site = {
+export const site: SiteContentData = {
   name: 'Rizky Maulana',
   email: 'hello@rizkymaulana.dev',
   availability: 'Open to select projects and collaborations.',
   location: 'Indonesia',
+  footerHeading: ["Let's make", 'it clear.'],
   socials: [
     { label: 'GitHub', href: 'https://github.com/RizkyMaulana-Dev' },
     { label: 'LinkedIn', href: '#' },

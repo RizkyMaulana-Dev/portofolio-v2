@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { hero } from "@/content/hero";
+import type { HeroContent } from "@/content/hero";
 
 const MENU_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -26,7 +26,7 @@ const menuItem: Variants = {
   },
 };
 
-export function HeroNavbar() {
+export function HeroNavbar({ content }: { content: HeroContent }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -36,8 +36,8 @@ export function HeroNavbar() {
       )}
     >
       {/* Wordmark */}
-      <a href="#hero" className="text-lg font-semibold text-foreground" aria-label={hero.brand}>
-        {hero.brand}
+      <a href="#hero" className="text-lg font-semibold text-foreground" aria-label={content.brand}>
+        {content.brand}
       </a>
 
       {/* Desktop pill nav */}
@@ -49,9 +49,9 @@ export function HeroNavbar() {
         )}
         aria-label="Primary"
       >
-        {hero.nav.map((item) => (
+        {content.nav.map((item, index) => (
           <a
-            key={item.label}
+            key={`${item.label}-${index}`}
             href={item.href}
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium text-foreground",
@@ -63,8 +63,8 @@ export function HeroNavbar() {
         ))}
         <div className="w-px h-6 bg-border" aria-hidden="true" />
         <Button size="sm" className="ml-1" asChild>
-          <a href={hero.navCta.href}>
-            {hero.navCta.label}
+          <a href={content.navCta.href}>
+            {content.navCta.label}
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </a>
         </Button>
@@ -109,7 +109,7 @@ export function HeroNavbar() {
               </div>
 
               <div className="flex items-center justify-between p-6 pt-3 border-b border-border">
-                <span className="text-lg font-semibold">{hero.brand}</span>
+                <span className="text-lg font-semibold">{content.brand}</span>
                 <button
                   onClick={() => setMobileOpen(false)}
                   className={cn(
@@ -128,9 +128,9 @@ export function HeroNavbar() {
                 initial="hidden"
                 animate="show"
               >
-                {hero.nav.map((item) => (
+                {content.nav.map((item, index) => (
                   <motion.a
-                    key={item.label}
+                    key={`${item.label}-${index}`}
                     variants={menuItem}
                     href={item.href}
                     className="py-3 text-base font-medium text-foreground hover:text-muted-foreground"
@@ -141,8 +141,8 @@ export function HeroNavbar() {
                 ))}
                 <motion.div variants={menuItem} className="pt-4">
                   <Button className="w-full" asChild>
-                    <a href={hero.navCta.href} onClick={() => setMobileOpen(false)}>
-                      {hero.navCta.label}
+                    <a href={content.navCta.href} onClick={() => setMobileOpen(false)}>
+                      {content.navCta.label}
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </Button>

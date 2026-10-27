@@ -11,9 +11,9 @@ import { Footer } from '../components/footer/footer';
 <Layout title="Rizky Maulana — Portfolio">
   <SmoothScroll client:load>
     <Hero client:load />
-    <About client:visible />
-    <Work />
-    <Videos />
+    <About client:idle />
+    <Work client:idle />
+    <Videos client:idle />
   </SmoothScroll>
-  <Footer />
+  <Footer client:idle />
 </Layout>

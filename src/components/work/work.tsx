@@ -1,6 +1,11 @@
+"use client";
+
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { work, type Project, type WorkAccent } from "@/content/work";
+import type { Project, WorkAccent } from "@/content/work";
+import { useSiteContent } from "@/lib/site-content";
+import { Reveal, RevealLine, useReveal } from "@/components/motion/reveal";
 
 const WASH: Record<WorkAccent, string> = {
   violet: "bg-violet/55",
@@ -141,8 +146,15 @@ function ProjectCard({
   index: number;
   stickyClass: string;
 }) {
+  const reveal = useReveal({
+    delay: Math.min(index * 0.06, 0.24),
+    distance: 28,
+    amount: 0.18,
+  });
+
   return (
-    <a
+    <motion.a
+      {...reveal}
       href={project.href}
       className={cn(
         "group block bg-background focus-visible:z-10",
@@ -179,7 +191,7 @@ function ProjectCard({
 
         <ul className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[9px] font-medium uppercase tracking-[0.16em] text-muted-foreground/80">
           {project.tags.map((tag, tagIndex) => (
-            <li key={tag} className="flex items-center gap-3">
+            <li key={`${tag}-${tagIndex}`} className="flex items-center gap-3">
               {tagIndex > 0 && (
                 <span
                   aria-hidden="true"
@@ -191,11 +203,12 @@ function ProjectCard({
           ))}
         </ul>
       </div>
-    </a>
+    </motion.a>
   );
 }
 
 export function Work() {
+  const { work } = useSiteContent();
   const leftProjects = work.projects
     .map((project, index) => ({ project, index }))
     .filter(({ index }) => index % 2 === 0);
@@ -217,35 +230,43 @@ export function Work() {
       <div className="relative mx-auto max-w-[1280px] px-6 pt-20 pb-0 md:px-10 md:pt-28 md:pb-0 lg:px-16 lg:pt-32">
         <header className="grid gap-8 border-b border-[var(--color-border)] pb-10 md:grid-cols-[minmax(0,1fr)_340px] md:items-end md:gap-12 md:pb-14 lg:gap-20">
           <div>
-            <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-muted-foreground">
-              <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
-              {work.eyebrow}
-            </p>
+            <Reveal distance={10} amount={0.6}>
+              <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-muted-foreground">
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
+                {work.eyebrow}
+              </p>
+            </Reveal>
             <h2
               id="work-heading"
               className="mt-5 font-display text-[clamp(3.2rem,7vw,6.2rem)] font-normal leading-[0.87] tracking-[-0.03em]"
             >
-              {work.heading[0]}
-              <br />
-              <em className="italic">{work.heading[1]}</em>
+              <RevealLine>{work.heading[0]}</RevealLine>
+              <RevealLine delay={0.08}>
+                <em className="italic">{work.heading[1]}</em>
+              </RevealLine>
             </h2>
           </div>
 
-          <div className="flex flex-col gap-5 md:items-end md:pb-2 md:text-right">
+          <Reveal
+            className="flex flex-col gap-5 md:items-end md:pb-2 md:text-right"
+            delay={0.14}
+            distance={18}
+            amount={0.35}
+          >
             <p className="max-w-[38ch] text-sm leading-relaxed text-muted-foreground">
               {work.intro}
             </p>
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
               {projectCount} · {work.period}
             </p>
-          </div>
+          </Reveal>
         </header>
 
         {/* Mobile: one card at a time, each new card rising over the last. */}
         <div className="mt-12 flex flex-col gap-14 md:hidden">
           {work.projects.map((project, index) => (
             <ProjectCard
-              key={project.title}
+              key={`${project.title}-${index}`}
               project={project}
               index={index}
               stickyClass="sticky top-4 motion-reduce:static"
@@ -260,7 +281,7 @@ export function Work() {
           <div className="flex flex-col gap-20 lg:gap-24">
             {leftProjects.map(({ project, index }) => (
               <ProjectCard
-                key={project.title}
+                key={`${project.title}-${index}`}
                 project={project}
                 index={index}
                 stickyClass="sticky top-16 lg:top-20 motion-reduce:static"
@@ -272,7 +293,7 @@ export function Work() {
           <div className="flex flex-col gap-20 md:mt-20 lg:mt-28 lg:gap-24">
             {rightProjects.map(({ project, index }) => (
               <ProjectCard
-                key={project.title}
+                key={`${project.title}-${index}`}
                 project={project}
                 index={index}
                 stickyClass="sticky top-24 lg:top-28 motion-reduce:static"

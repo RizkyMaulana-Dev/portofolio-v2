@@ -1,9 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { hero } from "@/content/hero";
 
-export function CornerTagline() {
+export function CornerTagline({ tagline }: { tagline: string[] }) {
   return (
     <div
       className={cn(
@@ -15,13 +14,13 @@ export function CornerTagline() {
       <div className="flex items-center justify-end gap-2">
         <span className="text-lg text-muted-foreground" aria-hidden="true">✦</span>
         <span className="text-sm font-medium text-muted-foreground">
-          {hero.tagline[0]}
+          {tagline[0]}
         </span>
       </div>
       <div className="flex items-center justify-end gap-2">
         <span className="text-lg text-muted-foreground" aria-hidden="true">✦</span>
         <span className="text-sm font-medium text-muted-foreground">
-          {hero.tagline[1]}
+          {tagline[1]}
         </span>
       </div>
     </div>

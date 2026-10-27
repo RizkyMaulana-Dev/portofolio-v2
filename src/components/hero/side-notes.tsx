@@ -6,21 +6,33 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { hero } from "@/content/hero";
+import type { SideNote } from "@/content/hero";
 import { useSectionProgress } from "@/lib/use-section-progress";
 
-export function SideNotes({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
+export function SideNotes({
+  heroRef,
+  notes,
+}: {
+  heroRef: React.RefObject<HTMLElement | null>;
+  notes: SideNote[];
+}) {
   // Rendered on the server too; the notes are hidden below lg via CSS.
   // (A `window.innerWidth` branch here causes a hydration mismatch.)
   return (
     <>
-      <LeftNote heroRef={heroRef} />
-      <RightNote heroRef={heroRef} />
+      <LeftNote heroRef={heroRef} note={notes[0]} />
+      <RightNote heroRef={heroRef} note={notes[1]} />
     </>
   );
 }
 
-function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
+function LeftNote({
+  heroRef,
+  note,
+}: {
+  heroRef: React.RefObject<HTMLElement | null>;
+  note: SideNote;
+}) {
   const smooth = useSectionProgress(heroRef);
   const time = useTime();
   const y = useMotionValue(0);
@@ -61,7 +73,7 @@ function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> })
     return () => cancelAnimationFrame(raf);
   }, [smooth, y, x, rotate, opacity, scale, time]);
 
-  const { title, caption } = hero.sideNotes[0];
+  const { title, caption } = note;
 
   return (
     <motion.div
@@ -85,7 +97,13 @@ function LeftNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> })
   );
 }
 
-function RightNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
+function RightNote({
+  heroRef,
+  note,
+}: {
+  heroRef: React.RefObject<HTMLElement | null>;
+  note: SideNote;
+}) {
   const smooth = useSectionProgress(heroRef);
   const time = useTime();
   const y = useMotionValue(0);
@@ -125,7 +143,7 @@ function RightNote({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }
     return () => cancelAnimationFrame(raf);
   }, [smooth, y, x, rotate, opacity, scale, time]);
 
-  const { title, caption } = hero.sideNotes[1];
+  const { title, caption } = note;
 
   return (
     <motion.div

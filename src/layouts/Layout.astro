@@ -7,6 +7,7 @@ interface Props {
   description?: string;
   ogType?: 'website' | 'article';
   lang?: 'id' | 'en';
+  noindex?: boolean;
 }
 
 const {
@@ -14,6 +15,7 @@ const {
   description = hero.subheadline,
   ogType = 'website',
   lang = 'id',
+  noindex = false,
 } = Astro.props;
 ---
 
@@ -24,8 +26,18 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta name="description" content={description} />
     <meta name="author" content="Rizky Maulana" />
+
+    <noscript>
+      <style is:inline>
+        [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />

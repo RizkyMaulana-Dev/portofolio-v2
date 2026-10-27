@@ -3,9 +3,9 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import { hero } from "@/content/hero";
+import type { HeroContent } from "@/content/hero";
 
-export function HeroCopy() {
+export function HeroCopy({ content }: { content: HeroContent }) {
   return (
     <div className={cn(
       "relative z-[3] flex flex-col items-center text-center px-6",
@@ -17,8 +17,8 @@ export function HeroCopy() {
         "text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
         "font-light"
       )}>
-        <span className="block">{hero.headline[0]}</span>
-        <span className="block italic">{hero.headline[1]}</span>
+        <span className="block">{content.headline[0]}</span>
+        <span className="block italic">{content.headline[1]}</span>
       </h1>
 
       {/* Subheadline */}
@@ -27,23 +27,23 @@ export function HeroCopy() {
         "text-base md:text-lg leading-[1.55]",
         "font-normal"
       )}>
-        {hero.subheadline}
+        {content.subheadline}
       </p>
 
       {/* CTA Buttons */}
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
         <Button size="default" asChild>
-          <a href={hero.ctaPrimary.href}>
-            {hero.ctaPrimary.label}
+          <a href={content.ctaPrimary.href}>
+            {content.ctaPrimary.label}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </a>
         </Button>
         <Button variant="outline" size="default" asChild>
-          <a href={hero.ctaSecondary.href} className="flex items-center gap-2">
+          <a href={content.ctaSecondary.href} className="flex items-center gap-2">
             <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-primary">
               <Play className="h-3 w-3 text-primary-foreground ml-0.5" aria-hidden="true" />
             </span>
-            {hero.ctaSecondary.label}
+            {content.ctaSecondary.label}
           </a>
         </Button>
       </div>

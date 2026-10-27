@@ -4,8 +4,10 @@ import { useRef } from "react";
 import { motion, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { about, type Accent } from "@/content/about";
+import type { Accent } from "@/content/about";
 import { useSectionProgress } from "@/lib/use-section-progress";
+import { useSiteContent } from "@/lib/site-content";
+import { Reveal, RevealLine } from "@/components/motion/reveal";
 
 const DOT: Record<Accent, string> = {
   lime: "bg-lime",
@@ -29,6 +31,7 @@ export function About() {
   const wrapperRef = useRef<HTMLElement>(null);
   const progress = useSectionProgress(wrapperRef);
   const sheetY = useTransform(progress, [0, 1], ["0%", "-100%"]);
+  const { about } = useSiteContent();
   const totalSkills = about.skillGroups.reduce((count, group) => count + group.skills.length, 0);
 
   return (
@@ -53,43 +56,62 @@ export function About() {
         <header className="relative z-20 shrink-0">
           <div className="mx-auto flex max-w-[1280px] items-start justify-between gap-8 px-6 pb-5 pt-9 md:px-10 md:pb-7 md:pt-11 lg:px-16 lg:pt-14">
             <div>
-              <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-muted-foreground">
-                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
-                {about.eyebrow}
-              </p>
+              <Reveal distance={10} amount={0.6}>
+                <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-muted-foreground">
+                  <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
+                  {about.eyebrow}
+                </p>
+              </Reveal>
               <h2
                 id="about-heading"
                 className="mt-3.5 font-display text-[clamp(2.6rem,5vw,4.6rem)] font-normal leading-[0.9] tracking-[-0.025em]"
               >
-                {about.heading[0]}
-                <br />
-                <em className="italic">{about.heading[1]}</em>
+                <RevealLine>{about.heading[0]}</RevealLine>
+                <RevealLine delay={0.08}>
+                  <em className="italic">{about.heading[1]}</em>
+                </RevealLine>
               </h2>
             </div>
-            <span
-              aria-hidden="true"
-              className="hidden shrink-0 select-none font-display text-[clamp(4.5rem,8vw,7.5rem)] leading-[0.7] text-foreground/[0.05] md:block"
+            <Reveal
+              delay={0.16}
+              distance={0}
+              amount={0.6}
+              className="hidden shrink-0 md:block"
             >
-              ✦
-            </span>
+              <span
+                aria-hidden="true"
+                className="block select-none font-display text-[clamp(4.5rem,8vw,7.5rem)] leading-[0.7] text-foreground/[0.05]"
+              >
+                ✦
+              </span>
+            </Reveal>
           </div>
         </header>
 
         {/* Skills sit under the header; the credential sheet rises over this layer only */}
         <div className="relative min-h-0 flex-1">
           <div className="mx-auto flex h-full max-w-[1280px] flex-col px-6 pb-6 pt-4 md:px-10 md:pb-10 md:pt-7 lg:px-16">
-            <div className="flex items-end justify-between gap-4 pb-4 md:pb-7">
+            <Reveal
+              className="flex items-end justify-between gap-4 pb-4 md:pb-7"
+              distance={12}
+              amount={0.4}
+            >
               <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
                 {about.skills.label}
               </p>
               <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">
                 {about.skillGroups.length} disciplines · {totalSkills} skills
               </p>
-            </div>
+            </Reveal>
 
             <div className="grid gap-y-5 md:grid-cols-3 md:gap-x-12 md:gap-y-0">
-              {about.skillGroups.map((group) => (
-                <div key={group.label}>
+              {about.skillGroups.map((group, groupIndex) => (
+                <Reveal
+                  key={`${group.label}-${groupIndex}`}
+                  delay={groupIndex * 0.08}
+                  distance={22}
+                  amount={0.18}
+                >
                   <div className="flex items-center gap-2.5">
                     <span
                       aria-hidden="true"
@@ -106,7 +128,7 @@ export function About() {
                   <ul className="mt-2.5 grid grid-cols-2 gap-x-5 md:mt-4 md:grid-cols-1 md:gap-x-0">
                     {group.skills.map((skill, skillIndex) => (
                       <li
-                        key={skill}
+                        key={`${skill}-${skillIndex}`}
                         className="group flex items-baseline justify-between gap-3 border-b border-[var(--color-border)] py-1.5 md:py-2.5"
                       >
                         <span className="text-[13px] leading-snug text-foreground md:text-[14px]">
@@ -121,7 +143,7 @@ export function About() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -140,15 +162,19 @@ export function About() {
             <div className="mx-auto flex h-full max-w-[1280px] flex-col px-6 pb-8 pt-6 md:px-10 md:pb-10 md:pt-8 lg:px-16 lg:pt-10">
               <div className="flex flex-wrap items-end justify-between gap-3 pb-5 md:pb-7">
                 <div>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
-                    {about.certificates.label}
-                  </p>
+                  <Reveal distance={8} amount={0.6}>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
+                      {about.certificates.label}
+                    </p>
+                  </Reveal>
                   <h3
                     id="certificates-heading"
                     className="mt-2.5 font-display text-[2rem] leading-[0.95] tracking-[-0.015em] md:text-[2.7rem]"
                   >
-                    {about.certificates.heading[0]}{" "}
-                    <em className="italic">{about.certificates.heading[1]}</em>
+                    <RevealLine>
+                      {about.certificates.heading[0]}{" "}
+                      <em className="italic">{about.certificates.heading[1]}</em>
+                    </RevealLine>
                   </h3>
                 </div>
                 <p className="pb-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">
@@ -158,104 +184,117 @@ export function About() {
 
               {/* Mobile: compact credential rows */}
               <div className="grid gap-2.5 lg:hidden">
-                {about.certificates.items.map((certificate) => (
-                  <a
-                    key={certificate.title}
-                    href={certificate.href}
-                    className={cn(
-                      "group flex items-center gap-3.5 rounded-2xl border border-[var(--color-border)]",
-                      "bg-white/50 px-3.5 py-3 transition-colors duration-300 hover:bg-white/80"
-                    )}
+                {about.certificates.items.map((certificate, certificateIndex) => (
+                  <Reveal
+                    key={`${certificate.title}-${certificateIndex}`}
+                    delay={certificateIndex * 0.06}
+                    distance={20}
+                    amount={0.2}
                   >
-                    <span
+                    <a
+                      href={certificate.href}
                       className={cn(
-                        "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10",
-                        SEAL[certificate.accent]
+                        "group flex w-full items-center gap-3.5 rounded-2xl border border-[var(--color-border)]",
+                        "bg-white/50 px-3.5 py-3 transition-colors duration-300 hover:bg-white/80"
                       )}
                     >
-                      <span aria-hidden="true" className="absolute inset-[3px] rounded-full border border-black/10" />
-                      <span className="font-display text-sm leading-none">{certificate.mark}</span>
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[9px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                        {certificate.issuer} · {certificate.year}
-                      </span>
-                      <span className="mt-0.5 block truncate font-display text-lg leading-tight">
-                        {certificate.title}
-                      </span>
-                    </span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/60">
-                      <ArrowUpRight
-                        className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </a>
-                ))}
-              </div>
-
-              {/* Desktop: certificate cards */}
-              <div className="hidden gap-4 lg:grid lg:grid-cols-3 lg:gap-5">
-                {about.certificates.items.map((certificate) => (
-                  <a
-                    key={certificate.title}
-                    href={certificate.href}
-                    className={cn(
-                      "group relative flex min-h-[240px] flex-col overflow-hidden rounded-[24px]",
-                      "border border-[var(--color-border)] bg-white/55 p-6",
-                      "transition-[transform,background-color,box-shadow] duration-300 ease-out",
-                      "hover:-translate-y-1 hover:bg-white/80 hover:shadow-[0_28px_56px_-28px_rgb(0_0_0/0.22)]"
-                    )}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-white/80 via-white/40 to-transparent"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute -bottom-8 -right-4 select-none font-display text-[8rem] leading-none text-foreground/[0.035]"
-                    >
-                      {certificate.mark}
-                    </span>
-
-                    <div className="flex items-start justify-between gap-4">
-                      <span className="rounded-full border border-[var(--color-border)] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                        {certificate.year}
-                      </span>
                       <span
                         className={cn(
-                          "relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10",
-                          "transition-transform duration-500 ease-out group-hover:rotate-6",
+                          "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10",
                           SEAL[certificate.accent]
                         )}
                       >
                         <span aria-hidden="true" className="absolute inset-[3px] rounded-full border border-black/10" />
-                        <span className="font-display text-base leading-none">{certificate.mark}</span>
+                        <span className="font-display text-sm leading-none">{certificate.mark}</span>
                       </span>
-                    </div>
-
-                    <div className="mt-auto pt-7">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                        {certificate.issuer}
-                      </p>
-                      <h4 className="mt-2 max-w-[17ch] font-display text-[1.65rem] leading-[1.02] tracking-[-0.01em]">
-                        {certificate.title}
-                      </h4>
-                    </div>
-
-                    <div className="mt-5 flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-3.5">
-                      <span className="truncate text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
-                        ID {certificate.credentialId}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[9px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                          {certificate.issuer} · {certificate.year}
+                        </span>
+                        <span className="mt-0.5 block truncate font-display text-lg leading-tight">
+                          {certificate.title}
+                        </span>
                       </span>
-                      <span className="inline-flex shrink-0 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em]">
-                        View
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/60">
                         <ArrowUpRight
                           className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                           aria-hidden="true"
                         />
                       </span>
-                    </div>
-                  </a>
+                    </a>
+                  </Reveal>
+                ))}
+              </div>
+
+              {/* Desktop: certificate cards */}
+              <div className="hidden gap-4 lg:grid lg:grid-cols-3 lg:gap-5">
+                {about.certificates.items.map((certificate, certificateIndex) => (
+                  <Reveal
+                    key={`${certificate.title}-${certificateIndex}`}
+                    delay={certificateIndex * 0.06}
+                    distance={24}
+                    amount={0.2}
+                    className="h-full"
+                  >
+                    <a
+                      href={certificate.href}
+                      className={cn(
+                        "group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-[24px]",
+                        "border border-[var(--color-border)] bg-white/55 p-6",
+                        "transition-[transform,background-color,box-shadow] duration-300 ease-out",
+                        "hover:-translate-y-1 hover:bg-white/80 hover:shadow-[0_28px_56px_-28px_rgb(0_0_0/0.22)]"
+                      )}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-white/80 via-white/40 to-transparent"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-8 -right-4 select-none font-display text-[8rem] leading-none text-foreground/[0.035]"
+                      >
+                        {certificate.mark}
+                      </span>
+
+                      <div className="flex items-start justify-between gap-4">
+                        <span className="rounded-full border border-[var(--color-border)] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                          {certificate.year}
+                        </span>
+                        <span
+                          className={cn(
+                            "relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10",
+                            "transition-transform duration-500 ease-out group-hover:rotate-6",
+                            SEAL[certificate.accent]
+                          )}
+                        >
+                          <span aria-hidden="true" className="absolute inset-[3px] rounded-full border border-black/10" />
+                          <span className="font-display text-base leading-none">{certificate.mark}</span>
+                        </span>
+                      </div>
+
+                      <div className="mt-auto pt-7">
+                        <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                          {certificate.issuer}
+                        </p>
+                        <h4 className="mt-2 max-w-[17ch] font-display text-[1.65rem] leading-[1.02] tracking-[-0.01em]">
+                          {certificate.title}
+                        </h4>
+                      </div>
+
+                      <div className="mt-5 flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-3.5">
+                        <span className="truncate text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                          ID {certificate.credentialId}
+                        </span>
+                        <span className="inline-flex shrink-0 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em]">
+                          View
+                          <ArrowUpRight
+                            className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </div>
+                    </a>
+                  </Reveal>
                 ))}
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { cn } from "@/lib/utils";
+import { useSiteContent } from "@/lib/site-content";
 import { HeroNavbar } from "./hero-navbar";
 import { HeroCopy } from "./hero-copy";
 import { HeroHead } from "./hero-head";
@@ -14,6 +14,7 @@ import { StickerBadge } from "./sticker-badge";
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
+  const { hero } = useSiteContent();
 
   return (
     <section
@@ -32,22 +33,22 @@ export function Hero() {
         <AmbientBackground />
 
         {/* Navbar */}
-        <HeroNavbar />
+        <HeroNavbar content={hero} />
 
         {/* Main content area - flex column to push head to bottom */}
         <div className="flex-1 flex flex-col items-center justify-between px-6 md:px-10 lg:px-16 pb-0 gap-4 mt-[92px] md:mt-[96px]">
-          <HeroCopy />
+          <HeroCopy content={hero} />
           <HeroHead />
         </div>
 
         {/* Orbit cards - positioned around head */}
-        <OrbitCards containerRef={heroRef} />
+        <OrbitCards containerRef={heroRef} cards={hero.cards} />
 
         {/* Fixed positioned elements */}
-        <SideNotes heroRef={heroRef} />
-        <TrustBadge />
-        <CornerTagline />
-        <StickerBadge />
+        <SideNotes heroRef={heroRef} notes={hero.sideNotes} />
+        <TrustBadge trust={hero.trust} />
+        <CornerTagline tagline={hero.tagline} />
+        <StickerBadge sticker={hero.sticker} />
       </div>
     </section>
   );

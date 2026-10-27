@@ -1,6 +1,11 @@
+'use client';
+
 import { ArrowUpRight, Play } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { videos, type VideoAccent, type VideoClip, type VideoEntry } from '@/content/videos';
+import type { VideoAccent, VideoClip, VideoEntry } from '@/content/videos';
+import { useSiteContent } from '@/lib/site-content';
+import { Reveal, RevealLine, useReveal } from '@/components/motion/reveal';
 
 const FILL: Record<VideoAccent, string> = {
   sun: 'bg-sun/80',
@@ -134,8 +139,10 @@ function FeaturedVideo({
   label: string;
   total: number;
 }) {
+  const reveal = useReveal({ distance: 30, amount: 0.16 });
+
   return (
-    <div>
+    <motion.div {...reveal}>
       <a
         href={href}
         aria-label={`${entry.title} — ${label}`}
@@ -208,15 +215,29 @@ function FeaturedVideo({
           {entry.description}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function ClipRow({ clip, index }: { clip: VideoClip; index: number }) {
+function ClipRow({
+  clip,
+  index,
+  feedHref,
+}: {
+  clip: VideoClip;
+  index: number;
+  feedHref: string;
+}) {
+  const reveal = useReveal({
+    delay: Math.min(index * 0.04, 0.16),
+    distance: 18,
+    amount: 0.35,
+  });
+
   return (
-    <li className="border-b border-[var(--color-border)]">
+    <motion.li {...reveal} className="border-b border-[var(--color-border)]">
       <a
-        href={`${videos.feedHref}?clip=${clip.slug}`}
+        href={`${feedHref}?clip=${clip.slug}`}
         className="group focus-visible:ring-ring grid grid-cols-[1.25rem_3.5rem_minmax(0,1fr)_auto] items-center gap-3 py-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:grid-cols-[1.5rem_4.25rem_minmax(0,1fr)_auto] md:gap-5 md:py-5"
       >
         <span className="text-muted-foreground/60 self-start pt-1 text-[9px] font-medium tracking-[0.16em]">
@@ -259,11 +280,12 @@ function ClipRow({ clip, index }: { clip: VideoClip; index: number }) {
           />
         </span>
       </a>
-    </li>
+    </motion.li>
   );
 }
 
 export function Videos() {
+  const { videos } = useSiteContent();
   const [featured, ...moreClips] = videos.clips;
   if (!featured) return null;
 
@@ -284,28 +306,36 @@ export function Videos() {
       <div className="relative mx-auto max-w-[1280px] px-6 py-20 md:px-10 md:py-28 lg:px-16 lg:py-32">
         <header className="grid gap-8 border-b border-[var(--color-border)] pb-10 md:grid-cols-[minmax(0,1fr)_340px] md:items-end md:gap-12 md:pb-14 lg:gap-20">
           <div>
-            <p className="text-muted-foreground flex items-center gap-2.5 text-[10px] font-medium tracking-[0.26em] uppercase">
-              <span aria-hidden="true" className="bg-foreground h-1 w-1 rounded-full" />
-              {videos.eyebrow}
-            </p>
+            <Reveal distance={10} amount={0.6}>
+              <p className="text-muted-foreground flex items-center gap-2.5 text-[10px] font-medium tracking-[0.26em] uppercase">
+                <span aria-hidden="true" className="bg-foreground h-1 w-1 rounded-full" />
+                {videos.eyebrow}
+              </p>
+            </Reveal>
             <h2
               id="videos-heading"
               className="font-display mt-5 text-[clamp(3.2rem,7vw,6.2rem)] leading-[0.87] font-normal tracking-[-0.03em]"
             >
-              {videos.heading[0]}
-              <br />
-              <em className="italic">{videos.heading[1]}</em>
+              <RevealLine>{videos.heading[0]}</RevealLine>
+              <RevealLine delay={0.08}>
+                <em className="italic">{videos.heading[1]}</em>
+              </RevealLine>
             </h2>
           </div>
 
-          <div className="flex flex-col gap-5 md:items-end md:pb-2 md:text-right">
+          <Reveal
+            className="flex flex-col gap-5 md:items-end md:pb-2 md:text-right"
+            delay={0.14}
+            distance={18}
+            amount={0.35}
+          >
             <p className="text-muted-foreground max-w-[38ch] text-sm leading-relaxed">
               {videos.intro}
             </p>
             <p className="text-muted-foreground/70 text-[10px] tracking-[0.18em] uppercase">
               {totalLabel} · {videos.period}
             </p>
-          </div>
+          </Reveal>
         </header>
 
         <div className="mt-12 grid gap-14 md:mt-16 md:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] md:items-start md:gap-10 lg:mt-20 lg:gap-16">
@@ -317,7 +347,12 @@ export function Videos() {
           />
 
           <div>
-            <div className="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4">
+            <Reveal
+              className="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4"
+              delay={0.08}
+              distance={12}
+              amount={0.4}
+            >
               <div>
                 <p className="text-muted-foreground text-[10px] font-medium tracking-[0.26em] uppercase">
                   More from the feed
@@ -329,17 +364,24 @@ export function Videos() {
               <p className="text-muted-foreground/70 shrink-0 pb-0.5 text-[10px] tracking-[0.18em] uppercase">
                 {String(moreClips.length).padStart(2, '0')} clips
               </p>
-            </div>
+            </Reveal>
 
             <ol aria-label="More from the feed">
               {moreClips.map((clip, index) => (
-                <ClipRow key={clip.slug} clip={clip} index={index} />
+                <ClipRow
+                  key={`${clip.slug}-${index}`}
+                  clip={clip}
+                  index={index}
+                  feedHref={videos.feedHref}
+                />
               ))}
             </ol>
 
-            <p className="text-muted-foreground/55 mt-5 text-[10px] tracking-[0.18em] uppercase">
-              New clips appear here as they’re posted.
-            </p>
+            <Reveal className="mt-5" distance={8} amount={0.6} delay={0.12}>
+              <p className="text-muted-foreground/55 text-[10px] tracking-[0.18em] uppercase">
+                New clips appear here as they’re posted.
+              </p>
+            </Reveal>
           </div>
         </div>
       </div>

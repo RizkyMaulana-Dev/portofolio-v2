@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { OrbitCard as OrbitCardView } from "./orbit-card";
-import { hero, type OrbitCard } from "@/content/hero";
+import type { OrbitCard } from "@/content/hero";
 import { computeCard, getCardCount, getOrbitConfig, type StageSize } from "@/lib/orbit";
 import { useStageSize } from "@/lib/use-stage-size";
 import { useSectionProgress } from "@/lib/use-section-progress";
@@ -102,11 +102,17 @@ function AnimatedOrbitCard({
   );
 }
 
-export function OrbitCards({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
+export function OrbitCards({
+  containerRef,
+  cards,
+}: {
+  containerRef: React.RefObject<HTMLElement | null>;
+  cards: OrbitCard[];
+}) {
   const stageSize = useStageSize();
   const cardCount = useMemo(() => getCardCount(stageSize.width), [stageSize.width]);
 
-  const cardsToShow = hero.cards.slice(0, cardCount);
+  const cardsToShow = cards.slice(0, cardCount);
 
   return (
     <div

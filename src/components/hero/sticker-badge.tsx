@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { hero } from "@/content/hero";
 
-export function StickerBadge() {
+export function StickerBadge({ sticker }: { sticker: string }) {
   const rotate = useMotionValue(0);
   const time = useTime();
 
@@ -26,7 +25,7 @@ export function StickerBadge() {
   }, [rotate, time]);
 
   // Repeat text to fill circle
-  const text = hero.sticker.repeat(3);
+  const text = sticker.repeat(3);
 
   return (
     <motion.div

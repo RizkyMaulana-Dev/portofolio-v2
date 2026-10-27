@@ -1,7 +1,11 @@
+'use client';
+
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
-import { site } from '@/content/site';
+import { useSiteContent } from '@/lib/site-content';
+import { Reveal, RevealLine } from '@/components/motion/reveal';
 
 export function Footer() {
+  const { site } = useSiteContent();
   const year = new Date().getFullYear();
 
   return (
@@ -18,39 +22,49 @@ export function Footer() {
       <div className="relative mx-auto max-w-[1280px] px-6 md:px-10 lg:px-16">
         <div className="grid gap-12 py-16 md:py-24 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-24">
           <div>
-            <p className="text-foreground/60 flex items-center gap-2.5 text-[10px] font-medium tracking-[0.26em] uppercase">
-              <span aria-hidden="true" className="bg-foreground h-1 w-1 rounded-full" />
-              Contact / {year}
-            </p>
+            <Reveal distance={8} amount={0.6}>
+              <p className="text-foreground/60 flex items-center gap-2.5 text-[10px] font-medium tracking-[0.26em] uppercase">
+                <span aria-hidden="true" className="bg-foreground h-1 w-1 rounded-full" />
+                Contact / {year}
+              </p>
+            </Reveal>
 
             <h2
               id="footer-heading"
               className="font-display mt-5 text-[clamp(3.4rem,8.2vw,7.6rem)] leading-[0.86] tracking-[-0.04em]"
             >
-              Let's make
-              <br />
-              <em className="italic">it clear.</em>
+              <RevealLine>{site.footerHeading[0]}</RevealLine>
+              <RevealLine delay={0.08}>
+                <em className="italic">{site.footerHeading[1]}</em>
+              </RevealLine>
             </h2>
 
-            <a
-              href={`mailto:${site.email}`}
-              className="group border-foreground/20 text-foreground hover:border-foreground focus-visible:ring-ring mt-8 inline-flex max-w-full items-center gap-3 border-b pb-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-            >
-              <span className="truncate">{site.email}</span>
-              <span className="border-foreground/15 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300">
-                <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
-              </span>
-            </a>
+            <Reveal className="mt-8" delay={0.16} distance={14} amount={0.5}>
+              <a
+                href={`mailto:${site.email}`}
+                className="group border-foreground/20 text-foreground hover:border-foreground focus-visible:ring-ring inline-flex max-w-full items-center gap-3 border-b pb-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                <span className="truncate">{site.email}</span>
+                <span className="border-foreground/15 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300">
+                  <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </span>
+              </a>
+            </Reveal>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1 lg:pt-2">
+          <Reveal
+            className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1 lg:pt-2"
+            delay={0.12}
+            distance={18}
+            amount={0.3}
+          >
             <div>
               <p className="text-foreground/60 text-[10px] font-medium tracking-[0.26em] uppercase">
                 Elsewhere
               </p>
               <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
-                {site.socials.map(social => (
-                  <li key={social.label}>
+                {site.socials.map((social, index) => (
+                  <li key={`${social.label}-${index}`}>
                     <a
                       href={social.href}
                       className="group text-foreground/60 hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center gap-1.5 text-sm transition-colors focus-visible:underline focus-visible:outline-none"
@@ -77,18 +91,23 @@ export function Footer() {
                 {site.location}
               </p>
             </div>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="text-foreground/60 flex flex-col gap-4 border-t border-[var(--color-border)] py-6 text-[10px] font-medium tracking-[0.16em] uppercase md:flex-row md:items-center md:justify-between">
+        <Reveal
+          className="text-foreground/60 flex flex-col gap-4 border-t border-[var(--color-border)] py-6 text-[10px] font-medium tracking-[0.16em] uppercase md:flex-row md:items-center md:justify-between"
+          delay={0.2}
+          distance={10}
+          amount={0.4}
+        >
           <p>
             © {year} {site.name}
           </p>
 
           <nav aria-label="Footer navigation">
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
-              {site.footerNav.map(item => (
-                <li key={item.label}>
+              {site.footerNav.map((item, index) => (
+                <li key={`${item.label}-${index}`}>
                   <a
                     href={item.href}
                     className="hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center transition-colors focus-visible:underline focus-visible:outline-none"
@@ -107,7 +126,7 @@ export function Footer() {
             Back to top
             <ArrowUp aria-hidden="true" className="h-3.5 w-3.5" />
           </a>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

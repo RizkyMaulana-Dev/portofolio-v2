@@ -5,9 +5,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { hero } from "@/content/hero";
 
-export function TrustBadge() {
+export function TrustBadge({ trust }: { trust: string }) {
   return (
     <div
       className={cn(
@@ -18,7 +17,7 @@ export function TrustBadge() {
     >
       <Separator className="w-[24px] border-border" />
       <p className="text-sm text-muted-foreground max-w-[200px]">
-        {hero.trust}
+        {trust}
       </p>
       <div className="flex items-center gap-2">
         <div className="flex -space-x-3">

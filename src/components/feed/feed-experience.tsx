@@ -5,7 +5,8 @@ import { ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { copyTextToClipboard } from '@/lib/clipboard';
 import { formatClipIndex, getClipShareUrl } from '@/lib/feed';
-import { videos, type VideoClip, type VideoComment } from '@/content/videos';
+import type { VideoClip, VideoComment, VideoFeedContent } from '@/content/videos';
+import { useSiteContent } from '@/lib/site-content';
 import { FeedSheet, type FeedPanelMode } from '@/components/videos/feed-sheet';
 import { FeedSlide } from '@/components/videos/feed-slide';
 
@@ -19,6 +20,13 @@ const LIKES_STORAGE_KEY = 'rizky-feed-likes-v1';
 const WHEEL_QUIET_MS = 220;
 
 export function FeedExperience() {
+  const { videos } = useSiteContent();
+  const clipKey = videos.clips.map((clip) => clip.slug).join('|');
+
+  return <FeedExperienceView key={clipKey} videos={videos} />;
+}
+
+function FeedExperienceView({ videos }: { videos: VideoFeedContent }) {
   const feedRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
   const toastTimeout = useRef<number | null>(null);
@@ -299,7 +307,7 @@ export function FeedExperience() {
       >
         {videos.clips.map((clip, index) => (
           <div
-            key={clip.slug}
+            key={`${clip.slug}-${index}`}
             ref={node => {
               slideRefs.current[index] = node;
             }}
@@ -347,7 +355,7 @@ export function FeedExperience() {
             >
               {videos.clips.map((clip, index) => (
                 <button
-                  key={clip.slug}
+                  key={`${clip.slug}-${index}`}
                   type="button"
                   onClick={() => goTo(index)}
                   aria-label={`Go to clip ${index + 1}: ${clip.title}`}
