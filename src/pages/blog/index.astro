@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowUpRight } from 'lucide-react';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { PostArt } from '../../components/blog/post-art';
+import { formatBlogDate } from '../../lib/blog';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const archivePosts = featured ? posts.filter((post) => post.id !== featured.id) : posts;
+const totalLabel = String(posts.length).padStart(2, '0');
+const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYear();
+---
+
+<BlogLayout
+  title="Blog · Rizky Maulana"
+  description="Notes on design, code, and the quiet parts in between."
+>
+  <div class="mx-auto max-w-[1280px] px-6 pt-14 pb-24 md:px-10 md:pt-20 md:pb-32 lg:px-16 lg:pt-24">
+    <header class="max-w-[1000px]">
+      <p class="text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/60">
+        Personal blog / {totalLabel} notes
+      </p>
+      <h1
+        class="mt-5 font-display text-[clamp(3rem,7vw,6.2rem)] leading-[0.87] tracking-[-0.03em]"
+      >
+        Notes from
+        <br />
+        <em class="italic">the in-between.</em>
+      </h1>
+
+      <div
+        class="mt-8 flex flex-col gap-5 border-t border-[var(--color-border)] pt-5 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <p class="max-w-[50ch] text-sm leading-relaxed text-foreground/60">
+          On design, code, and the parts of the process that do not fit neatly into a case study.
+        </p>
+        <p
+          class="shrink-0 text-[10px] uppercase tracking-[0.18em] text-foreground/60"
+        >
+          {totalLabel} entries / {latestYear}
+        </p>
+      </div>
+    </header>
+
+    {
+      featured && (
+        <article class="mt-12 md:mt-16">
+          <a
+            href={`/blog/${featured.id}`}
+            class="group block rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <div class="relative aspect-[4/3] overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-surface shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] sm:aspect-[16/9] lg:aspect-[16/7]">
+              <div class="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
+                <PostArt accent={featured.data.accent} mark={featured.data.mark} />
+              </div>
+
+              <div class="pointer-events-none absolute inset-x-5 top-4 flex items-center justify-between gap-4 md:inset-x-6 md:top-5">
+                <span class="inline-flex items-center whitespace-nowrap rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm">
+                  Featured note
+                </span>
+                <span class="text-right text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/65">
+                  {formatBlogDate(featured.data.date)}
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <h2 class="max-w-[17ch] text-balance font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.92] tracking-[-0.03em]">
+                {featured.data.title}
+              </h2>
+              <p class="mt-4 max-w-[62ch] text-sm leading-relaxed text-foreground/60 md:text-base">
+                {featured.data.description}
+              </p>
+
+              <div class="mt-5 flex items-center justify-between gap-6 border-t border-[var(--color-border)] pt-4">
+                <p class="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+                  {featured.data.category}
+                  <span aria-hidden="true" class="mx-2 text-foreground/30">
+                    /
+                  </span>
+                  {featured.data.readingTime}
+                </p>
+                <span class="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground transition-colors group-hover:text-foreground/60">
+                  Read essay
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </span>
+              </div>
+            </div>
+          </a>
+        </article>
+      )
+    }
+
+    <section class="mt-16 md:mt-24" aria-labelledby="all-notes-heading">
+      <div class="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4">
+        <h2
+          id="all-notes-heading"
+          class="font-display text-[clamp(2.3rem,4vw,3.4rem)] leading-none tracking-[-0.02em]"
+        >
+          All notes.
+        </h2>
+        <p class="shrink-0 pb-1 text-[10px] uppercase tracking-[0.18em] text-foreground/60">
+          {String(archivePosts.length).padStart(2, '0')} more
+        </p>
+      </div>
+
+      {
+        archivePosts.length > 0 ? (
+          <ol>
+            {archivePosts.map((post) => (
+              <li class="border-b border-[var(--color-border)]">
+                <a
+                  href={`/blog/${post.id}`}
+                  class="group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4 py-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:grid-cols-[7.5rem_minmax(0,1fr)_10rem_auto] md:gap-8"
+                >
+                  <span class="hidden self-start pt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:block">
+                    {formatBlogDate(post.data.date)}
+                  </span>
+
+                  <div>
+                    <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:hidden">
+                      {formatBlogDate(post.data.date)}
+                      <span aria-hidden="true" class="mx-2 text-foreground/30">
+                        /
+                      </span>
+                      {post.data.category}
+                    </p>
+                    <h3 class="mt-2 font-display text-[clamp(1.8rem,3vw,2.6rem)] leading-[0.98] tracking-[-0.01em] md:mt-0">
+                      {post.data.title}
+                    </h3>
+                    <p class="mt-2 max-w-[62ch] text-sm leading-relaxed text-foreground/60">
+                      {post.data.description}
+                    </p>
+                  </div>
+
+                  <p class="hidden self-start pt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:block">
+                    {post.data.category}
+                    <br />
+                    <span class="text-foreground/60">{post.data.readingTime}</span>
+                  </p>
+
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="py-10 text-sm leading-relaxed text-foreground/60">
+            The next note is still being written.
+          </p>
+        )
+      }
+    </section>
+  </div>
+</BlogLayout>

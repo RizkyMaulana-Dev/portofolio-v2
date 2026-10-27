@@ -23,6 +23,7 @@ export const site = {
   footerNav: [
     { label: 'Work', href: '/#work' },
     { label: 'About', href: '/#about' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Feed', href: '/feed' },
   ] as FooterLink[],
 };

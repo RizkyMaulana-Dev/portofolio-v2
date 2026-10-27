@@ -1,0 +1,23 @@
+---
+import Layout from './Layout.astro';
+import { BlogHeader } from '../components/blog/blog-header';
+import { Footer } from '../components/footer/footer';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, ogType = 'website' } = Astro.props;
+---
+
+<Layout title={title} description={description} ogType={ogType} lang="en">
+  <div class="min-h-screen">
+    <BlogHeader />
+    <main>
+      <slot />
+    </main>
+  </div>
+  <Footer />
+</Layout>
