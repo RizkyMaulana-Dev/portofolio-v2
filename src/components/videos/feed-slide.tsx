@@ -33,7 +33,7 @@ function FeedAction({
       aria-label={ariaLabel}
       aria-pressed={pressed}
       aria-haspopup={hasPopup}
-      className="group focus-visible:ring-foreground/40 flex min-w-11 flex-col items-center gap-1.5 rounded-2xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
+      className="group focus-visible:ring-foreground/40 flex min-w-11 flex-col items-center gap-1.5 rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-safe:hover:scale-[1.03] motion-safe:active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
     >
       <span
         className={cn(
@@ -111,7 +111,7 @@ export function FeedSlide({
       <div className="relative z-10 flex h-full flex-col justify-end">
         <div className="mx-auto w-full max-w-[1280px] px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] md:px-10 md:pb-10 lg:px-16 lg:pb-12">
           <div className="flex items-end justify-between gap-5">
-            <div className="max-w-[calc(100%_-_4.5rem)] min-w-0 sm:max-w-[34rem] lg:max-w-[45rem]">
+            <div className="feed-copy max-w-[calc(100%_-_4.5rem)] min-w-0 sm:max-w-[34rem] lg:max-w-[45rem]">
               <div className="text-foreground/65 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9px] font-medium tracking-[0.18em] uppercase">
                 <span className="border-foreground/10 bg-surface/80 text-foreground/75 inline-flex items-center rounded-full border px-2.5 py-1">
                   {clip.category}
@@ -143,7 +143,7 @@ export function FeedSlide({
             <div
               role="group"
               aria-label={`Actions for ${clip.title}`}
-              className="flex shrink-0 flex-col items-center gap-2.5 md:gap-3"
+              className="feed-actions flex shrink-0 flex-col items-center gap-2.5 md:gap-3"
             >
               <FeedAction
                 label="Like"

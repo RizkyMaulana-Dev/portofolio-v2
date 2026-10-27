@@ -21,18 +21,26 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
 >
   <div class="mx-auto max-w-[1280px] px-6 pt-14 pb-24 md:px-10 md:pt-20 md:pb-32 lg:px-16 lg:pt-24">
     <header class="max-w-[1000px]">
-      <p class="text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/60">
+      <p
+        data-reveal-static
+        class="text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/60"
+      >
         Personal blog / {totalLabel} notes
       </p>
       <h1
         class="mt-5 font-display text-[clamp(3rem,7vw,6.2rem)] leading-[0.87] tracking-[-0.03em]"
       >
-        Notes from
-        <br />
-        <em class="italic">the in-between.</em>
+        <span class="block" data-reveal-static data-reveal-mask>
+          <span class="block">Notes from</span>
+        </span>
+        <span class="block" data-reveal-static data-reveal-mask style="--reveal-delay: 80ms">
+          <span class="block"><em class="italic">the in-between.</em></span>
+        </span>
       </h1>
 
       <div
+        data-reveal-static
+        style="--reveal-delay: 160ms"
         class="mt-8 flex flex-col gap-5 border-t border-[var(--color-border)] pt-5 sm:flex-row sm:items-end sm:justify-between"
       >
         <p class="max-w-[50ch] text-sm leading-relaxed text-foreground/60">
@@ -48,10 +56,10 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
 
     {
       featured && (
-        <article class="mt-12 md:mt-16">
+        <article class="mt-12 md:mt-16" data-reveal-static style="--reveal-delay: 80ms">
           <a
             href={`/blog/${featured.id}`}
-            class="group block rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            class="group block rounded-[28px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <div class="relative aspect-[4/3] overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-surface shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] sm:aspect-[16/9] lg:aspect-[16/7]">
               <div class="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
@@ -99,7 +107,10 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
     }
 
     <section class="mt-16 md:mt-24" aria-labelledby="all-notes-heading">
-      <div class="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4">
+      <div
+        class="flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-4"
+        data-reveal-static
+      >
         <h2
           id="all-notes-heading"
           class="font-display text-[clamp(2.3rem,4vw,3.4rem)] leading-none tracking-[-0.02em]"
@@ -114,11 +125,15 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
       {
         archivePosts.length > 0 ? (
           <ol>
-            {archivePosts.map((post) => (
-              <li class="border-b border-[var(--color-border)]">
+            {archivePosts.map((post, index) => (
+              <li
+                class="border-b border-[var(--color-border)]"
+                data-reveal-static
+                style={`--reveal-delay: ${Math.min(index * 55, 220)}ms`}
+              >
                 <a
                   href={`/blog/${post.id}`}
-                  class="group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4 py-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:grid-cols-[7.5rem_minmax(0,1fr)_10rem_auto] md:gap-8"
+                  class="group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4 py-7 transition-colors duration-300 hover:bg-foreground/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:grid-cols-[7.5rem_minmax(0,1fr)_10rem_auto] md:gap-8"
                 >
                   <span class="hidden self-start pt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:block">
                     {formatBlogDate(post.data.date)}
@@ -146,7 +161,7 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
                     <span class="text-foreground/60">{post.data.readingTime}</span>
                   </p>
 
-                  <span class="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-all duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background motion-safe:group-hover:scale-105">
                     <ArrowUpRight
                       aria-hidden="true"
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -157,7 +172,7 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
             ))}
           </ol>
         ) : (
-          <p class="py-10 text-sm leading-relaxed text-foreground/60">
+          <p class="py-10 text-sm leading-relaxed text-foreground/60" data-reveal-static>
             The next note is still being written.
           </p>
         )

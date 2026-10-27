@@ -333,16 +333,20 @@ function FeedExperienceView({ videos }: { videos: VideoFeedContent }) {
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30">
+      <div className="feed-chrome pointer-events-none absolute inset-x-0 top-0 z-30">
         <div className="mx-auto max-w-[1280px] px-5 pt-[max(1rem,env(safe-area-inset-top))] md:px-10 md:pt-6 lg:px-16">
           <div className="flex items-center gap-4">
             <a
               href="/"
               aria-label="Back to portfolio"
               title="Back to portfolio"
-              className="text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 pointer-events-auto relative flex shrink-0 items-center gap-1.5 rounded-sm text-[9px] font-medium tracking-[0.18em] uppercase transition-colors duration-200 before:absolute before:-inset-x-2 before:-inset-y-3 before:content-[''] focus-visible:ring-2 focus-visible:outline-none"
+              className="group text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 pointer-events-auto relative flex shrink-0 items-center gap-1.5 rounded-sm text-[9px] font-medium tracking-[0.18em] uppercase transition-colors duration-200 before:absolute before:-inset-x-2 before:-inset-y-3 before:content-[''] focus-visible:ring-2 focus-visible:outline-none"
             >
-              <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={1.6} />
+              <ArrowLeft
+                aria-hidden="true"
+                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+                strokeWidth={1.6}
+              />
               <span>
                 Rizky° <span className="text-foreground/35">/ Feed</span>
               </span>
@@ -364,7 +368,7 @@ function FeedExperienceView({ videos }: { videos: VideoFeedContent }) {
                 >
                   <span
                     className={cn(
-                      'h-[2px] w-full transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                      'h-[2px] w-full origin-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-safe:group-hover:scale-y-150 motion-safe:group-focus-visible:scale-y-150',
                       activeIndex === index
                         ? 'bg-foreground/70'
                         : 'bg-foreground/15 group-hover:bg-foreground/35 group-focus-visible:bg-foreground/45'

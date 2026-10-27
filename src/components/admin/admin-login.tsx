@@ -63,7 +63,7 @@ export function AdminLogin() {
       </div>
 
       <div className="relative mx-auto flex min-h-svh max-w-[1320px] flex-col px-6 py-7 md:px-10 lg:px-16">
-        <header className="flex items-center justify-between gap-6">
+        <header className="enter-up flex items-center justify-between gap-6">
           <a
             href="/"
             className="text-lg font-semibold tracking-[-0.02em] text-foreground focus-visible:underline focus-visible:outline-none"
@@ -77,7 +77,7 @@ export function AdminLogin() {
         </header>
 
         <div className="grid flex-1 items-center gap-14 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] lg:gap-24 lg:py-20">
-          <section className="order-2 max-w-[680px] lg:order-1">
+          <section className="enter-up enter-up-delay-1 order-2 max-w-[680px] lg:order-1">
             <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/55">
               <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
               Content workspace
@@ -112,7 +112,7 @@ export function AdminLogin() {
             </ul>
           </section>
 
-          <section className="order-1 w-full lg:order-2">
+          <section className="enter-up enter-up-delay-2 order-1 w-full lg:order-2">
             <div className="rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)]/90 p-6 shadow-[0_36px_100px_-60px_rgb(0_0_0/0.55)] backdrop-blur-sm md:p-8">
               <div className="flex items-start justify-between gap-5 border-b border-[var(--color-border)] pb-6">
                 <div>
@@ -180,7 +180,7 @@ export function AdminLogin() {
                       type="button"
                       onClick={() => setShowPassword((current) => !current)}
                       aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-foreground/40 transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-foreground/40 transition-[color,background-color,scale] duration-200 motion-safe:hover:scale-110 motion-safe:active:scale-95 hover:bg-foreground/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
                     >
                       {showPassword ? (
                         <EyeOff aria-hidden="true" className="h-4 w-4" />
@@ -202,7 +202,7 @@ export function AdminLogin() {
 
                 <button
                   type="submit"
-                  className="group flex h-12 w-full items-center justify-between rounded-full bg-foreground pl-5 pr-2 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+                  className="group flex h-12 w-full items-center justify-between rounded-full bg-foreground pl-5 pr-2 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-[opacity,scale] duration-200 motion-safe:hover:scale-[1.01] motion-safe:active:scale-[0.99] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
                 >
                   Masuk ke dashboard
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
@@ -221,9 +221,12 @@ export function AdminLogin() {
 
             <a
               href="/"
-              className="mt-5 inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+              className="group mt-5 inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
             >
-              <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
+              <ArrowLeft
+                aria-hidden="true"
+                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+              />
               Kembali ke portfolio
             </a>
           </section>

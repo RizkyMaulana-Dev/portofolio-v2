@@ -50,7 +50,7 @@ const { clip } = Astro.props;
       >
       </div>
 
-      <div class="absolute inset-x-0 top-0 z-10 px-5 pt-[max(1rem,env(safe-area-inset-top))]">
+      <div class="enter-up absolute inset-x-0 top-0 z-10 px-5 pt-[max(1rem,env(safe-area-inset-top))]">
         <div class="flex items-center justify-between gap-4">
           <p class="text-foreground/65 text-[9px] font-medium tracking-[0.18em] uppercase">
             Rizky° <span class="text-foreground/35">/ Clip</span>
@@ -59,7 +59,7 @@ const { clip } = Astro.props;
             href={`/feed?clip=${clip.slug}`}
             target="_blank"
             rel="noreferrer"
-            class="border-foreground/10 bg-surface/80 text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 inline-flex items-center rounded-full border px-3 py-1.5 text-[9px] font-medium tracking-[0.14em] uppercase transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
+            class="border-foreground/10 bg-surface/80 text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 inline-flex items-center rounded-full border px-3 py-1.5 text-[9px] font-medium tracking-[0.14em] uppercase transition-all duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.03] focus-visible:ring-2 focus-visible:outline-none"
           >
             Open feed
           </a>
@@ -68,7 +68,7 @@ const { clip } = Astro.props;
 
       <div class="absolute inset-x-0 bottom-0 z-10 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <div class="mx-auto max-w-[420px]">
-          <div class="text-foreground/65 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9px] font-medium tracking-[0.18em] uppercase">
+          <div class="enter-up enter-up-delay-1 text-foreground/65 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9px] font-medium tracking-[0.18em] uppercase">
             <span class="border-foreground/10 bg-surface/80 text-foreground/75 inline-flex items-center rounded-full border px-2.5 py-1">
               {clip.category}
             </span>
@@ -79,16 +79,16 @@ const { clip } = Astro.props;
           </div>
 
           <h1
-            class="font-display mt-4 text-[clamp(2.5rem,9vw,3.4rem)] leading-[0.9] tracking-[-0.03em] text-balance"
+            class="enter-up enter-up-delay-2 font-display mt-4 text-[clamp(2.5rem,9vw,3.4rem)] leading-[0.9] tracking-[-0.03em] text-balance"
           >
             {clip.title}
           </h1>
 
-          <p class="text-muted-foreground mt-3 max-w-[34ch] text-[13px] leading-relaxed">
+          <p class="enter-up enter-up-delay-3 text-muted-foreground mt-3 max-w-[34ch] text-[13px] leading-relaxed">
             {clip.description}
           </p>
 
-          <p class="text-foreground/45 mt-4 text-[9px] font-medium tracking-[0.18em] uppercase">
+          <p class="enter-up enter-up-delay-4 text-foreground/45 mt-4 text-[9px] font-medium tracking-[0.18em] uppercase">
             @rizkymaulana
           </p>
         </div>

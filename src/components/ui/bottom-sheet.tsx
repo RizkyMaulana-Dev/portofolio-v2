@@ -56,7 +56,7 @@ const BottomSheetContent = React.forwardRef<
       />
       {children}
       {showClose && (
-        <BottomSheetClose className="bg-background/85 text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none">
+        <BottomSheetClose className="bg-background/85 text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] transition-all duration-200 motion-safe:hover:scale-105 motion-safe:active:scale-95 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none">
           <X aria-hidden="true" className="h-4 w-4" strokeWidth={1.6} />
           <span className="sr-only">Close</span>
         </BottomSheetClose>

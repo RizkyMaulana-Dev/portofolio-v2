@@ -11,7 +11,10 @@ const NAV = [
 export function BlogHeader() {
   return (
     <header className="bg-background/85 sticky top-0 z-40 border-b border-[var(--color-border)] backdrop-blur-xl">
-      <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-6 md:h-[76px] md:px-10 lg:px-16">
+      <div
+        data-reveal-static=""
+        className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-6 md:h-[76px] md:px-10 lg:px-16"
+      >
         <a
           href="/"
           aria-label="Rizky Maulana, back to portfolio"

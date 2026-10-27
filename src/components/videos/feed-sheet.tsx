@@ -210,7 +210,7 @@ export function FeedSheet({
                   type="submit"
                   disabled={!draft.trim()}
                   aria-label="Post comment"
-                  className="bg-foreground text-background focus-visible:ring-foreground/40 flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:opacity-85 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-25"
+                  className="bg-foreground text-background focus-visible:ring-foreground/40 flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:opacity-85 motion-safe:hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-25"
                 >
                   <ArrowUp aria-hidden="true" className="h-4 w-4" strokeWidth={1.7} />
                 </button>
@@ -264,7 +264,7 @@ export function FeedSheet({
                 type="button"
                 onClick={() => void handleCopy()}
                 aria-label="Copy embed code"
-                className="bg-foreground text-background focus-visible:ring-foreground/40 flex h-11 w-full items-center justify-center gap-2 rounded-full text-[10px] font-medium tracking-[0.14em] uppercase transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:opacity-85 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99]"
+                className="bg-foreground text-background focus-visible:ring-foreground/40 flex h-11 w-full items-center justify-center gap-2 rounded-full text-[10px] font-medium tracking-[0.14em] uppercase transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:opacity-85 motion-safe:hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99]"
               >
                 {copyState === 'copied' ? (
                   <Check aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={2} />

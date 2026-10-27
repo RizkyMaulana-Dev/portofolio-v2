@@ -77,6 +77,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
             <button
               className={cn(
                 "rounded-full p-2 bg-white/60 backdrop-blur border border-[var(--color-card-border)]",
+                "transition-all duration-200 ease-out motion-safe:hover:scale-105 motion-safe:active:scale-95",
                 "hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               )}
               aria-label="Open menu"
@@ -113,7 +114,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
                 <button
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    "rounded-full p-2 hover:bg-muted transition-colors",
+                    "rounded-full p-2 hover:bg-muted transition-all duration-200 ease-out motion-safe:hover:scale-105 motion-safe:active:scale-95",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   )}
                   aria-label="Close menu"
