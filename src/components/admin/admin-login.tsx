@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { isAdminAuthenticated, signIn } from "@/lib/admin-auth";
+import { withBase } from "@/lib/paths";
 
 export function AdminLogin() {
   const [checking, setChecking] = useState(true);
@@ -21,7 +22,7 @@ export function AdminLogin() {
 
   useEffect(() => {
     if (isAdminAuthenticated()) {
-      window.location.replace("/admin");
+      window.location.replace(withBase("/admin"));
       return;
     }
 
@@ -38,7 +39,7 @@ export function AdminLogin() {
       return;
     }
 
-    window.location.assign("/admin");
+    window.location.assign(withBase("/admin"));
   }
 
   if (checking) {
@@ -65,7 +66,7 @@ export function AdminLogin() {
       <div className="relative mx-auto flex min-h-svh max-w-[1280px] flex-col px-6 py-7 md:px-10 lg:px-16">
         <header className="enter-up flex items-center justify-between gap-6">
           <a
-            href="/"
+            href={withBase("/")}
             className="text-lg font-semibold tracking-[-0.02em] text-foreground focus-visible:underline focus-visible:outline-none"
           >
             Rizky°
@@ -220,7 +221,7 @@ export function AdminLogin() {
             </div>
 
             <a
-              href="/"
+              href={withBase("/")}
               className="group mt-5 inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
             >
               <ArrowLeft

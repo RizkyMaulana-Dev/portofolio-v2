@@ -1,4 +1,5 @@
 import type { VideoClip } from '@/content/videos';
+import { withBase } from '@/lib/paths';
 
 export function formatFeedCount(value: number): string {
   if (value < 1_000) return String(value);
@@ -22,10 +23,11 @@ export function getClipShareUrl(slug: string, currentUrl: string): string {
 
 export function getClipEmbedCode(clip: VideoClip, origin: string): string {
   const base = origin.replace(/\/$/, '');
+  const embedPath = withBase(`/embed/${clip.slug}`);
   const title = clip.title.replaceAll('"', '&quot;');
 
   return `<iframe
-  src="${base}/embed/${clip.slug}"
+  src="${base}${embedPath}"
   title="${title} — Rizky Maulana"
   width="390"
   height="700"

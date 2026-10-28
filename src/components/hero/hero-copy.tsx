@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import type { HeroContent } from "@/content/hero";
@@ -35,13 +36,13 @@ export function HeroCopy({ content }: { content: HeroContent }) {
       {/* CTA Buttons */}
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-[359px]:mt-7">
         <Button size="default" asChild>
-          <a href={content.ctaPrimary.href}>
+          <a href={withBase(content.ctaPrimary.href)}>
             {content.ctaPrimary.label}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </a>
         </Button>
         <Button variant="outline" size="default" asChild>
-          <a href={content.ctaSecondary.href} className="flex items-center gap-2">
+          <a href={withBase(content.ctaSecondary.href)} className="flex items-center gap-2">
             <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-primary">
               <Play className="h-3 w-3 text-primary-foreground ml-0.5" aria-hidden="true" />
             </span>

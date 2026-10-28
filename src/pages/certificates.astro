@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import PageLayout from '../layouts/PageLayout.astro';
 import { about } from '../content/about';
 import { site } from '../content/site';
+import { withBase } from '../lib/paths';
 
 const certificates = about.certificates.items;
 const issuers = [...new Set(certificates.map((certificate) => certificate.issuer.split(' / ')[0]))];
@@ -15,7 +16,7 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
 >
   <div class="mx-auto max-w-[1280px] px-6 pb-24 pt-10 md:px-10 md:pb-32 md:pt-16 lg:px-16 lg:pt-20">
     <a
-      href="/about"
+      href={withBase('/about')}
       data-reveal-static
       class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
     >
@@ -75,7 +76,7 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
             class="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--color-border)] bg-[var(--color-surface)]"
           >
             <a
-              href={certificate.href}
+              href={withBase(certificate.href)}
               target="_blank"
               rel="noreferrer"
               aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
@@ -83,7 +84,7 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
             >
               {certificate.image ? (
                 <img
-                  src={certificate.image}
+                  src={withBase(certificate.image)}
                   alt={`${certificate.title} certificate`}
                   loading="lazy"
                   decoding="async"
@@ -117,7 +118,7 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
                   {certificate.credentialId ? `ID ${certificate.credentialId}` : 'PDF credential'}
                 </span>
                 <a
-                  href={certificate.href}
+                  href={withBase(certificate.href)}
                   target="_blank"
                   rel="noreferrer"
                   class="group/link inline-flex min-h-8 items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
@@ -141,13 +142,13 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
       </p>
       <div class="flex flex-wrap items-center gap-3">
         <a
-          href="/about"
+          href={withBase('/about')}
           class="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           Read profile
         </a>
         <a
-          href={site.footerNav.find((item) => item.label === 'Résumé')?.href ?? '/documents/cv/rizky-maulana-fullstack-en.pdf'}
+          href={withBase(site.footerNav.find((item) => item.label === 'Résumé')?.href ?? '/documents/cv/rizky-maulana-fullstack-en.pdf')}
           target="_blank"
           rel="noreferrer"
           class="inline-flex min-h-10 items-center gap-2 rounded-full bg-foreground px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"

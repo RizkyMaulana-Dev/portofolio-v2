@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { withBase } from '@/lib/paths';
 import { copyTextToClipboard } from '@/lib/clipboard';
 import { formatClipIndex, getClipShareUrl } from '@/lib/feed';
 import type { VideoClip, VideoComment, VideoFeedContent } from '@/content/videos';
@@ -337,7 +338,7 @@ function FeedExperienceView({ videos }: { videos: VideoFeedContent }) {
         <div className="mx-auto max-w-[1280px] px-5 pt-[max(1rem,env(safe-area-inset-top))] md:px-10 md:pt-6 lg:px-16">
           <div className="flex items-center gap-4">
             <a
-              href="/"
+              href={withBase('/')}
               aria-label="Back to portfolio"
               title="Back to portfolio"
               className="group text-foreground/70 hover:text-foreground focus-visible:ring-foreground/35 pointer-events-auto relative flex shrink-0 items-center gap-1.5 rounded-sm text-[9px] font-medium tracking-[0.18em] uppercase transition-colors duration-200 before:absolute before:-inset-x-2 before:-inset-y-3 before:content-[''] focus-visible:ring-2 focus-visible:outline-none"

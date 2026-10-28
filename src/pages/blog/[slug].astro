@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import { PostArt } from '../../components/blog/post-art';
 import { formatBlogDate } from '../../lib/blog';
+import { withBase } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort(
@@ -38,7 +39,7 @@ const nextPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
   <article class="pb-24">
     <div class="mx-auto max-w-[1280px] px-6 pt-10 md:px-10 md:pt-16 lg:px-16 lg:pt-20">
       <a
-        href="/blog"
+        href={withBase('/blog')}
         data-reveal-static
         class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
       >
@@ -151,7 +152,7 @@ const nextPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
 
           {nextPost && (
             <a
-              href={`/blog/${nextPost.id}`}
+              href={withBase(`/blog/${nextPost.id}`)}
               class="group max-w-[360px] border-t border-[var(--color-border)] pt-4 transition-all duration-300 hover:border-foreground motion-safe:hover:-translate-y-0.5 focus-visible:border-foreground focus-visible:outline-none md:border-t-0 md:pt-0 md:text-right"
             >
               <span class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/60">
@@ -169,7 +170,7 @@ const nextPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
         </div>
 
         <a
-          href="/blog"
+          href={withBase('/blog')}
           class="group mt-10 inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
         >
           <ArrowLeft

@@ -6,6 +6,7 @@ import { site } from '../content/site';
 import { about } from '../content/about';
 import { experiences } from '../content/experience';
 import { work } from '../content/work';
+import { withBase } from '../lib/paths';
 
 const certificateCount = about.certificates.items.length;
 const skillCount = about.skillGroups.reduce((count, group) => count + group.skills.length, 0);
@@ -19,7 +20,7 @@ const projectCount = work.projects.length;
 >
   <div class="mx-auto max-w-[1280px] px-6 pb-24 pt-10 md:px-10 md:pb-32 md:pt-16 lg:px-16 lg:pt-20">
     <a
-      href="/"
+      href={withBase('/')}
       data-reveal-static
       class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
     >
@@ -54,7 +55,7 @@ const projectCount = work.projects.length;
             <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
           </a>
           <a
-            href={profile.resume.en}
+            href={withBase(profile.resume.en)}
             target="_blank"
             rel="noreferrer"
             class="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/55 px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:border-foreground/30 hover:bg-white/85 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -68,7 +69,7 @@ const projectCount = work.projects.length;
       <figure data-reveal-static style="--reveal-delay: 100ms" class="relative">
         <div class="overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)]">
           <img
-            src={profile.image}
+            src={withBase(profile.image)}
             alt="Rizky Maulana"
             width="432"
             height="577"
@@ -175,7 +176,7 @@ const projectCount = work.projects.length;
             {certificateCount} sertifikat dari Cisco Networking Academy, Gamelab Indonesia, dan LearningX — semuanya bisa dibuka sebagai PDF asli.
           </p>
           <a
-            href="/certificates"
+            href={withBase('/certificates')}
             class="group mt-6 inline-flex min-h-10 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
           >
             Browse all credentials
@@ -220,7 +221,7 @@ const projectCount = work.projects.length;
             <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
           </a>
           <a
-            href={profile.resume.id}
+            href={withBase(profile.resume.id)}
             target="_blank"
             rel="noreferrer"
             class="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"

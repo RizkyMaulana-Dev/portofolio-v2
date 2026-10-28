@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { withBase } from '@/lib/paths';
 import { hero } from '@/content/hero';
 
 export type SiteHeaderSection = 'work' | 'about' | 'blog' | 'contact';
@@ -18,7 +19,7 @@ export function BlogHeader({ active }: { active?: SiteHeaderSection }) {
         className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-6 md:h-[76px] md:px-10 lg:px-16"
       >
         <a
-          href="/"
+          href={withBase('/')}
           aria-label="Rizky Maulana, back to portfolio"
           className="text-foreground focus-visible:ring-ring inline-flex min-h-10 items-center rounded-sm text-lg font-semibold focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
@@ -33,7 +34,7 @@ export function BlogHeader({ active }: { active?: SiteHeaderSection }) {
               return (
                 <li key={item.id}>
                   <a
-                    href={item.href}
+                    href={withBase(item.href)}
                     aria-current={isActive ? 'page' : undefined}
                     className={cn(
                       'focus-visible:ring-ring inline-flex min-h-10 items-center rounded-sm px-1 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',

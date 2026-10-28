@@ -3,6 +3,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 import type { Accent, Certificate } from "@/content/about";
 import { useSiteContent } from "@/lib/site-content";
 import { Reveal, RevealLine, useReveal } from "@/components/motion/reveal";
@@ -46,7 +47,7 @@ function CertificateTile({
   return (
     <motion.a
       {...reveal}
-      href={certificate.href}
+      href={withBase(certificate.href)}
       target="_blank"
       rel="noreferrer"
       aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
@@ -65,7 +66,7 @@ function CertificateTile({
         <div className="absolute inset-0 flex items-center justify-center p-1 lg:p-4">
           {certificate.image ? (
             <img
-              src={certificate.image}
+              src={withBase(certificate.image)}
               alt=""
               loading="lazy"
               decoding="async"
@@ -182,7 +183,7 @@ export function Credentials() {
               {certificateCount} · {period}
             </p>
             <a
-              href="/certificates"
+              href={withBase("/certificates")}
               className="group inline-flex min-h-8 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none md:justify-end"
             >
               Open certificate archive

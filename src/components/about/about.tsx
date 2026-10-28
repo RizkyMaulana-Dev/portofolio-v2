@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 import type { Accent } from "@/content/about";
 import { useSectionProgress } from "@/lib/use-section-progress";
 import { useSiteContent } from "@/lib/site-content";
@@ -180,7 +181,7 @@ export function About() {
                     {about.fullstack.note}
                   </p>
                   <a
-                    href="/certificates"
+                    href={withBase("/certificates")}
                     className="group inline-flex min-h-8 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
                   >
                     See all credentials
@@ -246,7 +247,7 @@ export function About() {
                   {featuredCertificates.map((certificate, certificateIndex) => (
                     <a
                       key={`${certificate.title}-${certificateIndex}`}
-                      href={certificate.href}
+                      href={withBase(certificate.href)}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
@@ -255,7 +256,7 @@ export function About() {
                       <span className="relative flex h-8 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/10 bg-[#f4eee2]">
                         {certificate.image ? (
                           <img
-                            src={certificate.image}
+                            src={withBase(certificate.image)}
                             alt=""
                             loading="lazy"
                             className="h-full w-full object-contain p-0.5"

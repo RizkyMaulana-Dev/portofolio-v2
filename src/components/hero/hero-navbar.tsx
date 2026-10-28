@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X, ArrowUpRight } from "lucide-react";
@@ -52,7 +53,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
         {content.nav.map((item, index) => (
           <a
             key={`${item.label}-${index}`}
-            href={item.href}
+            href={withBase(item.href)}
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium text-foreground",
               "transition-colors hover:bg-white"
@@ -63,7 +64,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
         ))}
         <div className="w-px h-6 bg-border" aria-hidden="true" />
         <Button size="sm" className="ml-1" asChild>
-          <a href={content.navCta.href}>
+          <a href={withBase(content.navCta.href)}>
             {content.navCta.label}
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </a>
@@ -133,7 +134,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
                   <motion.a
                     key={`${item.label}-${index}`}
                     variants={menuItem}
-                    href={item.href}
+                    href={withBase(item.href)}
                     className="py-3 text-base font-medium text-foreground hover:text-muted-foreground"
                     onClick={() => setMobileOpen(false)}
                   >
@@ -142,7 +143,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
                 ))}
                 <motion.div variants={menuItem} className="pt-4">
                   <Button className="w-full" asChild>
-                    <a href={content.navCta.href} onClick={() => setMobileOpen(false)}>
+                    <a href={withBase(content.navCta.href)} onClick={() => setMobileOpen(false)}>
                       {content.navCta.label}
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>

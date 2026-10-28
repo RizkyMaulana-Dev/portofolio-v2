@@ -3,6 +3,7 @@
 import { ArrowUpRight, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { withBase } from '@/lib/paths';
 import type { VideoAccent, VideoClip, VideoEntry } from '@/content/videos';
 import { useSiteContent } from '@/lib/site-content';
 import { Reveal, RevealLine, useReveal } from '@/components/motion/reveal';
@@ -344,7 +345,7 @@ export function Videos() {
         <div className="mt-12 grid gap-14 md:mt-16 md:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] md:items-start md:gap-10 lg:mt-20 lg:gap-16">
           <FeaturedVideo
             entry={featured}
-            href={`${videos.feedHref}?clip=${featured.slug}`}
+            href={withBase(`${videos.feedHref}?clip=${featured.slug}`)}
             label={videos.feedLabel}
             total={totalClips}
           />
@@ -375,7 +376,7 @@ export function Videos() {
                   key={`${clip.slug}-${index}`}
                   clip={clip}
                   index={index}
-                  feedHref={videos.feedHref}
+                  feedHref={withBase(videos.feedHref)}
                 />
               ))}
             </ol>

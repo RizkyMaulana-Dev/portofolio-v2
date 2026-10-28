@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
+import { withBase } from '@/lib/paths';
 import { useSiteContent } from '@/lib/site-content';
 import { Reveal, RevealLine } from '@/components/motion/reveal';
 import { SectionPattern } from '@/components/ui/section-pattern';
@@ -68,7 +69,7 @@ export function Footer() {
                 {site.socials.map((social, index) => (
                   <li key={`${social.label}-${index}`}>
                     <a
-                      href={social.href}
+                      href={withBase(social.href)}
                       className="group text-foreground/60 hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center gap-1.5 text-sm transition-colors focus-visible:underline focus-visible:outline-none"
                     >
                       {social.label}
@@ -111,7 +112,7 @@ export function Footer() {
               {site.footerNav.map((item, index) => (
                 <li key={`${item.label}-${index}`}>
                   <a
-                    href={item.href}
+                    href={withBase(item.href)}
                     className="hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center transition-colors focus-visible:underline focus-visible:outline-none"
                   >
                     {item.label}

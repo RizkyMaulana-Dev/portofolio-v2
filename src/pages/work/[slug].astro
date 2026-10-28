@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import PageLayout from '../../layouts/PageLayout.astro';
 import { work } from '../../content/work';
 import type { Project } from '../../content/work';
+import { withBase } from '../../lib/paths';
 
 export function getStaticPaths() {
   return work.projects
@@ -45,7 +46,7 @@ const statusLabel =
   <article class="pb-24 md:pb-32">
     <div class="mx-auto max-w-[1280px] px-6 pt-10 md:px-10 md:pt-16 lg:px-16 lg:pt-20">
       <a
-        href="/#work"
+        href={withBase('/#work')}
         data-reveal-static
         class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
       >
@@ -140,7 +141,7 @@ const statusLabel =
           class="mt-10 overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] md:mt-14"
         >
           <img
-            src={project.cover}
+            src={withBase(project.cover)}
             alt={`${project.title} — project preview`}
             width="1200"
             height="900"
@@ -256,7 +257,7 @@ const statusLabel =
           <div class="mt-7 grid gap-5 md:grid-cols-2">
             {videos.map((video, videoIndex) => (
               <video
-                src={video}
+                src={withBase(video)}
                 controls
                 preload="metadata"
                 playsinline
@@ -287,14 +288,14 @@ const statusLabel =
           <div class="mt-7 columns-1 gap-5 md:columns-2">
             {gallery.map((src, imageIndex) => (
               <a
-                href={src}
+                href={withBase(src)}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`Open ${project.title} screenshot ${imageIndex + 1} in a new tab`}
                 class="group mb-5 block break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <img
-                  src={src}
+                  src={withBase(src)}
                   alt={`${project.title} — screenshot ${imageIndex + 1}`}
                   loading="lazy"
                   decoding="async"
@@ -309,7 +310,7 @@ const statusLabel =
       {nextProject && nextProject.slug !== project.slug && (
         <nav class="mt-16 border-t border-[var(--color-border)] pt-6 md:mt-24" aria-label="Next project">
           <a
-            href={nextProject.href}
+            href={withBase(nextProject.href)}
             class="group flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-6 transition-[border-color,transform] duration-300 hover:border-foreground motion-safe:hover:-translate-y-0.5 focus-visible:border-foreground focus-visible:outline-none"
           >
             <span>

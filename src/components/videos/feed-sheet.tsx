@@ -45,7 +45,9 @@ export function FeedSheet({
   const embedCode = useMemo(() => {
     if (!clip) return '';
     const origin =
-      typeof window === 'undefined' ? 'https://rizkymaulana.dev' : window.location.origin;
+      typeof window === 'undefined'
+        ? 'https://rizkymaulana-dev.github.io'
+        : window.location.origin;
     return getClipEmbedCode(clip, origin);
   }, [clip]);
 

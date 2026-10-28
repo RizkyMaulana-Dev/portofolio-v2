@@ -11,6 +11,7 @@ import {
   UserRound,
 } from "lucide-react";
 import type { SiteContent } from "@/lib/site-content";
+import { withBase } from "@/lib/paths";
 import type { AdminView } from "@/components/admin/admin-types";
 
 const CONTENT_VIEWS: Array<{
@@ -89,7 +90,7 @@ export function AdminOverview({
             </p>
           </div>
           <a
-            href="/"
+            href={withBase("/")}
             target="_blank"
             rel="noreferrer"
             className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"

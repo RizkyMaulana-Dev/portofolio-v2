@@ -3,6 +3,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 import type { Project, WorkAccent } from "@/content/work";
 import { useSiteContent } from "@/lib/site-content";
 import { Reveal, RevealLine, useReveal } from "@/components/motion/reveal";
@@ -102,7 +103,8 @@ function ProjectCover({
   index: number;
   isPlaceholder: boolean;
 }) {
-  const hasCover = Boolean(project.cover);
+  const cover = project.cover ? withBase(project.cover) : undefined;
+  const hasCover = Boolean(cover);
 
   return (
     <div
@@ -112,7 +114,7 @@ function ProjectCover({
       {hasCover ? (
         <>
           <img
-            src={project.cover}
+            src={cover}
             alt=""
             loading="lazy"
             decoding="async"
@@ -264,7 +266,7 @@ function ProjectCard({
   return (
     <motion.a
       {...reveal}
-      href={project.href}
+      href={withBase(project.href)}
       className={cn(
         "group block bg-background focus-visible:z-10",
         stickyClass

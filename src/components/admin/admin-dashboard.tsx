@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getAdminSession, signOut } from "@/lib/admin-auth";
+import { withBase } from "@/lib/paths";
 import {
   defaultSiteContent,
   getSiteContent,
@@ -73,7 +74,7 @@ export function AdminDashboard() {
   useEffect(() => {
     const session = getAdminSession();
     if (!session) {
-      window.location.replace("/admin/login");
+      window.location.replace(withBase("/admin/login"));
       return;
     }
 
@@ -100,7 +101,8 @@ export function AdminDashboard() {
 
   const navigate = useCallback((view: AdminView) => {
     setActive(view);
-    const nextHash = view === "overview" ? "/admin" : `/admin#${view}`;
+    const adminPath = withBase("/admin");
+    const nextHash = view === "overview" ? adminPath : `${adminPath}#${view}`;
     window.history.replaceState(null, "", nextHash);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -176,7 +178,7 @@ export function AdminDashboard() {
 
   function handleLogout() {
     signOut();
-    window.location.replace("/admin/login");
+    window.location.replace(withBase("/admin/login"));
   }
 
   if (!ready || !content) {
@@ -201,7 +203,7 @@ export function AdminDashboard() {
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between gap-4 px-5 pt-5 md:px-7 lg:px-6 lg:pt-7">
               <a
-                href="/admin"
+                href={withBase("/admin")}
                 className="text-lg font-semibold tracking-[-0.02em] text-foreground focus-visible:underline focus-visible:outline-none"
               >
                 Rizky°
@@ -251,7 +253,7 @@ export function AdminDashboard() {
               <p className="truncate text-[10px] text-foreground/40">{sessionEmail}</p>
               <div className="mt-4 flex flex-col gap-2">
                 <a
-                  href="/"
+                  href={withBase("/")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex min-h-9 items-center justify-between gap-2 rounded-lg px-2 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:bg-white/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
@@ -287,7 +289,7 @@ export function AdminDashboard() {
                   Local preview
                 </span>
                 <a
-                  href="/"
+                  href={withBase("/")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Lihat situs"

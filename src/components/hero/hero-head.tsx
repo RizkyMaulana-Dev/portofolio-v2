@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/paths";
 
 export function HeroHeadPlaceholder() {
   return (
@@ -24,7 +25,7 @@ const hasImage = true;
 export function HeroHead() {
   return hasImage ? (
     <img
-      src="/images/hero-head.png"
+      src={withBase("/images/hero-head.png")}
       alt=""
       className="relative z-[4] -mx-6 w-[calc(100%_+_3rem)] max-w-none md:mx-auto md:w-[52%] md:max-w-[600px] min-w-[240px] object-contain pointer-events-none"
       aria-hidden="true"

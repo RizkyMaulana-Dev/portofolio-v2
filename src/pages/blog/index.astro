@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import { PostArt } from '../../components/blog/post-art';
 import { formatBlogDate } from '../../lib/blog';
+import { withBase } from '../../lib/paths';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -59,7 +60,7 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
       featured && (
         <article class="mt-12 md:mt-16" data-reveal-static style="--reveal-delay: 80ms">
           <a
-            href={`/blog/${featured.id}`}
+            href={withBase(`/blog/${featured.id}`)}
             class="group block rounded-[28px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <div class="relative aspect-[4/3] overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-surface shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] sm:aspect-[16/9] lg:aspect-[16/7]">
@@ -133,7 +134,7 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
                 style={`--reveal-delay: ${Math.min(index * 55, 220)}ms`}
               >
                 <a
-                  href={`/blog/${post.id}`}
+                  href={withBase(`/blog/${post.id}`)}
                   class="group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4 py-7 transition-colors duration-300 hover:bg-foreground/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:grid-cols-[7.5rem_minmax(0,1fr)_10rem_auto] md:gap-8"
                 >
                   <span class="hidden self-start pt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 md:block">
