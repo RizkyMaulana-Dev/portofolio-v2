@@ -46,6 +46,12 @@ const LEGACY_CERTIFICATE_TITLES = new Set([
   'Responsive Web Design',
 ]);
 
+const FULLSTACK_PROOF_TITLES = new Set([
+  'Xpresso ACP Lite — UI/UX Design and Development',
+  'Xpresso ACP Lite — Web Programming',
+  'Git & Version Control',
+]);
+
 function isLegacyWork(content: SiteContent['work']): boolean {
   return (
     Array.isArray(content.projects) &&
@@ -61,6 +67,31 @@ function isLegacyAbout(content: SiteContent['about']): boolean {
     items.length > 0 &&
     items.every((certificate) => LEGACY_CERTIFICATE_TITLES.has(certificate.title))
   );
+}
+
+function curateFullstackProof(content: SiteContent['about']): SiteContent['about'] {
+  const certificates = content.certificates;
+  if (!certificates || !Array.isArray(certificates.items)) return content;
+
+  const hasOldAboutHeading =
+    content.heading?.[0] === 'Skills &' && content.heading?.[1] === 'certificates.';
+  const hasOldCertificateHeading =
+    certificates.heading?.[0] === 'Selected' && certificates.heading?.[1] === 'certificates.';
+
+  return {
+    ...content,
+    ...(hasOldAboutHeading ? { heading: ['Skills &', 'full stack.'] as [string, string] } : {}),
+    certificates: {
+      ...certificates,
+      ...(hasOldCertificateHeading
+        ? { heading: ['Every', 'certificate.'] as [string, string] }
+        : {}),
+      items: certificates.items.map((certificate) => ({
+        ...certificate,
+        featured: FULLSTACK_PROOF_TITLES.has(certificate.title),
+      })),
+    },
+  };
 }
 
 function isLegacyHero(content: SiteContent['hero']): boolean {
@@ -86,6 +117,7 @@ function mergeContent(value: unknown): SiteContent {
   const aboutSection = readSection(value.about, defaultSiteContent.about);
   const workSection = readSection(value.work, defaultSiteContent.work);
   const siteSection = readSection(value.site, defaultSiteContent.site);
+  const aboutHasFullstack = isRecord(value.about) && isRecord(value.about.fullstack);
 
   return {
     // `Process` was removed from the page but can still exist in older CMS
@@ -101,7 +133,11 @@ function mergeContent(value: unknown): SiteContent {
     // The previous build shipped placeholder case studies. Replace only when
     // the saved section is still entirely those placeholders, so real edits
     // made in the CMS are never silently discarded.
-    about: isLegacyAbout(aboutSection) ? defaultSiteContent.about : aboutSection,
+    about: isLegacyAbout(aboutSection)
+      ? defaultSiteContent.about
+      : aboutHasFullstack
+        ? aboutSection
+        : curateFullstackProof(aboutSection),
     work: isLegacyWork(workSection) ? defaultSiteContent.work : workSection,
     videos: readSection(value.videos, defaultSiteContent.videos),
     site: isLegacySite(siteSection) ? defaultSiteContent.site : siteSection,

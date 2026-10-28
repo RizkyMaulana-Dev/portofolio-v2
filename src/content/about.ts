@@ -21,12 +21,25 @@ export interface Certificate {
   featured?: boolean;
 }
 
+export interface FullstackStage {
+  title: string;
+  summary: string;
+  proof: string;
+  accent: Accent;
+}
+
 export interface AboutContent {
   eyebrow: string;
   heading: [string, string];
   skillGroups: SkillGroup[];
   skills: {
     label: string;
+  };
+  fullstack: {
+    label: string;
+    heading: [string, string];
+    note: string;
+    stages: FullstackStage[];
   };
   certificates: {
     label: string;
@@ -38,7 +51,7 @@ export interface AboutContent {
 
 export const about: AboutContent = {
   eyebrow: "About — Capabilities",
-  heading: ["Skills &", "certificates."],
+  heading: ["Skills &", "full stack."],
   skillGroups: [
     {
       label: "Frontend & game",
@@ -62,9 +75,44 @@ export const about: AboutContent = {
   skills: {
     label: "Toolkit",
   },
+  fullstack: {
+    label: "Full stack — end to end",
+    heading: ["From interface", "to deployment."],
+    note: "8 projects · 16 credentials · 15+ shipped",
+    stages: [
+      {
+        title: "Interface",
+        summary:
+          "React, Next.js, TypeScript, and Tailwind. Interfaces that stay clear, fast, and responsive.",
+        proof: "UI/UX + Three.js credentials",
+        accent: "violet",
+      },
+      {
+        title: "Application",
+        summary:
+          "Laravel, PHP, Node.js, and REST APIs — auth, admin flows, and business logic.",
+        proof: "Web + programming credentials",
+        accent: "lime",
+      },
+      {
+        title: "Data",
+        summary:
+          "MySQL, PostgreSQL, Prisma, and Supabase — schemas, relations, and row-level security.",
+        proof: "8 projects with custom schemas",
+        accent: "sky",
+      },
+      {
+        title: "Deployment",
+        summary:
+          "Git, Vercel, and Linux/VPS. From local build to public production, with live URLs.",
+        proof: "15+ apps hosted on public servers",
+        accent: "peach",
+      },
+    ],
+  },
   certificates: {
     label: "Credentials",
-    heading: ["Selected", "certificates."],
+    heading: ["Every", "certificate."],
     note: "16 certificates · 2023–2026",
     items: [
       {
@@ -126,7 +174,6 @@ export const about: AboutContent = {
         credentialId: "GL3622129029",
         href: "/documents/certificates/gamelab-unity.pdf",
         accent: "peach",
-        featured: true,
       },
       {
         title: "Introduction to Cybersecurity",
@@ -139,7 +186,6 @@ export const about: AboutContent = {
         credentialId: "0076806838",
         href: "/documents/certificates/cisco-introduction-to-cybersecurity.pdf",
         accent: "violet",
-        featured: true,
       },
       {
         title: "Game 3D: Three.js",
@@ -176,6 +222,7 @@ export const about: AboutContent = {
         credentialId: "GL6446634507",
         href: "/documents/certificates/gamelab-git.pdf",
         accent: "lime",
+        featured: true,
       },
       {
         title: "Xpresso ACP Lite — Web Programming",
@@ -188,6 +235,7 @@ export const about: AboutContent = {
         credentialId: "",
         href: "/documents/certificates/learningx-web-programming.pdf",
         accent: "sky",
+        featured: true,
       },
       {
         title: "Xpresso ACP Lite — Mobile Application Development",

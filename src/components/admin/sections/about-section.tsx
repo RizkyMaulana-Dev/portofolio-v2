@@ -179,7 +179,7 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
 
       <Subsection
         title="Certificates"
-        description="Heading dan daftar credential di bagian bawah About. Tandai maksimal tiga certificate sebagai Featured untuk homepage."
+        description="Heading dan daftar credential di arsip sertifikat homepage. Tandai certificate sebagai Selected untuk badge di wall dan strip Selected proof di About."
         action={
           <AddButton
             onClick={() =>
@@ -296,7 +296,7 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
                 options={ACCENT_OPTIONS}
               />
               <SelectField
-                label="Featured di homepage"
+                label="Selected badge"
                 value={certificate.featured ? "yes" : "no"}
                 onChange={(value) => updateCertificate(index, { featured: value === "yes" })}
                 options={[
