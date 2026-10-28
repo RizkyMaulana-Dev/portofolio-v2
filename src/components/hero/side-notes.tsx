@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { motion, useMotionValue, useTime } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { SideNote } from "@/content/hero";
 import { useSectionProgress } from "@/lib/use-section-progress";
@@ -170,14 +169,12 @@ function RightNote({
             </AvatarFallback>
           </Avatar>
         ))}
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 w-8 rounded-full"
-          aria-label="Add"
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white/60 text-foreground backdrop-blur"
         >
           <Plus className="h-3 w-3" />
-        </Button>
+        </span>
       </div>
 
       <p className="text-sm font-medium text-foreground mb-1">{title}</p>

@@ -105,8 +105,9 @@ export function computeCard(
 
 // Helper: get card count by breakpoint
 export function getCardCount(width: number): number {
-  if (width < 768) return 4;     // mobile
-  if (width < 1024) return 5;    // tablet
+  if (width < 360) return 3;      // very small phones: keep CTAs clear
+  if (width < 768) return 4;      // mobile
+  if (width < 1024) return 5;     // tablet
   return 6;                       // desktop
 }
 

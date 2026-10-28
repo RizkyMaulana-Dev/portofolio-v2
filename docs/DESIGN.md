@@ -104,7 +104,8 @@ Aturan: headline selalu center, `text-balance`. Baris kedua italic. Jangan memak
 |---|---|
 | `≥1024px` | Layout penuh: 6 kartu orbit, 2 kartu samping, trust badge, sticker bintang |
 | `768–1023px` | 5 kartu orbit, kartu samping lebih kecil |
-| `<768px` | 4 kartu orbit, kartu samping disembunyikan, nav jadi `Sheet`, headline `text-5xl`, radius orbit dikecilkan |
+| `360–767px` | 4 kartu orbit, kartu samping disembunyikan, nav jadi `Sheet`, headline `text-5xl`, radius orbit dikecilkan |
+| `<360px` | 3 kartu orbit dengan kartu lebih kecil, headline `2.6rem`, CTA tetap di atas kartu orbit |
 
 ---
 

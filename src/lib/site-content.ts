@@ -41,8 +41,17 @@ function mergeContent(value: unknown): SiteContent {
     return { ...fallback, ...section } as T;
   };
 
+  const heroSection = readSection(value.hero, defaultSiteContent.hero);
+
   return {
-    hero: readSection(value.hero, defaultSiteContent.hero),
+    // `Process` was removed from the page but can still exist in older CMS
+    // snapshots. Drop it so saved content cannot reintroduce a dead anchor.
+    hero: {
+      ...heroSection,
+      nav: (Array.isArray(heroSection.nav) ? heroSection.nav : defaultSiteContent.hero.nav).filter(
+        (item) => item.href !== '#process'
+      ),
+    },
     about: readSection(value.about, defaultSiteContent.about),
     work: readSection(value.work, defaultSiteContent.work),
     videos: readSection(value.videos, defaultSiteContent.videos),

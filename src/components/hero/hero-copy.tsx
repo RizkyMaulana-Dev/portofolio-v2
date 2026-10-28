@@ -8,13 +8,14 @@ import type { HeroContent } from "@/content/hero";
 export function HeroCopy({ content }: { content: HeroContent }) {
   return (
     <div className={cn(
-      "relative z-[3] flex flex-col items-center text-center px-6",
+      "relative z-[6] flex flex-col items-center text-center px-6",
       "md:px-10 lg:px-16"
     )}>
       {/* Headline - two lines, second line italic */}
       <h1 className={cn(
         "font-display text-center text-balance leading-[0.95] tracking-[-0.02em]",
         "text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+        "max-[359px]:text-[2.6rem]",
         "font-light"
       )}>
         <span className="block">{content.headline[0]}</span>
@@ -24,6 +25,7 @@ export function HeroCopy({ content }: { content: HeroContent }) {
       {/* Subheadline */}
       <p className={cn(
         "mt-6 max-w-[600px] text-muted-foreground",
+        "max-[359px]:mt-5",
         "text-base md:text-lg leading-[1.55]",
         "font-normal"
       )}>
@@ -31,7 +33,7 @@ export function HeroCopy({ content }: { content: HeroContent }) {
       </p>
 
       {/* CTA Buttons */}
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-[359px]:mt-7">
         <Button size="default" asChild>
           <a href={content.ctaPrimary.href}>
             {content.ctaPrimary.label}

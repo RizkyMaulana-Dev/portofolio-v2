@@ -57,12 +57,12 @@ export function AdminLogin() {
   return (
     <main className="relative min-h-svh overflow-hidden bg-background">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-[18%] -top-[22%] h-[720px] w-[720px] rounded-full bg-[var(--color-blob-2)] opacity-55 blur-[170px]" />
-        <div className="absolute -right-[16%] bottom-[-24%] h-[660px] w-[660px] rounded-full bg-[var(--color-blob-1)] opacity-45 blur-[170px]" />
-        <div className="absolute left-[42%] top-[18%] h-[280px] w-[280px] rounded-full bg-[var(--color-blob-3)] opacity-30 blur-[120px]" />
+        <div className="absolute -left-[18%] -top-[22%] h-[720px] w-[720px] rounded-full bg-[var(--color-blob-2)] opacity-35 blur-[170px]" />
+        <div className="absolute -right-[16%] bottom-[-24%] h-[660px] w-[660px] rounded-full bg-[var(--color-blob-1)] opacity-30 blur-[170px]" />
+        <div className="absolute left-[42%] top-[18%] h-[280px] w-[280px] rounded-full bg-[var(--color-blob-3)] opacity-20 blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto flex min-h-svh max-w-[1320px] flex-col px-6 py-7 md:px-10 lg:px-16">
+      <div className="relative mx-auto flex min-h-svh max-w-[1280px] flex-col px-6 py-7 md:px-10 lg:px-16">
         <header className="enter-up flex items-center justify-between gap-6">
           <a
             href="/"
@@ -76,23 +76,23 @@ export function AdminLogin() {
           </p>
         </header>
 
-        <div className="grid flex-1 items-center gap-14 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] lg:gap-24 lg:py-20">
-          <section className="enter-up enter-up-delay-1 order-2 max-w-[680px] lg:order-1">
+        <div className="grid flex-1 items-center gap-10 py-10 max-lg:mx-auto max-lg:w-full max-lg:max-w-[430px] md:gap-12 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] lg:gap-24 lg:py-20">
+          <section className="enter-up enter-up-delay-1 max-w-[680px]">
             <p className="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/55">
               <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground" />
               Content workspace
             </p>
-            <h1 className="mt-5 font-display text-[clamp(3.7rem,8vw,7.6rem)] leading-[0.86] tracking-[-0.045em] text-balance">
+            <h1 className="mt-4 font-display text-[clamp(2.7rem,8vw,7.6rem)] leading-[0.86] tracking-[-0.045em] text-balance">
               Keep the site
               <br />
               <em className="italic">clear.</em>
             </h1>
-            <p className="mt-7 max-w-[48ch] text-sm leading-relaxed text-foreground/60 md:text-[15px]">
+            <p className="mt-7 hidden max-w-[48ch] text-sm leading-relaxed text-foreground/60 md:text-[15px] lg:block">
               Satu tempat untuk merapikan copy, project, video, dan kontak yang tampil di
               halaman utama. Tanpa menyentuh kode.
             </p>
 
-            <ul className="mt-10 grid max-w-[600px] gap-3 sm:grid-cols-3">
+            <ul className="mt-10 hidden max-w-[600px] gap-3 sm:grid-cols-3 lg:grid">
               {[
                 ["01", "Hero", "Headline, CTA, navigasi"],
                 ["02", "Konten", "About, work, video"],
@@ -112,7 +112,7 @@ export function AdminLogin() {
             </ul>
           </section>
 
-          <section className="enter-up enter-up-delay-2 order-1 w-full lg:order-2">
+          <section className="enter-up enter-up-delay-2 mx-auto w-full max-w-[430px] lg:mx-0">
             <div className="rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)]/90 p-6 shadow-[0_36px_100px_-60px_rgb(0_0_0/0.55)] backdrop-blur-sm md:p-8">
               <div className="flex items-start justify-between gap-5 border-b border-[var(--color-border)] pb-6">
                 <div>

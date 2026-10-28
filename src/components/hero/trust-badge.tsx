@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
@@ -43,14 +42,12 @@ export function TrustBadge({ trust }: { trust: string }) {
             </Avatar>
           ))}
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-8 w-8 rounded-full"
-          aria-label="Add"
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white/60 text-foreground backdrop-blur"
         >
           <Plus className="h-4 w-4" />
-        </Button>
+        </span>
       </div>
     </div>
   );

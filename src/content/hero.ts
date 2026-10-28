@@ -16,7 +16,6 @@ export const hero = {
     { label: "Work", href: "#work" },
     { label: "About", href: "#about" },
     { label: "Blog", href: "/blog" },
-    { label: "Process", href: "#process" },
     { label: "Contact", href: "#contact" },
   ],
   navCta: { label: "Hire me", href: "#contact" },

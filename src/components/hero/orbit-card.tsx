@@ -39,7 +39,7 @@ export function OrbitCard({ title, caption, accent, icon }: OrbitCardProps) {
   return (
     <div
       className={cn(
-        "glass-card p-4 w-[clamp(9.5rem,15vw,14rem)] select-none",
+        "glass-card p-4 w-[clamp(9.5rem,15vw,14rem)] max-[767px]:w-[8.5rem] select-none",
         "shadow-[0_24px_48px_-12px_rgb(0_0_0/0.15)]",
         "overflow-hidden"
       )}

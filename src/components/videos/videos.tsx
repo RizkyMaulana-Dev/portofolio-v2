@@ -144,9 +144,10 @@ function FeaturedVideo({
   return (
     <motion.div {...reveal}>
       <a
+        id="showreel"
         href={href}
         aria-label={`${entry.title} — ${label}`}
-        className="video-feed-card group bg-surface focus-visible:ring-ring relative block overflow-hidden rounded-[28px] border border-[var(--color-border)] shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="video-feed-card group bg-surface focus-visible:ring-ring relative block scroll-mt-24 overflow-hidden rounded-[28px] border border-[var(--color-border)] shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <div className="relative aspect-[9/16] w-full overflow-hidden">
           <div className="absolute inset-0 transition-[filter,transform] duration-700 ease-out group-hover:scale-[1.035] group-hover:blur-[7px] group-focus-visible:scale-[1.035] group-focus-visible:blur-[7px]">

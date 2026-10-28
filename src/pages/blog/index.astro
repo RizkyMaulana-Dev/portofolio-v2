@@ -23,8 +23,9 @@ const latestYear = posts[0]?.data.date.getUTCFullYear() ?? new Date().getFullYea
     <header class="max-w-[1000px]">
       <p
         data-reveal-static
-        class="text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/60"
+        class="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.26em] text-foreground/60"
       >
+        <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-foreground" />
         Personal blog / {totalLabel} notes
       </p>
       <h1

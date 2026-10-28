@@ -92,7 +92,15 @@ function CoverArt({ project }: { project: Project }) {
   );
 }
 
-function ProjectCover({ project, index }: { project: Project; index: number }) {
+function ProjectCover({
+  project,
+  index,
+  isPlaceholder,
+}: {
+  project: Project;
+  index: number;
+  isPlaceholder: boolean;
+}) {
   return (
     <div
       aria-hidden="true"
@@ -125,12 +133,17 @@ function ProjectCover({ project, index }: { project: Project; index: number }) {
         <span className="font-display text-[2.4rem] italic leading-none text-foreground/80">
           {project.mark}
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white/90 group-hover:text-foreground">
-          View project
-          <ArrowUpRight
-            className="h-3 w-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            aria-hidden="true"
-          />
+        <span className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300",
+          !isPlaceholder && "group-hover:bg-white/90 group-hover:text-foreground"
+        )}>
+          {isPlaceholder ? "Case study soon" : "View project"}
+          {!isPlaceholder && (
+            <ArrowUpRight
+              className="h-3 w-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          )}
         </span>
       </div>
     </div>
@@ -152,16 +165,11 @@ function ProjectCard({
     amount: 0.18,
   });
 
-  return (
-    <motion.a
-      {...reveal}
-      href={project.href}
-      className={cn(
-        "group block bg-background focus-visible:z-10",
-        stickyClass
-      )}
-    >
-      <ProjectCover project={project} index={index} />
+  const isPlaceholder = !project.href || project.href === "#";
+
+  const cardContent = (
+    <>
+      <ProjectCover project={project} index={index} isPlaceholder={isPlaceholder} />
 
       <div className="mt-5 border-t border-[var(--color-border)] pt-4">
         <div className="flex items-start justify-between gap-5">
@@ -177,12 +185,21 @@ function ProjectCard({
               {project.title}
             </h3>
           </div>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
-            <ArrowUpRight
-              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          {isPlaceholder ? (
+            <span
               aria-hidden="true"
-            />
-          </span>
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/35"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+            </span>
+          ) : (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+              <ArrowUpRight
+                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </span>
+          )}
         </div>
 
         <p className="mt-3 max-w-[44ch] text-[13px] leading-relaxed text-muted-foreground md:text-sm">
@@ -203,6 +220,27 @@ function ProjectCard({
           ))}
         </ul>
       </div>
+    </>
+  );
+
+  if (isPlaceholder) {
+    return (
+      <motion.div {...reveal} className={cn("block bg-background", stickyClass)}>
+        {cardContent}
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.a
+      {...reveal}
+      href={project.href}
+      className={cn(
+        "group block bg-background focus-visible:z-10",
+        stickyClass
+      )}
+    >
+      {cardContent}
     </motion.a>
   );
 }

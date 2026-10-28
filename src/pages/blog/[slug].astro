@@ -54,10 +54,11 @@ const nextPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
           <div>
             <p
               data-reveal-static
-              class="text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60"
+              class="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60"
             >
+              <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-foreground" />
               {post.data.category}
-              <span aria-hidden="true" class="mx-2 text-foreground/30">
+              <span aria-hidden="true" class="text-foreground/30">
                 /
               </span>
               {formatBlogDate(post.data.date)}
