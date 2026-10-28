@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import type { Project, WorkAccent } from "@/content/work";
 import { useSiteContent } from "@/lib/site-content";
 import { Reveal, RevealLine, useReveal } from "@/components/motion/reveal";
+import { SectionPattern } from "@/components/ui/section-pattern";
 
 const WASH: Record<WorkAccent, string> = {
   violet: "bg-violet/55",
@@ -292,6 +293,7 @@ export function Work() {
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -right-[16%] -top-40 h-[620px] w-[620px] rounded-full bg-[var(--color-blob-3)] opacity-35 blur-[160px]" />
+        <SectionPattern edge="right" variant="grid" />
       </div>
 
       <div className="relative mx-auto max-w-[1280px] px-6 pt-20 pb-0 md:px-10 md:pt-28 md:pb-0 lg:px-16 lg:pt-32">

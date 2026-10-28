@@ -7,6 +7,7 @@ import { HeroCopy } from "./hero-copy";
 import { HeroHead } from "./hero-head";
 import { OrbitCards } from "./orbit-cards";
 import { AmbientBackground } from "./ambient-background";
+import { SectionPattern } from "@/components/ui/section-pattern";
 import { SideNotes } from "./side-notes";
 import { TrustBadge } from "./trust-badge";
 import { CornerTagline } from "./corner-tagline";
@@ -31,6 +32,7 @@ export function Hero() {
         {/* Background */}
         <div className="absolute inset-0 bg-[var(--color-background)]" aria-hidden="true" />
         <AmbientBackground />
+        <SectionPattern edge="left" variant="grid" className="opacity-50" />
 
         {/* Navbar */}
         <HeroNavbar content={hero} />

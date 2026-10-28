@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import type { Accent, Certificate } from "@/content/about";
 import { useSiteContent } from "@/lib/site-content";
 import { Reveal, RevealLine, useReveal } from "@/components/motion/reveal";
+import { SectionPattern } from "@/components/ui/section-pattern";
 
 const GRID_STYLE = {
   backgroundImage:
@@ -144,6 +145,7 @@ export function Credentials() {
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-[14%] top-24 h-[520px] w-[520px] rounded-full bg-[var(--color-blob-1)] opacity-30 blur-[160px]" />
+        <SectionPattern edge="right" variant="dots" />
       </div>
 
       <div className="relative mx-auto max-w-[1280px] px-6 py-14 md:px-10 md:py-24 lg:px-16 lg:py-28">

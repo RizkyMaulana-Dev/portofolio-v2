@@ -8,6 +8,7 @@ import type { Accent } from "@/content/about";
 import { useSectionProgress } from "@/lib/use-section-progress";
 import { useSiteContent } from "@/lib/site-content";
 import { Reveal, RevealLine } from "@/components/motion/reveal";
+import { SectionPattern } from "@/components/ui/section-pattern";
 
 const DOT: Record<Accent, string> = {
   lime: "bg-lime",
@@ -46,6 +47,8 @@ export function About() {
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-40 left-[-16%] h-[440px] w-[440px] rounded-full bg-[var(--color-blob-1)] opacity-40 blur-[150px]"
         />
+
+        <SectionPattern edge="left" variant="grid" />
 
         {/* Pinned header — never covered by the credential sheet */}
         <header className="relative z-20 shrink-0">

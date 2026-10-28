@@ -3,6 +3,7 @@
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { useSiteContent } from '@/lib/site-content';
 import { Reveal, RevealLine } from '@/components/motion/reveal';
+import { SectionPattern } from '@/components/ui/section-pattern';
 
 export function Footer() {
   const { site } = useSiteContent();
@@ -17,6 +18,7 @@ export function Footer() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-52 -left-[12%] h-[620px] w-[620px] rounded-full bg-[var(--color-blob-2)] opacity-25 blur-[160px]" />
         <div className="absolute -right-[10%] bottom-0 h-[420px] w-[420px] rounded-full bg-[var(--color-blob-1)] opacity-20 blur-[150px]" />
+        <SectionPattern edge="right" variant="grid" />
       </div>
 
       <div className="relative mx-auto max-w-[1280px] px-6 md:px-10 lg:px-16">

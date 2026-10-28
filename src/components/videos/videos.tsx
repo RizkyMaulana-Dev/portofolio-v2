@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import type { VideoAccent, VideoClip, VideoEntry } from '@/content/videos';
 import { useSiteContent } from '@/lib/site-content';
 import { Reveal, RevealLine, useReveal } from '@/components/motion/reveal';
+import { SectionPattern } from '@/components/ui/section-pattern';
 
 const FILL: Record<VideoAccent, string> = {
   sun: 'bg-sun/80',
@@ -302,6 +303,7 @@ export function Videos() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-24 -left-[14%] h-[520px] w-[520px] rounded-full bg-[var(--color-blob-2)] opacity-35 blur-[160px]" />
         <div className="absolute -right-[12%] bottom-0 h-[440px] w-[440px] rounded-full bg-[var(--color-blob-1)] opacity-25 blur-[150px]" />
+        <SectionPattern edge="left" variant="hatch" className="opacity-50" />
       </div>
 
       <div className="relative mx-auto max-w-[1280px] px-6 py-20 md:px-10 md:py-28 lg:px-16 lg:py-32">
