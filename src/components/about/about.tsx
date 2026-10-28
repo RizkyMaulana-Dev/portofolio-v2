@@ -33,6 +33,11 @@ export function About() {
   const sheetY = useTransform(progress, [0, 1], ["0%", "-100%"]);
   const { about } = useSiteContent();
   const totalSkills = about.skillGroups.reduce((count, group) => count + group.skills.length, 0);
+  const featuredCertificates = about.certificates.items.filter((certificate) => certificate.featured);
+  const certificates = (featuredCertificates.length > 0
+    ? featuredCertificates
+    : about.certificates.items
+  ).slice(0, 3);
 
   return (
     <section
@@ -177,14 +182,26 @@ export function About() {
                     </RevealLine>
                   </h3>
                 </div>
-                <p className="pb-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">
-                  {about.certificates.note}
-                </p>
+                <div className="flex flex-col items-start gap-2 pb-1 md:items-end">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">
+                    {about.certificates.note}
+                  </p>
+                  <a
+                    href="/certificates"
+                    className="group inline-flex min-h-8 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+                  >
+                    View all credentials
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="h-3 w-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    />
+                  </a>
+                </div>
               </div>
 
               {/* Mobile: compact credential rows */}
-              <div className="grid gap-2.5 lg:hidden">
-                {about.certificates.items.map((certificate, certificateIndex) => (
+              <div className="grid grid-cols-1 gap-2.5 lg:hidden">
+                {certificates.map((certificate, certificateIndex) => (
                   <Reveal
                     key={`${certificate.title}-${certificateIndex}`}
                     delay={certificateIndex * 0.06}
@@ -193,6 +210,8 @@ export function About() {
                   >
                     <a
                       href={certificate.href}
+                      target="_blank"
+                      rel="noreferrer"
                       className={cn(
                         "group flex w-full items-center gap-3.5 rounded-2xl border border-[var(--color-border)]",
                         "bg-white/50 px-3.5 py-3 transition-colors duration-300 hover:bg-white/80"
@@ -228,7 +247,7 @@ export function About() {
 
               {/* Desktop: certificate cards */}
               <div className="hidden gap-4 lg:grid lg:grid-cols-3 lg:gap-5">
-                {about.certificates.items.map((certificate, certificateIndex) => (
+                {certificates.map((certificate, certificateIndex) => (
                   <Reveal
                     key={`${certificate.title}-${certificateIndex}`}
                     delay={certificateIndex * 0.06}
@@ -238,6 +257,8 @@ export function About() {
                   >
                     <a
                       href={certificate.href}
+                      target="_blank"
+                      rel="noreferrer"
                       className={cn(
                         "group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-[24px]",
                         "border border-[var(--color-border)] bg-white/55 p-6",
@@ -283,7 +304,7 @@ export function About() {
 
                       <div className="mt-5 flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-3.5">
                         <span className="truncate text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
-                          ID {certificate.credentialId}
+                          {certificate.credentialId ? `ID ${certificate.credentialId}` : "PDF credential"}
                         </span>
                         <span className="inline-flex shrink-0 items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.16em]">
                           View

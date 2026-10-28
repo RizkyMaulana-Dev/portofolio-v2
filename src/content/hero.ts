@@ -19,9 +19,9 @@ export const hero = {
     { label: "Contact", href: "#contact" },
   ],
   navCta: { label: "Hire me", href: "#contact" },
-  headline: ["A clearer mind", "for a brighter you."],
+  headline: ["Web apps, built", "end to end."],
   subheadline:
-    "Designer & developer yang membuat pengalaman digital yang tenang, fokus, dan berkesan.",
+    "Full-stack developer di Bandung. Saya membangun dashboard, API, dan antarmuka yang rapi — dari skema database sampai detail terakhir.",
   ctaPrimary: { label: "View work", href: "#work" },
   ctaSecondary: { label: "Watch showreel", href: "#showreel" },
   cards: [
@@ -36,7 +36,7 @@ export const hero = {
     { title: "Turn thoughts into progress.", caption: "Capture, organise and do more." },
     { title: "Ideas, anytime, anywhere.", caption: "Sync across all your devices." },
   ] as SideNote[],
-  trust: "Dipercaya 50+ klien di seluruh dunia.",
+  trust: "8 proyek · 16 sertifikat.",
   tagline: ["Less chaos.", "More clarity."],
   sticker: "A MORE FOCUSED YOU • EVERYDAY • ",
 };

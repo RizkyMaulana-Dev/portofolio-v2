@@ -33,6 +33,47 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+const LEGACY_WORK_TITLES = new Set([
+  'Luma Health',
+  'Northline Studio',
+  'Quiet Hours',
+  'Common Ground',
+]);
+
+const LEGACY_CERTIFICATE_TITLES = new Set([
+  'Google UX Design',
+  'Front-End Developer',
+  'Responsive Web Design',
+]);
+
+function isLegacyWork(content: SiteContent['work']): boolean {
+  return (
+    Array.isArray(content.projects) &&
+    content.projects.length > 0 &&
+    content.projects.every((project) => LEGACY_WORK_TITLES.has(project.title))
+  );
+}
+
+function isLegacyAbout(content: SiteContent['about']): boolean {
+  const items = content.certificates?.items;
+  return (
+    Array.isArray(items) &&
+    items.length > 0 &&
+    items.every((certificate) => LEGACY_CERTIFICATE_TITLES.has(certificate.title))
+  );
+}
+
+function isLegacyHero(content: SiteContent['hero']): boolean {
+  return (
+    content.headline?.[0] === 'A clearer mind' &&
+    content.headline?.[1] === 'for a brighter you.'
+  );
+}
+
+function isLegacySite(content: SiteContent['site']): boolean {
+  return content.email === 'hello@rizkymaulana.dev';
+}
+
 function mergeContent(value: unknown): SiteContent {
   if (!isRecord(value)) return defaultSiteContent;
 
@@ -42,20 +83,28 @@ function mergeContent(value: unknown): SiteContent {
   };
 
   const heroSection = readSection(value.hero, defaultSiteContent.hero);
+  const aboutSection = readSection(value.about, defaultSiteContent.about);
+  const workSection = readSection(value.work, defaultSiteContent.work);
+  const siteSection = readSection(value.site, defaultSiteContent.site);
 
   return {
     // `Process` was removed from the page but can still exist in older CMS
     // snapshots. Drop it so saved content cannot reintroduce a dead anchor.
-    hero: {
-      ...heroSection,
-      nav: (Array.isArray(heroSection.nav) ? heroSection.nav : defaultSiteContent.hero.nav).filter(
-        (item) => item.href !== '#process'
-      ),
-    },
-    about: readSection(value.about, defaultSiteContent.about),
-    work: readSection(value.work, defaultSiteContent.work),
+    hero: isLegacyHero(heroSection)
+      ? defaultSiteContent.hero
+      : {
+          ...heroSection,
+          nav: (
+            Array.isArray(heroSection.nav) ? heroSection.nav : defaultSiteContent.hero.nav
+          ).filter((item) => item.href !== '#process'),
+        },
+    // The previous build shipped placeholder case studies. Replace only when
+    // the saved section is still entirely those placeholders, so real edits
+    // made in the CMS are never silently discarded.
+    about: isLegacyAbout(aboutSection) ? defaultSiteContent.about : aboutSection,
+    work: isLegacyWork(workSection) ? defaultSiteContent.work : workSection,
     videos: readSection(value.videos, defaultSiteContent.videos),
-    site: readSection(value.site, defaultSiteContent.site),
+    site: isLegacySite(siteSection) ? defaultSiteContent.site : siteSection,
   };
 }
 

@@ -1,0 +1,24 @@
+---
+import Layout from './Layout.astro';
+import { BlogHeader, type SiteHeaderSection } from '../components/blog/blog-header';
+import { Footer } from '../components/footer/footer';
+
+interface Props {
+  title: string;
+  description: string;
+  active?: SiteHeaderSection;
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, active, ogType = 'website' } = Astro.props;
+---
+
+<Layout title={title} description={description} ogType={ogType} lang="id" staticReveal>
+  <div class="min-h-screen">
+    <BlogHeader active={active} />
+    <main>
+      <slot />
+    </main>
+  </div>
+  <Footer client:idle />
+</Layout>

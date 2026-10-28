@@ -1,0 +1,329 @@
+---
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { work } from '../../content/work';
+import type { Project } from '../../content/work';
+
+export function getStaticPaths() {
+  return work.projects
+    .filter((project) => Boolean(project.slug))
+    .map((project, index) => ({
+      params: { slug: project.slug },
+      props: { project, index },
+    }));
+}
+
+interface Props {
+  project: Project;
+  index: number;
+}
+
+const { project, index } = Astro.props;
+const gallery = project.gallery ?? [];
+const videos = [project.video, ...(project.videos ?? [])].filter(Boolean) as string[];
+const hasLinks = Boolean(project.liveUrl || project.githubUrl);
+const currentIndex = work.projects.findIndex((item) => item.slug === project.slug);
+const nextProject =
+  currentIndex >= 0
+    ? work.projects[(currentIndex + 1) % work.projects.length]
+    : work.projects[0];
+
+const statusLabel =
+  project.status === 'in-progress'
+    ? 'In progress'
+    : project.status === 'planned'
+      ? 'Planned'
+      : 'Completed';
+---
+
+<PageLayout
+  title={`${project.title} — Rizky Maulana`}
+  description={project.description ?? project.summary}
+  active="work"
+  ogType="article"
+>
+  <article class="pb-24 md:pb-32">
+    <div class="mx-auto max-w-[1280px] px-6 pt-10 md:px-10 md:pt-16 lg:px-16 lg:pt-20">
+      <a
+        href="/#work"
+        data-reveal-static
+        class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+      >
+        <ArrowLeft
+          aria-hidden="true"
+          className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+        />
+        Selected work
+      </a>
+
+      <header class="mt-10 grid gap-10 md:mt-14 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
+        <div data-reveal-static style="--reveal-delay: 60ms">
+          <p class="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60">
+            <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-foreground" />
+            {project.category}
+            <span aria-hidden="true" class="text-foreground/30">/</span>
+            {project.year}
+          </p>
+
+          <h1 class="mt-4 max-w-[18ch] text-balance font-display text-[clamp(3rem,7vw,6.2rem)] leading-[0.9] tracking-[-0.035em]">
+            {project.title}
+          </h1>
+
+          <p class="mt-6 max-w-[62ch] text-base leading-relaxed text-foreground/65 md:text-lg">
+            {project.description ?? project.summary}
+          </p>
+
+          {hasLinks && (
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              {project.liveUrl && project.liveUrl !== '#' && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="inline-flex min-h-11 items-center gap-2 rounded-full bg-foreground px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  Live site
+                  <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </a>
+              )}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/60 px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:border-foreground/30 hover:bg-white/85 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  Source code
+                  <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        <aside
+          data-reveal-static
+          style="--reveal-delay: 140ms"
+          class="self-start border-t border-[var(--color-border)] pt-5 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0"
+        >
+          <dl class="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 lg:grid-cols-1 lg:gap-y-6">
+            <div>
+              <dt class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/55">Role</dt>
+              <dd class="mt-1.5 text-sm leading-snug text-foreground">{project.role ?? 'Fullstack Developer'}</dd>
+            </div>
+            <div>
+              <dt class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/55">Year</dt>
+              <dd class="mt-1.5 text-sm leading-snug text-foreground">{project.year}</dd>
+            </div>
+            <div>
+              <dt class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/55">Status</dt>
+              <dd class="mt-1.5 text-sm leading-snug text-foreground">{statusLabel}</dd>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <dt class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/55">Toolkit</dt>
+              <dd class="mt-2 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <span class="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.12em] text-foreground/65">
+                    {tag}
+                  </span>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      </header>
+
+      {project.cover && (
+        <figure
+          data-reveal-static
+          style="--reveal-delay: 180ms"
+          class="mt-10 overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[0_30px_90px_-64px_rgb(0_0_0/0.55)] md:mt-14"
+        >
+          <img
+            src={project.cover}
+            alt={`${project.title} — project preview`}
+            width="1200"
+            height="900"
+            loading="eager"
+            decoding="async"
+            class="aspect-[4/3] h-auto w-full object-cover"
+          />
+          <figcaption class="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--color-border)] px-5 py-3 text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/55 md:px-6">
+            <span>{project.title}</span>
+            <span>{String(index + 1).padStart(2, '0')} / {String(work.projects.length).padStart(2, '0')}</span>
+          </figcaption>
+        </figure>
+      )}
+
+      {(project.problem || project.solution) && (
+        <section class="mt-16 grid gap-10 border-t border-[var(--color-border)] pt-10 md:mt-24 md:grid-cols-2 md:gap-16 md:pt-14">
+          {project.problem && (
+            <div data-reveal-static>
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">The brief</p>
+              <h2 class="mt-3 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em]">
+                Problem.
+              </h2>
+              <p class="mt-5 text-sm leading-relaxed text-foreground/65 md:text-base">{project.problem}</p>
+            </div>
+          )}
+          {project.solution && (
+            <div data-reveal-static style="--reveal-delay: 80ms">
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">The response</p>
+              <h2 class="mt-3 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em]">
+                Approach.
+              </h2>
+              <p class="mt-5 text-sm leading-relaxed text-foreground/65 md:text-base">{project.solution}</p>
+            </div>
+          )}
+        </section>
+      )}
+
+      {(project.features?.length || project.challenges?.length || project.approach?.length || project.results?.length) && (
+        <section class="mt-16 grid gap-10 border-t border-[var(--color-border)] pt-10 md:mt-24 md:grid-cols-2 md:gap-16 md:pt-14">
+          {project.features && project.features.length > 0 && (
+            <div data-reveal-static>
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Build notes</p>
+              <h2 class="mt-3 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em]">
+                What is inside.
+              </h2>
+              <ul class="mt-5 space-y-2.5">
+                {project.features.map((item) => (
+                  <li class="flex items-start gap-2.5 text-sm leading-relaxed text-foreground/65">
+                    <span aria-hidden="true" class="mt-2 h-1 w-1 shrink-0 rounded-full bg-foreground/55" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {(project.challenges?.length || project.approach?.length || project.results?.length) && (
+            <div data-reveal-static style="--reveal-delay: 80ms">
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Method</p>
+              <h2 class="mt-3 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em]">
+                How it was made.
+              </h2>
+              <div class="mt-5 space-y-5">
+                {project.challenges && project.challenges.length > 0 && (
+                  <div>
+                    <h3 class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Challenges</h3>
+                    <ul class="mt-2.5 space-y-2">
+                      {project.challenges.map((item) => (
+                        <li class="text-sm leading-relaxed text-foreground/65">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {project.approach && project.approach.length > 0 && (
+                  <div>
+                    <h3 class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Decisions</h3>
+                    <ul class="mt-2.5 space-y-2">
+                      {project.approach.map((item) => (
+                        <li class="text-sm leading-relaxed text-foreground/65">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {project.results && project.results.length > 0 && (
+                  <div>
+                    <h3 class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Results</h3>
+                    <ul class="mt-2.5 space-y-2">
+                      {project.results.map((item) => (
+                        <li class="text-sm leading-relaxed text-foreground/65">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {videos.length > 0 && (
+        <section class="mt-16 scroll-mt-20 border-t border-[var(--color-border)] pt-10 md:mt-24 md:scroll-mt-24 md:pt-14" aria-labelledby="project-motion">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Motion</p>
+              <h2 id="project-motion" class="mt-3 scroll-mt-20 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em] md:scroll-mt-24">
+                In motion.
+              </h2>
+            </div>
+            <p class="pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+              {String(videos.length).padStart(2, '0')} preview{videos.length > 1 ? 's' : ''}
+            </p>
+          </div>
+          <div class="mt-7 grid gap-5 md:grid-cols-2">
+            {videos.map((video, videoIndex) => (
+              <video
+                src={video}
+                controls
+                preload="metadata"
+                playsinline
+                class="aspect-video w-full rounded-2xl border border-[var(--color-border)] bg-black object-cover"
+                aria-label={`${project.title} — video preview ${videoIndex + 1}`}
+              >
+                Browser Anda tidak mendukung pemutaran video.
+              </video>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {gallery.length > 0 && (
+        <section class="mt-16 scroll-mt-20 border-t border-[var(--color-border)] pt-10 md:mt-24 md:scroll-mt-24 md:pt-14" aria-labelledby="project-gallery">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Screens</p>
+              <h2 id="project-gallery" class="mt-3 scroll-mt-20 font-display text-[clamp(2rem,3.5vw,3.1rem)] leading-[0.98] tracking-[-0.02em] md:scroll-mt-24">
+                The closer look.
+              </h2>
+            </div>
+            <p class="pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+              {String(gallery.length).padStart(2, '0')} frames
+            </p>
+          </div>
+
+          <div class="mt-7 columns-1 gap-5 md:columns-2">
+            {gallery.map((src, imageIndex) => (
+              <a
+                href={src}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.title} screenshot ${imageIndex + 1} in a new tab`}
+                class="group mb-5 block break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <img
+                  src={src}
+                  alt={`${project.title} — screenshot ${imageIndex + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.01]"
+                />
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {nextProject && nextProject.slug !== project.slug && (
+        <nav class="mt-16 border-t border-[var(--color-border)] pt-6 md:mt-24" aria-label="Next project">
+          <a
+            href={nextProject.href}
+            class="group flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-6 transition-[border-color,transform] duration-300 hover:border-foreground motion-safe:hover:-translate-y-0.5 focus-visible:border-foreground focus-visible:outline-none"
+          >
+            <span>
+              <span class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Next case study</span>
+              <span class="mt-2 block max-w-[20ch] text-balance font-display text-[clamp(2rem,4vw,3.6rem)] leading-[0.95] tracking-[-0.02em]">
+                {nextProject.title}
+              </span>
+            </span>
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] text-foreground/60 transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+            </span>
+          </a>
+        </nav>
+      )}
+    </div>
+  </article>
+</PageLayout>

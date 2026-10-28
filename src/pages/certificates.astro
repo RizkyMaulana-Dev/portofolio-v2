@@ -1,0 +1,161 @@
+---
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import PageLayout from '../layouts/PageLayout.astro';
+import { about } from '../content/about';
+import { site } from '../content/site';
+
+const certificates = about.certificates.items;
+const issuers = [...new Set(certificates.map((certificate) => certificate.issuer.split(' / ')[0]))];
+---
+
+<PageLayout
+  title="Credentials — Rizky Maulana"
+  description="16 sertifikat Cisco, Gamelab Indonesia, dan LearningX — cybersecurity, pengembangan game, pemrograman, dan desain."
+  active="about"
+>
+  <div class="mx-auto max-w-[1280px] px-6 pb-24 pt-10 md:px-10 md:pb-32 md:pt-16 lg:px-16 lg:pt-20">
+    <a
+      href="/about"
+      data-reveal-static
+      class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+    >
+      <ArrowLeft
+        aria-hidden="true"
+        className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+      />
+      About
+    </a>
+
+    <header class="mt-10 grid gap-8 border-b border-[var(--color-border)] pb-10 md:mt-14 md:grid-cols-[minmax(0,1fr)_280px] md:items-end md:gap-16 md:pb-14">
+      <div data-reveal-static>
+        <p class="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60">
+          <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-foreground" />
+          Credentials / 2023–2026
+        </p>
+        <h1 class="mt-4 max-w-[12ch] text-balance font-display text-[clamp(3.2rem,8vw,7rem)] leading-[0.9] tracking-[-0.04em]">
+          Proof of <span class="italic">the work.</span>
+        </h1>
+        <p class="mt-6 max-w-[58ch] text-sm leading-relaxed text-foreground/65 md:text-base">
+          Kumpulan sertifikat dari Cisco Networking Academy, Gamelab Indonesia, dan LearningX —
+          mulai dari keamanan siber dan pemrograman sampai game development dan UI/UX.
+        </p>
+      </div>
+
+      <div
+        data-reveal-static
+        style="--reveal-delay: 90ms"
+        class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-border)] md:grid-cols-1"
+      >
+        <div class="bg-background px-4 py-3.5">
+          <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/50">Certificates</p>
+          <p class="mt-1 font-display text-3xl leading-none">{String(certificates.length).padStart(2, '0')}</p>
+        </div>
+        <div class="bg-background px-4 py-3.5">
+          <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/50">Issuers</p>
+          <p class="mt-1 font-display text-3xl leading-none">{String(issuers.length).padStart(2, '0')}</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="mt-10 md:mt-14" aria-labelledby="credential-list">
+      <div class="flex flex-col items-start gap-2 md:flex-row md:items-end md:justify-between md:gap-4">
+        <h2 id="credential-list" class="font-display text-[clamp(2rem,4vw,3.4rem)] leading-[0.98] tracking-[-0.02em]">
+          The collection.
+        </h2>
+        <p class="pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+          Newest first · PDF verified
+        </p>
+      </div>
+
+      <div class="mt-7 grid gap-5 md:grid-cols-2">
+        {certificates.map((certificate, index) => (
+          <article
+            data-reveal-static
+            style={`--reveal-delay: ${Math.min(index * 40, 240)}ms`}
+            class="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--color-border)] bg-[var(--color-surface)]"
+          >
+            <a
+              href={certificate.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
+              class="focus-visible:ring-ring block overflow-hidden border-b border-[var(--color-border)] bg-white focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+            >
+              {certificate.image ? (
+                <img
+                  src={certificate.image}
+                  alt={`${certificate.title} certificate`}
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-[4/3] h-full w-full object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-[1.015] sm:p-4"
+                />
+              ) : (
+                <div class="flex aspect-[4/3] items-center justify-center">
+                  <span class="font-display text-6xl italic text-foreground/20">{certificate.mark}</span>
+                </div>
+              )}
+            </a>
+
+            <div class="flex flex-1 flex-col p-5 md:p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/50">
+                    {certificate.category ?? 'Certificate'} · {certificate.date ?? certificate.year}
+                  </p>
+                  <h3 class="mt-2 text-balance text-base font-medium leading-snug text-foreground">
+                    {certificate.title}
+                  </h3>
+                  <p class="mt-1.5 text-xs text-foreground/55">{certificate.issuer}</p>
+                </div>
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] font-display text-sm italic text-foreground/60">
+                  {certificate.mark}
+                </span>
+              </div>
+
+              <div class="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--color-border)] pt-3.5">
+                <span class="text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/45">
+                  {certificate.credentialId ? `ID ${certificate.credentialId}` : 'PDF credential'}
+                </span>
+                <a
+                  href={certificate.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group/link inline-flex min-h-8 items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+                >
+                  View PDF
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="h-3 w-3 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                  />
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <footer class="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-[var(--color-border)] pt-6 md:mt-24">
+      <p class="max-w-[48ch] text-sm leading-relaxed text-foreground/60">
+        Butuh detail lengkap atau ingin melihat CV? Semua ada di profil dan berkas terpisah.
+      </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href="/about"
+          class="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          Read profile
+        </a>
+        <a
+          href={site.footerNav.find((item) => item.label === 'Résumé')?.href ?? '/documents/cv/rizky-maulana-fullstack-en.pdf'}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex min-h-10 items-center gap-2 rounded-full bg-foreground px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          Download CV
+          <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </footer>
+  </div>
+</PageLayout>

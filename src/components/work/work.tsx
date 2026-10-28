@@ -101,42 +101,71 @@ function ProjectCover({
   index: number;
   isPlaceholder: boolean;
 }) {
+  const hasCover = Boolean(project.cover);
+
   return (
     <div
       aria-hidden="true"
       className="relative aspect-[4/3] overflow-hidden rounded-[26px] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[0_28px_70px_-56px_rgb(0_0_0/0.35)]"
     >
-      <div className="absolute inset-0 opacity-70" style={GRID_STYLE} />
-      <div
-        className={cn(
-          "absolute -left-20 -top-24 h-64 w-64 rounded-full opacity-70 blur-[90px]",
-          WASH[project.accent]
-        )}
-      />
-      <div
-        className={cn(
-          "absolute -bottom-28 -right-16 h-72 w-72 rounded-full opacity-45 blur-[100px]",
-          WASH[project.accent]
-        )}
-      />
+      {hasCover ? (
+        <>
+          <img
+            src={project.cover}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/0 to-black/65" />
+        </>
+      ) : (
+        <>
+          <div className="absolute inset-0 opacity-70" style={GRID_STYLE} />
+          <div
+            className={cn(
+              "absolute -left-20 -top-24 h-64 w-64 rounded-full opacity-70 blur-[90px]",
+              WASH[project.accent]
+            )}
+          />
+          <div
+            className={cn(
+              "absolute -bottom-28 -right-16 h-72 w-72 rounded-full opacity-45 blur-[100px]",
+              WASH[project.accent]
+            )}
+          />
 
-      <div className="absolute inset-x-5 top-4 flex items-center justify-between text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/50 md:inset-x-6 md:top-5">
+          <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-[1.035]">
+            <CoverArt project={project} />
+          </div>
+        </>
+      )}
+
+      <div
+        className={cn(
+          "absolute inset-x-5 top-4 flex items-center justify-between text-[9px] font-medium uppercase tracking-[0.2em] md:inset-x-6 md:top-5",
+          hasCover ? "text-white/80 drop-shadow-[0_1px_2px_rgb(0_0_0/0.35)]" : "text-foreground/50"
+        )}
+      >
         <span>N° {String(index + 1).padStart(2, "0")}</span>
         <span>{project.year}</span>
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-[1.035]">
-        <CoverArt project={project} />
-      </div>
-
       <div className="absolute inset-x-5 bottom-4 flex items-end justify-between gap-4 md:inset-x-6 md:bottom-5">
-        <span className="font-display text-[2.4rem] italic leading-none text-foreground/80">
+        <span
+          className={cn(
+            "font-display text-[2.4rem] italic leading-none drop-shadow-sm",
+            hasCover ? "text-white/90" : "text-foreground/80"
+          )}
+        >
           {project.mark}
         </span>
-        <span className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300",
-          !isPlaceholder && "group-hover:bg-white/90 group-hover:text-foreground"
-        )}>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/75 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300",
+            !isPlaceholder && "group-hover:bg-white/95 group-hover:text-foreground"
+          )}
+        >
           {isPlaceholder ? "Case study soon" : "View project"}
           {!isPlaceholder && (
             <ArrowUpRight

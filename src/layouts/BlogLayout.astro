@@ -14,7 +14,7 @@ const { title, description, ogType = 'website' } = Astro.props;
 
 <Layout title={title} description={description} ogType={ogType} lang="en" staticReveal>
   <div class="min-h-screen">
-    <BlogHeader />
+    <BlogHeader active="blog" />
     <main>
       <slot />
     </main>

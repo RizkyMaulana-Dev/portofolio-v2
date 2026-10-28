@@ -162,6 +162,12 @@ export function WorkSection({ value, onSave, onReset }: SectionEditorProps<WorkC
                 value={project.href}
                 onChange={(href) => updateProject(index, { href })}
               />
+              <TextField
+                label="Cover image"
+                value={project.cover ?? ""}
+                onChange={(cover) => updateProject(index, { cover })}
+                hint="Path seperti /images/work/slug/cover.webp. Kosongkan untuk memakai cover abstrak."
+              />
               <SelectField
                 label="Accent"
                 value={project.accent}

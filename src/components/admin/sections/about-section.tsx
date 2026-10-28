@@ -179,7 +179,7 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
 
       <Subsection
         title="Certificates"
-        description="Heading dan daftar credential yang tampil di bagian bawah About."
+        description="Heading dan daftar credential di bagian bawah About. Tandai maksimal tiga certificate sebagai Featured untuk homepage."
         action={
           <AddButton
             onClick={() =>
@@ -285,7 +285,7 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
                 onChange={(credentialId) => updateCertificate(index, { credentialId })}
               />
               <TextField
-                label="Link"
+                label="Link PDF"
                 value={certificate.href}
                 onChange={(href) => updateCertificate(index, { href })}
               />
@@ -294,6 +294,15 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
                 value={certificate.accent}
                 onChange={(accent) => updateCertificate(index, { accent })}
                 options={ACCENT_OPTIONS}
+              />
+              <SelectField
+                label="Featured di homepage"
+                value={certificate.featured ? "yes" : "no"}
+                onChange={(value) => updateCertificate(index, { featured: value === "yes" })}
+                options={[
+                  { value: "no", label: "Tidak" },
+                  { value: "yes", label: "Ya" },
+                ]}
               />
             </ItemCard>
           ))}

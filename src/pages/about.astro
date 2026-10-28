@@ -1,0 +1,234 @@
+---
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import PageLayout from '../layouts/PageLayout.astro';
+import { profile } from '../content/profile';
+import { site } from '../content/site';
+import { about } from '../content/about';
+import { experiences } from '../content/experience';
+import { work } from '../content/work';
+
+const certificateCount = about.certificates.items.length;
+const skillCount = about.skillGroups.reduce((count, group) => count + group.skills.length, 0);
+const projectCount = work.projects.length;
+---
+
+<PageLayout
+  title="About — Rizky Maulana"
+  description={profile.bio}
+  active="about"
+>
+  <div class="mx-auto max-w-[1280px] px-6 pb-24 pt-10 md:px-10 md:pb-32 md:pt-16 lg:px-16 lg:pt-20">
+    <a
+      href="/"
+      data-reveal-static
+      class="group inline-flex min-h-9 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+    >
+      <ArrowLeft
+        aria-hidden="true"
+        className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+      />
+      Back to portfolio
+    </a>
+
+    <header class="mt-10 grid gap-10 md:mt-14 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-16">
+      <div data-reveal-static>
+        <p class="flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/60">
+          <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-foreground" />
+          About / Profile
+        </p>
+        <h1 class="mt-4 max-w-[12ch] text-balance font-display text-[clamp(3.2rem,8vw,7rem)] leading-[0.88] tracking-[-0.04em]">
+          Rizky <span class="italic">Maulana.</span>
+        </h1>
+        <p class="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/55">
+          {profile.role} · {profile.location}
+        </p>
+        <p class="mt-6 max-w-[62ch] text-base leading-relaxed text-foreground/65 md:text-lg">
+          {profile.bio}
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex min-h-11 items-center gap-2 rounded-full bg-foreground px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            Email me
+            <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </a>
+          <a
+            href={profile.resume.en}
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/55 px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:border-foreground/30 hover:bg-white/85 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            Download CV
+            <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </a>
+        </div>
+      </div>
+
+      <figure data-reveal-static style="--reveal-delay: 100ms" class="relative">
+        <div class="overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)]">
+          <img
+            src={profile.image}
+            alt="Rizky Maulana"
+            width="432"
+            height="577"
+            loading="eager"
+            decoding="async"
+            class="aspect-[4/5] h-auto w-full object-contain"
+          />
+        </div>
+        <figcaption class="mt-3 flex items-center justify-between gap-4 text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">
+          <span>Bandung, Indonesia</span>
+          <span>Open to remote</span>
+        </figcaption>
+      </figure>
+    </header>
+
+    <section class="mt-16 border-t border-[var(--color-border)] pt-10 md:mt-24 md:pt-14" aria-labelledby="about-experience">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Experience</p>
+          <h2 id="about-experience" class="mt-3 font-display text-[clamp(2.2rem,4.5vw,4rem)] leading-[0.95] tracking-[-0.025em]">
+            Where I have <span class="italic">worked.</span>
+          </h2>
+        </div>
+        <p class="pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+          {String(experiences.length).padStart(2, '0')} roles · 2024–2026
+        </p>
+      </div>
+
+      <div class="mt-8 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+        {experiences.map((experience, index) => (
+          <article
+            data-reveal-static
+            style={`--reveal-delay: ${Math.min(index * 70, 140)}ms`}
+            class="grid gap-5 py-7 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 md:py-9"
+          >
+            <div>
+              <p class="text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/45">{experience.period}</p>
+              <p class="mt-2 text-[11px] text-foreground/55">{experience.location}</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                <h3 class="font-display text-2xl leading-none tracking-[-0.01em] md:text-3xl">{experience.role}</h3>
+                <p class="text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/50">{experience.company}</p>
+              </div>
+              <p class="mt-3 max-w-[66ch] text-sm leading-relaxed text-foreground/65">{experience.description}</p>
+              <ul class="mt-4 space-y-2">
+                {experience.achievements.map((achievement) => (
+                  <li class="flex items-start gap-2.5 text-sm leading-relaxed text-foreground/65">
+                    <span aria-hidden="true" class="mt-2 h-1 w-1 shrink-0 rounded-full bg-foreground/50" />
+                    <span>{achievement}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul class="mt-4 flex flex-wrap gap-1.5">
+                {experience.techStack.map((tech) => (
+                  <li class="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.12em] text-foreground/60">
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-16 grid gap-10 border-t border-[var(--color-border)] pt-10 md:mt-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] md:gap-16 md:pt-14" aria-labelledby="about-skills">
+      <div data-reveal-static>
+        <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Toolkit</p>
+        <h2 id="about-skills" class="mt-3 font-display text-[clamp(2.2rem,4.5vw,4rem)] leading-[0.95] tracking-[-0.025em]">
+          The everyday <span class="italic">kit.</span>
+        </h2>
+        <p class="mt-5 max-w-[40ch] text-sm leading-relaxed text-foreground/60">
+          {skillCount} tools dan kemampuan yang paling sering saya pakai untuk mengirim produk dari konsep ke produksi.
+        </p>
+        <p class="mt-4 text-[9px] uppercase tracking-[0.18em] text-foreground/40">{site.availability}</p>
+      </div>
+
+      <div data-reveal-static style="--reveal-delay: 80ms" class="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+        {about.skillGroups.map((group) => (
+          <div class="grid gap-4 py-5 sm:grid-cols-[140px_minmax(0,1fr)] sm:gap-8">
+            <div>
+              <h3 class="text-xs font-medium text-foreground">{group.label}</h3>
+              <p class="mt-1 text-[10px] leading-snug text-foreground/45">{group.note}</p>
+            </div>
+            <ul class="flex flex-wrap gap-x-4 gap-y-2">
+              {group.skills.map((skill) => (
+                <li class="text-sm text-foreground/65">{skill}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-16 border-t border-[var(--color-border)] pt-10 md:mt-24 md:pt-14" aria-labelledby="about-credentials">
+      <div class="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] md:gap-16">
+        <div data-reveal-static>
+          <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Credentials</p>
+          <h2 id="about-credentials" class="mt-3 font-display text-[clamp(2.2rem,4.5vw,4rem)] leading-[0.95] tracking-[-0.025em]">
+            Proof, <span class="italic">collected.</span>
+          </h2>
+          <p class="mt-5 max-w-[42ch] text-sm leading-relaxed text-foreground/60">
+            {certificateCount} sertifikat dari Cisco Networking Academy, Gamelab Indonesia, dan LearningX — semuanya bisa dibuka sebagai PDF asli.
+          </p>
+          <a
+            href="/certificates"
+            class="group mt-6 inline-flex min-h-10 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:underline focus-visible:outline-none"
+          >
+            Browse all credentials
+            <ArrowUpRight
+              aria-hidden="true"
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
+          </a>
+        </div>
+
+        <div data-reveal-static style="--reveal-delay: 80ms" class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-border)]">
+          <div class="bg-background px-4 py-4 sm:px-5">
+            <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Certificates</p>
+            <p class="mt-1 font-display text-4xl leading-none">{String(certificateCount).padStart(2, '0')}</p>
+          </div>
+          <div class="bg-background px-4 py-4 sm:px-5">
+            <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Projects</p>
+            <p class="mt-1 font-display text-4xl leading-none">{String(projectCount).padStart(2, '0')}</p>
+          </div>
+          <div class="col-span-2 bg-background px-4 py-4 sm:px-5">
+            <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-foreground/45">Currently</p>
+            <p class="mt-1 text-sm text-foreground/70">{site.availability} · {site.location}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-16 border-t border-[var(--color-border)] pt-10 md:mt-24 md:pt-14">
+      <div class="flex flex-wrap items-end justify-between gap-8">
+        <div data-reveal-static>
+          <p class="text-[9px] font-medium uppercase tracking-[0.2em] text-foreground/55">Contact</p>
+          <h2 class="mt-3 max-w-[12ch] text-balance font-display text-[clamp(2.2rem,5vw,4.6rem)] leading-[0.92] tracking-[-0.03em]">
+            Let's build <span class="italic">something clear.</span>
+          </h2>
+        </div>
+        <div data-reveal-static style="--reveal-delay: 80ms" class="flex w-full flex-col items-start gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex max-w-full min-h-11 items-center gap-2 rounded-full bg-foreground px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <span class="min-w-0 truncate">{site.email}</span>
+            <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+          </a>
+          <a
+            href={profile.resume.id}
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/65 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            CV Indonesia
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</PageLayout>
