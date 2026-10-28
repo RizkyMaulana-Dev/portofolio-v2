@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { withBase } from '@/lib/paths';
 import { hero } from '@/content/hero';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export type SiteHeaderSection = 'work' | 'about' | 'blog' | 'contact';
 
@@ -26,30 +27,33 @@ export function BlogHeader({ active }: { active?: SiteHeaderSection }) {
           {hero.brand}
         </a>
 
-        <nav aria-label="Site navigation">
-          <ul className="flex items-center gap-2.5 text-[11px] font-medium sm:gap-6 sm:text-xs">
-            {NAV.map(item => {
-              const isActive = item.id === active;
+        <div className="flex items-center gap-3">
+          <nav aria-label="Site navigation">
+            <ul className="flex items-center gap-2.5 text-[11px] font-medium sm:gap-6 sm:text-xs">
+              {NAV.map(item => {
+                const isActive = item.id === active;
 
-              return (
-                <li key={item.id}>
-                  <a
-                    href={withBase(item.href)}
-                    aria-current={isActive ? 'page' : undefined}
-                    className={cn(
-                      'focus-visible:ring-ring inline-flex min-h-10 items-center rounded-sm px-1 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-                      isActive
-                        ? 'text-foreground underline decoration-1 underline-offset-4'
-                        : 'text-foreground/60 hover:text-foreground'
-                    )}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                return (
+                  <li key={item.id}>
+                    <a
+                      href={withBase(item.href)}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={cn(
+                        'focus-visible:ring-ring inline-flex min-h-10 items-center rounded-sm px-1 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                        isActive
+                          ? 'text-foreground underline decoration-1 underline-offset-4'
+                          : 'text-foreground/60 hover:text-foreground'
+                      )}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          <ThemeToggle className="hidden xs:inline-flex" />
+        </div>
       </div>
     </header>
   );

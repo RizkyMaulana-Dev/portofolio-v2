@@ -80,7 +80,7 @@ function LeftNote({
         "fixed z-[6] hidden lg:block",
         "top-24 left-6 xl:left-8",
         "w-[320px] rounded-[28px]",
-        "bg-white/80 backdrop-blur border border-[var(--color-card-border)]",
+        "bg-[var(--color-glass-strong)] backdrop-blur border border-[var(--color-card-border)]",
         "p-6 shadow-[0_16px_40px_-12px_rgb(0_0_0/0.10)]",
         "-rotate-3"
       )}
@@ -150,7 +150,7 @@ function RightNote({
         "fixed z-[6] hidden lg:block",
         "top-32 right-6 xl:right-8",
         "w-[320px] rounded-[28px]",
-        "bg-white/80 backdrop-blur border border-[var(--color-card-border)]",
+        "bg-[var(--color-glass-strong)] backdrop-blur border border-[var(--color-card-border)]",
         "p-6 shadow-[0_16px_40px_-12px_rgb(0_0_0/0.10)]",
         "rotate-3"
       )}
@@ -160,7 +160,7 @@ function RightNote({
       {/* Avatar group */}
       <div className="flex items-center -space-x-3 mb-3">
         {["A", "B", "C"].map((initial, idx) => (
-          <Avatar key={idx} className="h-8 w-8 border-2 border-white">
+          <Avatar key={idx} className="h-8 w-8 border-2 border-[var(--color-background)]">
             <AvatarFallback
               className="text-xs font-medium"
               style={{ backgroundColor: idx === 0 ? "var(--color-sky)" : idx === 1 ? "var(--color-lime)" : "var(--color-rose)" }}
@@ -171,7 +171,7 @@ function RightNote({
         ))}
         <span
           aria-hidden="true"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white/60 text-foreground backdrop-blur"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-[var(--color-glass)] text-foreground backdrop-blur"
         >
           <Plus className="h-3 w-3" />
         </span>

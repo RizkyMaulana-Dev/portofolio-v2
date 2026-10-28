@@ -28,6 +28,29 @@ const { clip } = Astro.props;
     <title>{clip.title} — Rizky Maulana</title>
     <meta name="description" content={clip.description} />
 
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const key = 'rizky-theme';
+        let stored = null;
+
+        try {
+          stored = window.localStorage.getItem(key);
+        } catch {
+          // Private browsing or blocked storage falls back to the system preference.
+        }
+
+        if (stored === 'light' || stored === 'dark') {
+          root.dataset.theme = stored;
+          return;
+        }
+
+        root.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

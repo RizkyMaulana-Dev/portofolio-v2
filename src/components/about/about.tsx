@@ -202,7 +202,7 @@ export function About() {
                     amount={0.2}
                     className="h-full"
                   >
-                    <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/55 p-4 md:rounded-[24px] md:p-5">
+                    <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass)] p-4 md:rounded-[24px] md:p-5">
                       <div className="flex items-center justify-between gap-4">
                         <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
                           Stage {String(stageIndex + 1).padStart(2, "0")}
@@ -251,9 +251,9 @@ export function About() {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
-                      className="group flex shrink-0 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/40 py-1 pl-1 pr-2.5 transition-colors hover:bg-white/80 focus-visible:bg-white/80 focus-visible:outline-none"
+                      className="group flex shrink-0 items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] py-1 pl-1 pr-2.5 transition-colors hover:bg-[var(--color-glass-strong)] focus-visible:bg-[var(--color-glass-strong)] focus-visible:outline-none"
                     >
-                      <span className="relative flex h-8 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/10 bg-[#f4eee2]">
+                      <span className="relative flex h-8 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-paper)]">
                         {certificate.image ? (
                           <img
                             src={withBase(certificate.image)}

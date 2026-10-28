@@ -20,7 +20,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.02] motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98]",
           {
             "bg-primary text-primary-foreground hover:shadow-lg": variant === "default",
-            "bg-white/60 backdrop-blur border border-border text-foreground hover:bg-white/80":
+            "bg-[var(--color-glass)] backdrop-blur border border-border text-foreground hover:bg-[var(--color-glass-strong)]":
               variant === "outline",
             "bg-muted/30 text-foreground hover:bg-muted/50": variant === "secondary",
             "text-foreground hover:bg-muted/30": variant === "ghost",

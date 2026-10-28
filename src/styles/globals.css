@@ -26,6 +26,27 @@
   --color-blob-2: oklch(0.88 0.08 40); /* #FFE4D3 */
   --color-blob-3: oklch(0.88 0.08 140); /* #E3F5D8 */
 
+  /* Translucent surfaces */
+  --color-glass: oklch(1 0 0 / 0.58);
+  --color-glass-strong: oklch(1 0 0 / 0.85);
+  --color-glass-soft: oklch(1 0 0 / 0.36);
+  --color-paper: oklch(0.945 0.018 80);
+
+  /* Quiet perimeter patterns and ambient light */
+  --color-pattern-grid: rgb(17 17 17 / 0.045);
+  --color-pattern-grid-strong: rgb(17 17 17 / 0.055);
+  --color-pattern-dot: rgb(17 17 17 / 0.12);
+  --color-pattern-hatch: rgb(17 17 17 / 0.055);
+  --color-pattern-scan: rgb(17 17 17 / 0.035);
+  --color-ambient-1: rgb(223 227 255 / 0.6);
+  --color-ambient-2: rgb(255 228 211 / 0.35);
+  --color-art-veil: transparent;
+
+  /* Editorial code surfaces */
+  --color-code-bg: rgb(17 17 17 / 0.06);
+  --color-code-block: oklch(0.07 0 0);
+  --color-code-block-foreground: oklch(0.97 0.01 80);
+
   /* Radius */
   --radius: 0.75rem; /* 12px */
 
@@ -106,9 +127,53 @@
 
 @layer base {
   :root {
+    color-scheme: light;
     font-family: var(--font-ui);
     background-color: var(--color-background);
     color: var(--color-foreground);
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+    --color-background: oklch(0.185 0.012 70);
+    --color-surface: oklch(0.225 0.012 70);
+    --color-foreground: oklch(0.92 0.012 80);
+    --color-muted-foreground: oklch(0.7 0.02 70);
+    --color-card: oklch(1 0 0 / 0.055);
+    --color-card-border: oklch(1 0 0 / 0.12);
+    --color-primary: oklch(0.92 0.012 80);
+    --color-primary-foreground: oklch(0.185 0.012 70);
+    --color-border: oklch(1 0 0 / 0.12);
+    --color-ring: oklch(0.92 0.012 80);
+
+    --color-lime: oklch(0.83 0.14 120);
+    --color-violet: oklch(0.72 0.16 285);
+    --color-peach: oklch(0.78 0.11 50);
+    --color-sky: oklch(0.77 0.11 210);
+    --color-sun: oklch(0.84 0.13 80);
+    --color-rose: oklch(0.76 0.14 350);
+
+    --color-blob-1: oklch(0.38 0.08 255);
+    --color-blob-2: oklch(0.38 0.07 40);
+    --color-blob-3: oklch(0.38 0.07 140);
+
+    --color-glass: oklch(0.28 0.012 70 / 0.68);
+    --color-glass-strong: oklch(0.34 0.012 70 / 0.88);
+    --color-glass-soft: oklch(0.25 0.012 70 / 0.45);
+    --color-paper: oklch(0.92 0.012 80);
+
+    --color-pattern-grid: rgb(255 255 255 / 0.06);
+    --color-pattern-grid-strong: rgb(255 255 255 / 0.075);
+    --color-pattern-dot: rgb(255 255 255 / 0.14);
+    --color-pattern-hatch: rgb(255 255 255 / 0.07);
+    --color-pattern-scan: rgb(255 255 255 / 0.04);
+    --color-ambient-1: rgb(87 102 174 / 0.22);
+    --color-ambient-2: rgb(157 93 58 / 0.18);
+    --color-art-veil: rgb(18 15 12 / 0.22);
+
+    --color-code-bg: rgb(255 255 255 / 0.08);
+    --color-code-block: oklch(0.155 0.012 70);
+    --color-code-block-foreground: oklch(0.92 0.012 80);
   }
 
   html {
@@ -117,6 +182,21 @@
 
   body {
     @apply antialiased;
+    transition:
+      background-color 280ms ease,
+      color 280ms ease;
+  }
+
+  .theme-icon-sun {
+    display: none;
+  }
+
+  html[data-theme='dark'] .theme-icon-sun {
+    display: block;
+  }
+
+  html[data-theme='dark'] .theme-icon-moon {
+    display: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -183,7 +263,7 @@
 
   .feed-sheet-scroll {
     scrollbar-width: thin;
-    scrollbar-color: rgb(17 17 17 / 0.18) transparent;
+    scrollbar-color: color-mix(in srgb, var(--color-foreground) 18%, transparent) transparent;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -283,7 +363,7 @@
   .prose-editorial {
     font-size: 1rem;
     line-height: 1.8;
-    color: rgb(17 17 17 / 0.78);
+    color: color-mix(in srgb, var(--color-foreground) 78%, transparent);
   }
 
   .prose-editorial > :first-child {
@@ -337,7 +417,7 @@
     text-decoration-line: underline;
     text-decoration-thickness: 0.06em;
     text-underline-offset: 0.18em;
-    text-decoration-color: rgb(17 17 17 / 0.3);
+    text-decoration-color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
     transition: text-decoration-color 180ms ease;
   }
 
@@ -391,7 +471,7 @@
 
   .prose-editorial code {
     border-radius: 0.25rem;
-    background: rgb(17 17 17 / 0.06);
+    background: var(--color-code-bg);
     padding: 0.15em 0.35em;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.875em;
@@ -401,9 +481,9 @@
     margin-top: 1.6em;
     overflow-x: auto;
     border-radius: 1rem;
-    background: var(--color-foreground);
+    background: var(--color-code-block);
     padding: 1.2em;
-    color: var(--color-background);
+    color: var(--color-code-block-foreground);
     font-size: 0.85em;
     line-height: 1.65;
   }

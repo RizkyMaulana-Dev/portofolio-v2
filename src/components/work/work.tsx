@@ -25,7 +25,7 @@ const FILL: Record<WorkAccent, string> = {
 
 const GRID_STYLE = {
   backgroundImage:
-    "linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)",
+    "linear-gradient(to right, var(--color-pattern-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid) 1px, transparent 1px)",
   backgroundSize: "48px 48px",
 };
 
@@ -49,7 +49,7 @@ function CoverArt({ project }: { project: Project }) {
   if (project.visual === "arch") {
     return (
       <div className="relative h-[62%] w-[42%]">
-        <span className="absolute inset-0 overflow-hidden rounded-t-full border border-foreground/10 bg-white/30">
+        <span className="absolute inset-0 overflow-hidden rounded-t-full border border-foreground/10 bg-[var(--color-glass-soft)]">
           <span
             className={cn(
               "absolute inset-x-0 bottom-0 h-[78%] rounded-t-full",
@@ -58,7 +58,7 @@ function CoverArt({ project }: { project: Project }) {
           />
           <span className="absolute inset-x-0 bottom-[32%] h-px bg-foreground/15" />
         </span>
-        <span className="absolute -right-6 top-[32%] h-14 w-14 translate-x-full rounded-full border border-foreground/10 bg-white/40 backdrop-blur-sm" />
+        <span className="absolute -right-6 top-[32%] h-14 w-14 translate-x-full rounded-full border border-foreground/10 bg-[var(--color-glass)] backdrop-blur-sm" />
       </div>
     );
   }
@@ -66,7 +66,7 @@ function CoverArt({ project }: { project: Project }) {
   if (project.visual === "stack") {
     return (
       <div className="relative h-[56%] w-[55%]">
-        <span className="absolute left-0 top-[18%] h-2/3 w-2/3 -rotate-6 rounded-[18px] border border-foreground/10 bg-white/55 shadow-[0_16px_36px_-24px_rgb(0_0_0/0.35)]" />
+        <span className="absolute left-0 top-[18%] h-2/3 w-2/3 -rotate-6 rounded-[18px] border border-foreground/10 bg-[var(--color-glass)] shadow-[0_16px_36px_-24px_rgb(0_0_0/0.35)]" />
         <span className="absolute left-[16%] top-[6%] h-2/3 w-2/3 rotate-3 rounded-[18px] border border-foreground/10 bg-[var(--color-surface)] shadow-[0_16px_36px_-24px_rgb(0_0_0/0.3)]" />
         <span
           className={cn(
@@ -165,8 +165,8 @@ function ProjectCover({
         </span>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/75 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300",
-            !isPlaceholder && "group-hover:bg-white/95 group-hover:text-foreground"
+            "inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-strong)] px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.16em] text-foreground/75 backdrop-blur-sm transition-colors duration-300",
+            !isPlaceholder && "group-hover:bg-[var(--color-glass-strong)] group-hover:text-foreground"
           )}
         >
           {isPlaceholder ? "Case study soon" : "View project"}

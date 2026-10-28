@@ -44,10 +44,15 @@ function AmbientBlob() {
     <motion.div
       className={cn(
         "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full",
-        "bg-[radial-gradient(circle,rgba(223,227,255,.6),rgba(255,228,211,.35)_45%,transparent_70%)]",
         "blur-[50px]"
       )}
-      style={{ x, y, scale }}
+      style={{
+        x,
+        y,
+        scale,
+        background:
+          "radial-gradient(circle, var(--color-ambient-1), var(--color-ambient-2) 45%, transparent 70%)",
+      }}
       aria-hidden="true"
     />
   );
@@ -76,7 +81,7 @@ function OrbitRings() {
       <motion.div
         className={cn(
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-          "w-[500px] h-[200px] border border-black/5 rounded-full rotate-[72deg]"
+          "w-[500px] h-[200px] border border-foreground/5 rounded-full rotate-[72deg]"
         )}
         style={{ rotate: rotate1 }}
         aria-hidden="true"
@@ -84,7 +89,7 @@ function OrbitRings() {
       <motion.div
         className={cn(
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-          "w-[450px] h-[180px] border border-black/10 rounded-full rotate-[72deg]"
+          "w-[450px] h-[180px] border border-foreground/10 rounded-full rotate-[72deg]"
         )}
         style={{ rotate: rotate2 }}
         aria-hidden="true"

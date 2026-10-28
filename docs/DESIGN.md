@@ -62,7 +62,23 @@ Letakkan di `app/globals.css`. Nilai memakai `oklch` sesuai konvensi shadcn. Hex
 **Warna blob ambient** (sangat pucat, blur tinggi): `#DFE3FF`, `#FFE4D3`, `#E3F5D8`.
 
 ### 3.2 Dark mode
-Hero dirancang light-first. Dark mode **di luar scope tahap ini**. Token tetap disiapkan lewat `.dark` kosong agar bisa ditambah nanti, tanpa mengubah komponen.
+
+Dark mode memakai karakter yang sama dengan light mode: hangat, tenang, dan editorial. Latar bukan hitam pekat, melainkan charcoal hangat dengan teks paper. Preferensi sistem dipakai pada kunjungan pertama; pilihan manual disimpan di `localStorage` dengan key `rizky-theme`. Tema diterapkan lewat atribut `data-theme="light|dark"` pada `<html>`.
+
+| Token | Nilai dark | Pemakaian |
+|---|---|---|
+| `--color-background` | `oklch(0.185 0.012 70)` | Latar utama charcoal hangat |
+| `--color-surface` | `oklch(0.225 0.012 70)` | Permukaan section yang terangkat |
+| `--color-foreground` | `oklch(0.92 0.012 80)` | Teks utama paper |
+| `--color-muted-foreground` | `oklch(0.70 0.02 70)` | Teks sekunder |
+| `--color-card` | `oklch(1 0 0 / 0.055)` | Kartu kaca |
+| `--color-card-border` | `oklch(1 0 0 / 0.12)` | Border kartu kaca |
+| `--color-primary` | `oklch(0.92 0.012 80)` | Tombol utama |
+| `--color-primary-foreground` | `oklch(0.185 0.012 70)` | Teks tombol utama |
+| `--color-border` | `oklch(1 0 0 / 0.12)` | Garis tipis |
+| `--color-ring` | `oklch(0.92 0.012 80)` | Focus ring |
+
+Pola perimeter, grid, scanline, ambient blob, dan permukaan kaca memakai token `--color-pattern-*`, `--color-ambient-*`, dan `--color-glass-*` agar tidak ada tekstur gelap yang dipaksakan ke light mode. Aksen tetap hidup tetapi sedikit diturunkan intensitasnya. Panel admin dikunci ke light mode lewat `data-theme-lock="light"`.
 
 ### 3.3 Radius
 Base `--radius: 0.75rem`. Skala shadcn: `sm` 8px, `md` 10px, `lg` 12px, `xl` 16px. Kartu orbit memakai `rounded-3xl` (24px). Tombol dan pill memakai `rounded-full`.

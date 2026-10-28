@@ -80,7 +80,7 @@ const issuers = [...new Set(certificates.map((certificate) => certificate.issuer
               target="_blank"
               rel="noreferrer"
               aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
-              class="focus-visible:ring-ring block overflow-hidden border-b border-[var(--color-border)] bg-white focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+              class="focus-visible:ring-ring block overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-paper)] focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
             >
               {certificate.image ? (
                 <img

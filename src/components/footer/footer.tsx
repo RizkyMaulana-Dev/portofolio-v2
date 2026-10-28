@@ -5,6 +5,7 @@ import { withBase } from '@/lib/paths';
 import { useSiteContent } from '@/lib/site-content';
 import { Reveal, RevealLine } from '@/components/motion/reveal';
 import { SectionPattern } from '@/components/ui/section-pattern';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export function Footer() {
   const { site } = useSiteContent();
@@ -122,13 +123,16 @@ export function Footer() {
             </ul>
           </nav>
 
-          <a
-            href="#top"
-            className="hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center gap-2 transition-colors focus-visible:underline focus-visible:outline-none"
-          >
-            Back to top
-            <ArrowUp aria-hidden="true" className="h-3.5 w-3.5" />
-          </a>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <a
+              href="#top"
+              className="hover:text-foreground focus-visible:text-foreground inline-flex min-h-8 items-center gap-2 transition-colors focus-visible:underline focus-visible:outline-none"
+            >
+              Back to top
+              <ArrowUp aria-hidden="true" className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </Reveal>
       </div>
     </footer>

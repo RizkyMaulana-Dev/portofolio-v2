@@ -10,6 +10,7 @@ import type { VideoClip, VideoComment, VideoFeedContent } from '@/content/videos
 import { useSiteContent } from '@/lib/site-content';
 import { FeedSheet, type FeedPanelMode } from '@/components/videos/feed-sheet';
 import { FeedSlide } from '@/components/videos/feed-slide';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface FeedPanel {
   mode: FeedPanelMode;
@@ -386,6 +387,8 @@ function FeedExperienceView({ videos }: { videos: VideoFeedContent }) {
                 / {formatClipIndex(totalClips)}
               </span>
             </p>
+
+            <ThemeToggle className="pointer-events-auto" />
           </div>
         </div>
       </div>

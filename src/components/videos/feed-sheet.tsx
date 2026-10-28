@@ -240,17 +240,17 @@ export function FeedSheet({
                 ))}
               </div>
 
-              <div className="bg-foreground text-background mt-5 overflow-hidden rounded-[20px]">
-                <div className="border-background/15 flex items-center justify-between gap-4 border-b px-4 py-3">
-                  <span className="text-background/60 font-mono text-[9px] tracking-[0.18em] uppercase">
+              <div className="bg-[var(--color-code-block)] text-[var(--color-code-block-foreground)] mt-5 overflow-hidden rounded-[20px]">
+                <div className="flex items-center justify-between gap-4 border-b border-white/15 px-4 py-3">
+                  <span className="font-mono text-[9px] tracking-[0.18em] uppercase opacity-60">
                     Embed / HTML
                   </span>
-                  <span className="text-background/45 font-mono text-[9px] tracking-[0.12em]">
+                  <span className="font-mono text-[9px] tracking-[0.12em] opacity-45">
                     390 × 700
                   </span>
                 </div>
 
-                <pre className="text-background/90 overflow-x-auto px-4 py-4 font-mono text-[10.5px] leading-[1.7] whitespace-pre sm:text-[11px]">
+                <pre className="overflow-x-auto px-4 py-4 font-mono text-[10.5px] leading-[1.7] whitespace-pre opacity-90 sm:text-[11px]">
                   <code>{embedCode}</code>
                 </pre>
               </div>

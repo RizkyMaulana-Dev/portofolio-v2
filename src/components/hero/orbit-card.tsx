@@ -46,7 +46,7 @@ export function OrbitCard({ title, caption, accent, icon }: OrbitCardProps) {
       aria-hidden="true"
     >
       <div
-        className="h-[1px] w-full bg-gradient-to-r from-white/70 to-transparent"
+        className="h-[1px] w-full bg-gradient-to-r from-[var(--color-card-border)] to-transparent"
         aria-hidden="true"
       />
       <div

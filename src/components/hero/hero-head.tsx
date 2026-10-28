@@ -8,7 +8,7 @@ export function HeroHeadPlaceholder() {
     <div
       className={cn(
         "relative mx-auto aspect-[1/1.2] w-[45%] md:w-[34%] min-w-[200px] max-w-[420px]",
-        "bg-gradient-to-br from-black/15 to-black/5 rounded-[45%]"
+        "bg-gradient-to-br from-foreground/15 to-foreground/5 rounded-[45%]"
       )}
       aria-hidden="true"
     >

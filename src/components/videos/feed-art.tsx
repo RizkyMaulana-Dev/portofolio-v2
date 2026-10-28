@@ -19,13 +19,13 @@ export const ACCENT_HEX: Record<VideoAccent, string> = {
 
 const GRID_STYLE = {
   backgroundImage:
-    'linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)',
+    'linear-gradient(to right, var(--color-pattern-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid) 1px, transparent 1px)',
   backgroundSize: '40px 40px',
 };
 
 const SCANLINE_STYLE = {
   backgroundImage:
-    'repeating-linear-gradient(to bottom, rgb(17 17 17 / 0.035) 0px, rgb(17 17 17 / 0.035) 1px, transparent 1px, transparent 5px)',
+    'repeating-linear-gradient(to bottom, var(--color-pattern-scan) 0px, var(--color-pattern-scan) 1px, transparent 1px, transparent 5px)',
 };
 
 function VideoArt({ entry }: { entry: VideoEntry }) {
@@ -41,8 +41,8 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
           )}
         />
         <span className="bg-foreground/20 absolute inset-x-0 top-[62%] h-px" />
-        <span className="border-foreground/10 absolute bottom-[6%] left-[10%] h-[20%] w-[46%] rounded-t-[10px] border bg-white/35" />
-        <span className="border-foreground/10 absolute right-[8%] bottom-[6%] h-[12%] w-[24%] rounded-t-[6px] border bg-white/25" />
+        <span className="border-foreground/10 absolute bottom-[6%] left-[10%] h-[20%] w-[46%] rounded-t-[10px] border bg-[var(--color-glass-soft)]" />
+        <span className="border-foreground/10 absolute right-[8%] bottom-[6%] h-[12%] w-[24%] rounded-t-[6px] border bg-[var(--color-glass-soft)]" />
         <span className="bg-foreground/20 absolute top-[62%] left-1/2 h-6 w-px" />
       </div>
     );
@@ -51,7 +51,7 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
   if (entry.visual === 'portal') {
     return (
       <div aria-hidden="true" className="relative h-[62%] w-[52%]">
-        <span className="border-foreground/10 absolute inset-0 overflow-hidden rounded-t-full rounded-b-[24px] border bg-white/30">
+        <span className="border-foreground/10 absolute inset-0 overflow-hidden rounded-t-full rounded-b-[24px] border bg-[var(--color-glass-soft)]">
           <span className={cn('absolute inset-x-0 bottom-0 h-[64%]', fill)} />
           <span className="bg-foreground/15 absolute inset-x-0 bottom-[34%] h-px" />
         </span>
@@ -64,7 +64,7 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
   if (entry.visual === 'fold') {
     return (
       <div aria-hidden="true" className="relative h-[58%] w-[64%]">
-        <span className="border-foreground/10 absolute top-[18%] left-[2%] h-[62%] w-[62%] -rotate-6 rounded-[18px] border bg-white/40" />
+        <span className="border-foreground/10 absolute top-[18%] left-[2%] h-[62%] w-[62%] -rotate-6 rounded-[18px] border bg-[var(--color-glass)]" />
         <span className="border-foreground/10 bg-surface/80 absolute top-[8%] right-[2%] h-[62%] w-[62%] rotate-6 rounded-[18px] border" />
         <span
           className={cn(
@@ -126,6 +126,7 @@ export function FeedArt({ entry }: { entry: VideoEntry }) {
 
       <div className="absolute inset-0 opacity-30" style={SCANLINE_STYLE} />
       <div className="from-background/10 to-background/25 absolute inset-0 bg-gradient-to-b via-transparent" />
+      <div className="absolute inset-0 bg-[var(--color-art-veil)]" />
     </div>
   );
 }

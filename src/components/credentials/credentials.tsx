@@ -11,7 +11,7 @@ import { SectionPattern } from "@/components/ui/section-pattern";
 
 const GRID_STYLE = {
   backgroundImage:
-    "linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)",
+    "linear-gradient(to right, var(--color-pattern-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid) 1px, transparent 1px)",
   backgroundSize: "36px 36px",
 };
 
@@ -53,7 +53,7 @@ function CertificateTile({
       aria-label={`Open ${certificate.title} certificate PDF in a new tab`}
       className="group flex h-full items-start gap-2.5 focus-visible:outline-none lg:block"
     >
-      <div className="relative h-12 w-14 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[#f4eee2] shadow-[0_14px_30px_-26px_rgb(0_0_0/0.35)] transition-[border-color,box-shadow,transform] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:border-foreground/20 group-hover:shadow-[0_22px_38px_-28px_rgb(0_0_0/0.32)] group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-background lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-[20px] lg:group-hover:-translate-y-1">
+      <div className="relative h-12 w-14 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] shadow-[0_14px_30px_-26px_rgb(0_0_0/0.35)] transition-[border-color,box-shadow,transform] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:border-foreground/20 group-hover:shadow-[0_22px_38px_-28px_rgb(0_0_0/0.32)] group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-background lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-[20px] lg:group-hover:-translate-y-1">
         <div aria-hidden="true" className="absolute inset-0 opacity-55" style={GRID_STYLE} />
         <div
           aria-hidden="true"
@@ -70,7 +70,7 @@ function CertificateTile({
               alt=""
               loading="lazy"
               decoding="async"
-              className="max-h-full max-w-full rounded-[3px] border border-black/5 object-contain shadow-[0_10px_20px_-16px_rgb(0_0_0/0.4)] transition-transform duration-500 ease-out group-hover:scale-[1.018] lg:rounded-[6px] lg:shadow-[0_16px_34px_-24px_rgb(0_0_0/0.4)]"
+              className="max-h-full max-w-full rounded-[3px] border border-[var(--color-border)] object-contain shadow-[0_10px_20px_-16px_rgb(0_0_0/0.4)] transition-transform duration-500 ease-out group-hover:scale-[1.018] lg:rounded-[6px] lg:shadow-[0_16px_34px_-24px_rgb(0_0_0/0.4)]"
             />
           ) : (
             <span
@@ -88,7 +88,7 @@ function CertificateTile({
         </div>
 
         {certificate.featured && (
-          <span className="absolute bottom-3 left-3 hidden items-center gap-1.5 rounded-full border border-black/10 bg-white/85 px-2 py-1 text-[8px] font-medium uppercase tracking-[0.14em] text-foreground/70 backdrop-blur-sm lg:inline-flex">
+          <span className="absolute bottom-3 left-3 hidden items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-strong)] px-2 py-1 text-[8px] font-medium uppercase tracking-[0.14em] text-foreground/70 backdrop-blur-sm lg:inline-flex">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-foreground/70" />
             Selected
           </span>

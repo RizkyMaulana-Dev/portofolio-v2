@@ -11,13 +11,13 @@ const ACCENT_HEX: Record<Accent, string> = {
 
 const GRID_STYLE = {
   backgroundImage:
-    'linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)',
+    'linear-gradient(to right, var(--color-pattern-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid) 1px, transparent 1px)',
   backgroundSize: '40px 40px',
 };
 
 const SCANLINE_STYLE = {
   backgroundImage:
-    'repeating-linear-gradient(to bottom, rgb(17 17 17 / 0.03) 0px, rgb(17 17 17 / 0.03) 1px, transparent 1px, transparent 5px)',
+    'repeating-linear-gradient(to bottom, var(--color-pattern-scan) 0px, var(--color-pattern-scan) 1px, transparent 1px, transparent 5px)',
 };
 
 export function PostArt({ accent, mark }: { accent: Accent; mark: string }) {
@@ -44,6 +44,7 @@ export function PostArt({ accent, mark }: { accent: Accent; mark: string }) {
       </div>
 
       <div className="absolute inset-0 opacity-30" style={SCANLINE_STYLE} />
+      <div className="absolute inset-0 bg-[var(--color-art-veil)]" />
     </div>
   );
 }

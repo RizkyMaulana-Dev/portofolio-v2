@@ -23,7 +23,7 @@ export function TrustBadge({ trust }: { trust: string }) {
           {["A", "B", "C", "D", "E"].map((initial, idx) => (
             <Avatar
               key={idx}
-             className="h-8 w-8 border-2 border-white"
+             className="h-8 w-8 border-2 border-[var(--color-background)]"
               style={{ zIndex: 5 - idx }}
             >
               <AvatarFallback
@@ -44,7 +44,7 @@ export function TrustBadge({ trust }: { trust: string }) {
         </div>
         <span
           aria-hidden="true"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white/60 text-foreground backdrop-blur"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-[var(--color-glass)] text-foreground backdrop-blur"
         >
           <Plus className="h-4 w-4" />
         </span>

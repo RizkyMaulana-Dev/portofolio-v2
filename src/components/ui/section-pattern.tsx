@@ -7,16 +7,16 @@ type SectionPatternVariant = 'grid' | 'dots' | 'hatch';
 const PATTERNS: Record<SectionPatternVariant, CSSProperties> = {
   grid: {
     backgroundImage:
-      'linear-gradient(to right, rgb(17 17 17 / 0.055) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.055) 1px, transparent 1px)',
+      'linear-gradient(to right, var(--color-pattern-grid-strong) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid-strong) 1px, transparent 1px)',
     backgroundSize: '34px 34px',
   },
   dots: {
-    backgroundImage: 'radial-gradient(circle, rgb(17 17 17 / 0.12) 1px, transparent 1.2px)',
+    backgroundImage: 'radial-gradient(circle, var(--color-pattern-dot) 1px, transparent 1.2px)',
     backgroundSize: '19px 19px',
   },
   hatch: {
     backgroundImage:
-      'repeating-linear-gradient(135deg, rgb(17 17 17 / 0.055) 0 1px, transparent 1px 10px)',
+      'repeating-linear-gradient(135deg, var(--color-pattern-hatch) 0 1px, transparent 1px 10px)',
   },
 };
 

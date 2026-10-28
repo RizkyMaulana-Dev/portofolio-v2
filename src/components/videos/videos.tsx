@@ -27,13 +27,13 @@ const ACCENT_HEX: Record<VideoAccent, string> = {
 
 const GRID_STYLE = {
   backgroundImage:
-    'linear-gradient(to right, rgb(17 17 17 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 17 17 / 0.045) 1px, transparent 1px)',
+    'linear-gradient(to right, var(--color-pattern-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--color-pattern-grid) 1px, transparent 1px)',
   backgroundSize: '32px 32px',
 };
 
 const SCANLINE_STYLE = {
   backgroundImage:
-    'repeating-linear-gradient(to bottom, rgb(17 17 17 / 0.035) 0px, rgb(17 17 17 / 0.035) 1px, transparent 1px, transparent 5px)',
+    'repeating-linear-gradient(to bottom, var(--color-pattern-scan) 0px, var(--color-pattern-scan) 1px, transparent 1px, transparent 5px)',
 };
 
 function ArtBackdrop({ entry, compact = false }: { entry: VideoEntry; compact?: boolean }) {
@@ -71,8 +71,8 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
           )}
         />
         <span className="bg-foreground/20 absolute inset-x-0 top-[62%] h-px" />
-        <span className="border-foreground/10 absolute bottom-[6%] left-[10%] h-[20%] w-[46%] rounded-t-[10px] border bg-white/35" />
-        <span className="border-foreground/10 absolute right-[8%] bottom-[6%] h-[12%] w-[24%] rounded-t-[6px] border bg-white/25" />
+        <span className="border-foreground/10 absolute bottom-[6%] left-[10%] h-[20%] w-[46%] rounded-t-[10px] border bg-[var(--color-glass-soft)]" />
+        <span className="border-foreground/10 absolute right-[8%] bottom-[6%] h-[12%] w-[24%] rounded-t-[6px] border bg-[var(--color-glass-soft)]" />
         <span className="bg-foreground/20 absolute top-[62%] left-1/2 h-6 w-px" />
       </div>
     );
@@ -81,7 +81,7 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
   if (entry.visual === 'portal') {
     return (
       <div aria-hidden="true" className="relative h-[62%] w-[52%]">
-        <span className="border-foreground/10 absolute inset-0 overflow-hidden rounded-t-full rounded-b-[24px] border bg-white/30">
+        <span className="border-foreground/10 absolute inset-0 overflow-hidden rounded-t-full rounded-b-[24px] border bg-[var(--color-glass-soft)]">
           <span className={cn('absolute inset-x-0 bottom-0 h-[64%]', fill)} />
           <span className="bg-foreground/15 absolute inset-x-0 bottom-[34%] h-px" />
         </span>
@@ -94,7 +94,7 @@ function VideoArt({ entry }: { entry: VideoEntry }) {
   if (entry.visual === 'fold') {
     return (
       <div aria-hidden="true" className="relative h-[58%] w-[64%]">
-        <span className="border-foreground/10 absolute top-[18%] left-[2%] h-[62%] w-[62%] -rotate-6 rounded-[18px] border bg-white/40" />
+        <span className="border-foreground/10 absolute top-[18%] left-[2%] h-[62%] w-[62%] -rotate-6 rounded-[18px] border bg-[var(--color-glass)]" />
         <span className="border-foreground/10 bg-surface/80 absolute top-[8%] right-[2%] h-[62%] w-[62%] rotate-6 rounded-[18px] border" />
         <span
           className={cn(
@@ -175,10 +175,10 @@ function FeaturedVideo({
           </div>
 
           <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between md:inset-x-5 md:bottom-5">
-            <span className="text-foreground/70 inline-flex items-center rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[9px] font-medium tracking-[0.16em] uppercase backdrop-blur-sm">
+            <span className="text-foreground/70 inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-3 py-1.5 text-[9px] font-medium tracking-[0.16em] uppercase backdrop-blur-sm">
               {entry.category}
             </span>
-            <span className="text-foreground/70 hidden h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white/60 backdrop-blur-sm md:flex">
+            <span className="text-foreground/70 hidden h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] backdrop-blur-sm md:flex">
               <Play aria-hidden="true" className="h-3 w-3 fill-current" />
             </span>
           </div>

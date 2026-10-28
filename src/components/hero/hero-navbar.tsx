@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { withBase } from "@/lib/paths";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import type { HeroContent } from "@/content/hero";
 
@@ -45,7 +46,7 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
       <nav
         className={cn(
           "hidden md:flex items-center gap-1",
-          "rounded-full bg-white/60 backdrop-blur-md border border-[var(--color-card-border)] p-1",
+          "rounded-full bg-[var(--color-glass)] backdrop-blur-md border border-[var(--color-card-border)] p-1",
           "shadow-[0_1px_2px_rgb(0_0_0/0.04)]"
         )}
         aria-label="Primary"
@@ -56,12 +57,13 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
             href={withBase(item.href)}
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium text-foreground",
-              "transition-colors hover:bg-white"
+              "transition-colors hover:bg-[var(--color-glass-strong)]"
             )}
           >
             {item.label}
           </a>
         ))}
+        <ThemeToggle className="ml-0.5" />
         <div className="w-px h-6 bg-border" aria-hidden="true" />
         <Button size="sm" className="ml-1" asChild>
           <a href={withBase(content.navCta.href)}>
@@ -72,14 +74,15 @@ export function HeroNavbar({ content }: { content: HeroContent }) {
       </nav>
 
       {/* Mobile menu */}
-      <div className="md:hidden">
+      <div className="flex items-center gap-2 md:hidden">
+        <ThemeToggle />
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <button
               className={cn(
-                "rounded-full p-2 bg-white/60 backdrop-blur border border-[var(--color-card-border)]",
+                "rounded-full p-2 bg-[var(--color-glass)] backdrop-blur border border-[var(--color-card-border)]",
                 "transition-all duration-200 ease-out motion-safe:hover:scale-105 motion-safe:active:scale-95",
-                "hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                "hover:bg-[var(--color-glass-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               )}
               aria-label="Open menu"
             >

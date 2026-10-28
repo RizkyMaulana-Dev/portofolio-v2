@@ -20,10 +20,12 @@ const {
   noindex = false,
   staticReveal = false,
 } = Astro.props;
+
+const isAdminRoute = Astro.url.pathname.split('/').includes('admin');
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-theme-lock={isAdminRoute ? 'light' : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,6 +35,38 @@ const {
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta name="description" content={description} />
     <meta name="author" content="Rizky Maulana" />
+    <meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#25211C" media="(prefers-color-scheme: dark)" />
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const lock = root.dataset.themeLock;
+
+        if (lock === 'light' || lock === 'dark') {
+          root.dataset.theme = lock;
+          return;
+        }
+
+        const key = 'rizky-theme';
+        let stored = null;
+
+        try {
+          stored = window.localStorage.getItem(key);
+        } catch {
+          // Private browsing or blocked storage falls back to the system preference.
+        }
+
+        if (stored === 'light' || stored === 'dark') {
+          root.dataset.theme = stored;
+          return;
+        }
+
+        root.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      })();
+    </script>
 
     {staticReveal && (
       <script is:inline>
@@ -70,6 +104,71 @@ const {
   </head>
   <body id="top" class="min-h-screen bg-background text-foreground font-ui antialiased">
     <slot />
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (root.dataset.themeLock) return;
+
+        const key = 'rizky-theme';
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const syncControls = () => {
+          const isDark = root.dataset.theme === 'dark';
+          const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+
+          document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+            button.setAttribute('aria-label', label);
+            button.setAttribute('aria-pressed', String(isDark));
+            button.setAttribute('title', label);
+          });
+        };
+
+        const setTheme = (theme, persist) => {
+          root.dataset.theme = theme;
+
+          if (persist) {
+            try {
+              window.localStorage.setItem(key, theme);
+            } catch {
+              // Keep the theme for this page even when storage is unavailable.
+            }
+          }
+
+          syncControls();
+        };
+
+        document.addEventListener('click', (event) => {
+          const target = event.target instanceof Element
+            ? event.target.closest('[data-theme-toggle]')
+            : null;
+
+          if (!target) return;
+          setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
+        });
+
+        media.addEventListener('change', (event) => {
+          let stored = null;
+
+          try {
+            stored = window.localStorage.getItem(key);
+          } catch {
+            // Follow the system preference when storage is unavailable.
+          }
+
+          if (stored === 'light' || stored === 'dark') return;
+          setTheme(event.matches ? 'dark' : 'light', false);
+        });
+
+        window.addEventListener('storage', (event) => {
+          if (event.key !== key) return;
+          if (event.newValue !== 'light' && event.newValue !== 'dark') return;
+          setTheme(event.newValue, false);
+        });
+
+        syncControls();
+      })();
+    </script>
 
     {staticReveal && (
       <script is:inline>
