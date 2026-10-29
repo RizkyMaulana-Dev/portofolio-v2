@@ -170,3 +170,78 @@ describe('content API', () => {
     assert.deepEqual(afterReset.body.sections, {});
   });
 });
+
+describe('upload API', () => {
+  async function cleanUploads() {
+    await pool.query('DELETE FROM uploads');
+    const { readdir, unlink } = await import('node:fs/promises');
+    const { config } = await import('../config.mjs');
+    const files = await readdir(config.uploadDir).catch(() => []);
+    await Promise.all(
+      files.map((file) => unlink(`${config.uploadDir}/${file}`).catch(() => undefined))
+    );
+  }
+
+  async function postFile(bytes, type, name) {
+    const form = new FormData();
+    form.append('file', new Blob([bytes], { type }), name);
+    const response = await fetch(`${baseUrl}/api/uploads`, {
+      method: 'POST',
+      body: form,
+    });
+    const text = await response.text();
+    return { status: response.status, body: text ? JSON.parse(text) : null };
+  }
+
+  beforeEach(async () => {
+    await cleanUploads();
+  });
+
+  test('uploads an image and serves it back', async () => {
+    const bytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    const uploaded = await postFile(bytes, 'image/png', 'cover.png');
+
+    assert.equal(uploaded.status, 201);
+    assert.match(uploaded.body.upload.url, /^\/uploads\/.+\.png$/);
+
+    const image = await fetch(`${baseUrl}${uploaded.body.upload.url}`);
+    assert.equal(image.status, 200);
+    assert.equal(image.headers.get('content-type'), 'image/png');
+    assert.deepEqual(new Uint8Array(await image.arrayBuffer()), bytes);
+  });
+
+  test('uploads a PDF and lists it', async () => {
+    const pdf = new TextEncoder().encode('%PDF-1.4\n1 0 obj\n<<>>\nendobj\n');
+    const uploaded = await postFile(pdf, 'application/pdf', 'certificate.pdf');
+    assert.equal(uploaded.status, 201);
+
+    const list = await request('/api/uploads');
+    assert.equal(list.status, 200);
+    assert.equal(list.body.uploads.length, 1);
+    assert.equal(list.body.uploads[0].originalName, 'certificate.pdf');
+  });
+
+  test('rejects an unsupported file type without saving a file', async () => {
+    const rejected = await postFile(
+      new TextEncoder().encode('hello'),
+      'text/plain',
+      'notes.txt'
+    );
+
+    assert.equal(rejected.status, 400);
+    const list = await request('/api/uploads');
+    assert.deepEqual(list.body.uploads, []);
+  });
+
+  test('deletes an upload and its file', async () => {
+    const bytes = new Uint8Array([0xff, 0xd8, 0xff, 0xd9]);
+    const uploaded = await postFile(bytes, 'image/jpeg', 'photo.jpg');
+    const id = uploaded.body.upload.id;
+
+    const removed = await request(`/api/uploads/${id}`, { method: 'DELETE' });
+    assert.equal(removed.status, 200);
+
+    const file = await fetch(`${baseUrl}${uploaded.body.upload.url}`);
+    assert.equal(file.status, 404);
+  });
+});

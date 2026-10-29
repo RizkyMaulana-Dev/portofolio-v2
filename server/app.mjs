@@ -1,5 +1,6 @@
 import express from 'express';
 import { createContentService } from './lib/content-service.mjs';
+import { createUploadService } from './lib/upload-service.mjs';
 import { isContentObject, isSection } from './lib/sections.mjs';
 
 function asyncRoute(handler) {
@@ -24,13 +25,35 @@ function assertContent(content) {
   }
 }
 
-export function createApp({ pool, contentService } = {}) {
+export function createApp({ pool, contentService, uploadService } = {}) {
   if (!pool) throw new Error('createApp requires a MySQL pool.');
   const content = contentService ?? createContentService(pool);
+  const uploads = uploadService ?? createUploadService({ pool });
   const app = express();
 
   app.disable('x-powered-by');
   app.use(express.json({ limit: '8mb' }));
+  app.use(
+    '/uploads',
+    express.static(uploads.uploadDir, {
+      fallthrough: false,
+      index: false,
+      dotfiles: 'deny',
+      maxAge: '1h',
+    })
+  );
+
+  const receiveUpload = (request, response, next) => {
+    uploads.middleware.single('file')(request, response, (error) => {
+      if (error) {
+        error.status =
+          error.status ?? (error.code === 'LIMIT_FILE_SIZE' ? 413 : 400);
+        next(error);
+        return;
+      }
+      next();
+    });
+  };
 
   app.get(
     '/api/health',
@@ -112,6 +135,41 @@ export function createApp({ pool, contentService } = {}) {
       response.json({
         revisions: await content.listRevisions(section, request.query.limit),
       });
+    })
+  );
+
+  app.post(
+    '/api/uploads',
+    receiveUpload,
+    asyncRoute(async (request, response) => {
+      if (!request.file) {
+        const error = new Error('File is required.');
+        error.status = 400;
+        throw error;
+      }
+
+      response.status(201).json({ upload: await uploads.save(request.file) });
+    })
+  );
+
+  app.get(
+    '/api/uploads',
+    asyncRoute(async (_request, response) => {
+      response.json({ uploads: await uploads.list() });
+    })
+  );
+
+  app.delete(
+    '/api/uploads/:id',
+    asyncRoute(async (request, response) => {
+      const id = Number(request.params.id);
+      if (!Number.isInteger(id) || id <= 0) {
+        const error = new Error('Upload id must be a positive integer.');
+        error.status = 400;
+        throw error;
+      }
+
+      response.json(await uploads.remove(id));
     })
   );
 
