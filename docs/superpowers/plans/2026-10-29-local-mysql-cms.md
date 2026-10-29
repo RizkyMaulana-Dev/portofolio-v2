@@ -70,9 +70,9 @@
 - Produces `createPool(config)` returning a mysql2 promise pool.
 - Produces tables: `content_sections`, `content_drafts`, `content_revisions`, `uploads`.
 
-- [ ] Start MySQL through Docker Compose on port 3307.
-- [ ] Apply `node server/scripts/setup-db.mjs`; verify all four tables exist.
-- [ ] Confirm `GITHUB_PAGES=true npx astro build` still works without a database.
+- [x] Start MySQL through Docker Compose on port 3307.
+- [x] Apply `node server/scripts/setup-db.mjs`; verify all four tables exist.
+- [x] Confirm `GITHUB_PAGES=true npx astro build` still works without a database.
 
 ## Task 2: Content and draft API (TDD)
 
@@ -88,11 +88,11 @@
 - `DELETE /api/drafts/:section` → `{ ok: true }`.
 - `DELETE /api/content` → `{ ok: true }`.
 
-- [ ] **Step 1: Write failing integration tests** for health, empty content, save/read section, draft save/read/clear, and invalid section rejection.
-- [ ] **Step 2: Run `node --test server/tests/api.test.mjs`; expect failure because `server/app.mjs` does not exist.**
-- [ ] **Step 3: Implement the service and the three content/draft routes.**
-- [ ] **Step 4: Re-run the tests; expect all content/draft tests to pass.**
-- [ ] **Step 5: Commit the task.**
+- [x] **Step 1: Write failing integration tests** for health, empty content, save/read section, draft save/read/clear, and invalid section rejection.
+- [x] **Step 2: Run `node --test server/tests/api.test.mjs`; expect failure because `server/app.mjs` does not exist.**
+- [x] **Step 3: Implement the service and the three content/draft routes.**
+- [x] **Step 4: Re-run the tests; expect all content/draft tests to pass.**
+- [x] **Step 5: Commit the task.**
 
 ## Task 3: Upload API (TDD)
 
@@ -104,11 +104,11 @@
 - `DELETE /api/uploads/:id` → `{ ok: true }`.
 - `GET /uploads/:name` serves stored files.
 
-- [ ] **Step 1: Add failing tests** for JPEG/PDF upload, listing, static serving, and rejection of unsupported MIME types.
-- [ ] **Step 2: Run the upload tests; expect 404/route failure.**
-- [ ] **Step 3: Implement multer storage, upload rows, static serving, and delete cleanup.**
-- [ ] **Step 4: Re-run tests; expect pass.**
-- [ ] **Step 5: Commit the task.**
+- [x] **Step 1: Add failing tests** for JPEG/PDF upload, listing, static serving, and rejection of unsupported MIME types.
+- [x] **Step 2: Run the upload tests; expect 404/route failure.**
+- [x] **Step 3: Implement multer storage, upload rows, static serving, and delete cleanup.**
+- [x] **Step 4: Re-run tests; expect pass.**
+- [x] **Step 5: Commit the task.**
 
 ## Task 4: Public content hydration and API client
 
@@ -120,10 +120,10 @@
 - `hydrateSiteContentFromServer()` is idempotent and fails silently.
 - `useSiteContent()` triggers one remote hydration attempt on mount.
 
-- [ ] **Step 1: Add a failing test for merge behavior** (pure content merge with a partial hero object) in `tests/site-content.test.ts` using the Node test runner or a small `tsx` harness.
-- [ ] **Step 2: Implement the client, merge helper, and hydration.**
-- [ ] **Step 3: Verify with the test and `npx astro check`.**
-- [ ] **Step 4: Commit the task.**
+- [x] **Step 1: Add a failing test for merge behavior** (pure content merge with a partial hero object) in `tests/site-content.test.ts` using the Node test runner or a small `tsx` harness.
+- [x] **Step 2: Implement the client, merge helper, and hydration.**
+- [x] **Step 3: Verify with the test and `npx astro check`.**
+- [x] **Step 4: Commit the task.**
 
 ## Task 5: Admin autosave and recoverable drafts
 
@@ -135,12 +135,12 @@
 - `useSectionDraft(section, initial, onSave)` returns `{ draft, setDraft, isDirty, isSaving, restoredAt, save, discardDraft }`.
 - Admin status is `'mysql' | 'browser'`.
 
-- [ ] **Step 1: Write a failing test for local draft read/write/clear and server-draft seeding.**
-- [ ] **Step 2: Implement draft helpers and the hook.**
-- [ ] **Step 3: Wire the dashboard to load MySQL first, migrate existing local content when the DB is empty, and fall back to browser mode.**
-- [ ] **Step 4: Add the restored-draft banner and autosave status to `FormShell`.**
-- [ ] **Step 5: Verify recovery by typing, closing the tab, reopening, and saving.**
-- [ ] **Step 6: Commit the task.**
+- [x] **Step 1: Write a failing test for local draft read/write/clear and server-draft seeding.**
+- [x] **Step 2: Implement draft helpers and the hook.**
+- [x] **Step 3: Wire the dashboard to load MySQL first, migrate existing local content when the DB is empty, and fall back to browser mode.**
+- [x] **Step 4: Add the restored-draft banner and autosave status to `FormShell`.**
+- [x] **Step 5: Verify recovery by typing, closing the tab, reopening, and saving.**
+- [x] **Step 6: Commit the task.**
 
 ## Task 6: Drag-and-drop uploads and media library
 
@@ -151,21 +151,21 @@
 - `<MediaListField label values onChange accept hint />` uploads multiple files.
 - `MediaLibrary` lists, uploads, copies, and deletes files.
 
-- [ ] **Step 1: Add a failing test for upload URL resolution/`withBase` handling of `/uploads/...`.**
-- [ ] **Step 2: Implement the components and the Media nav item.**
-- [ ] **Step 3: Add drop fields for project cover/gallery/video and certificate image/PDF.**
-- [ ] **Step 4: Verify upload, preview, copy URL, and remove.**
-- [ ] **Step 5: Commit the task.**
+- [x] **Step 1: Add a failing test for upload URL resolution/`withBase` handling of `/uploads/...`.**
+- [x] **Step 2: Implement the components and the Media nav item.**
+- [x] **Step 3: Add drop fields for project cover/gallery/video and certificate image/PDF.**
+- [x] **Step 4: Verify upload, preview, copy URL, and remove.**
+- [x] **Step 5: Commit the task.**
 
 ## Task 7: Documentation and full verification
 
 **Files:** `docs/LOCAL_CMS.md`, `README.md`, `package.json`.
 
-- [ ] Document `docker compose up -d mysql`, `npx pnpm@10.20.0 install`, `node server/scripts/setup-db.mjs`, and `npm run dev`.
-- [ ] Explain draft recovery, the browser fallback, and why uploaded files are excluded from the static GitHub Pages build.
-- [ ] Run `node --test server/tests/*.test.mjs`, `npx astro check`, and `GITHUB_PAGES=true npx astro build`.
-- [ ] Manually verify admin login, content save, edit/reopen recovery, drag-drop upload, media copy/delete, and public hydration.
-- [ ] Commit the final task.
+- [x] Document `docker compose up -d mysql`, `npx pnpm@10.20.0 install`, `node server/scripts/setup-db.mjs`, and `npm run dev`.
+- [x] Explain draft recovery, the browser fallback, and why uploaded files are excluded from the static GitHub Pages build.
+- [x] Run `node --test server/tests/*.test.mjs`, `npx astro check`, and `GITHUB_PAGES=true npx astro build`.
+- [x] Manually verify admin login, content save, edit/reopen recovery, drag-drop upload, media copy/delete, and public hydration.
+- [x] Commit the final task.
 
 ## Review Focus
 
