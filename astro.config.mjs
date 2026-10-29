@@ -11,6 +11,18 @@ export default defineConfig({
   site: "https://rizkymaulana-dev.github.io",
   base: isGitHubPages ? "/portofolio-v2" : "/",
   integrations: [react()],
+  server: {
+    proxy: {
+      "/api": "http://127.0.0.1:8787",
+      "/uploads": "http://127.0.0.1:8787",
+    },
+  },
+  preview: {
+    proxy: {
+      "/api": "http://127.0.0.1:8787",
+      "/uploads": "http://127.0.0.1:8787",
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {

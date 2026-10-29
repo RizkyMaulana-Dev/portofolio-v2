@@ -19,3 +19,12 @@ yarn-error.log*
 
 # agentic
 .claude/
+
+# local superpowers scratch
+.superpowers/
+
+# local uploads
+uploads/
+
+# local mysql data
+.local-mysql/
