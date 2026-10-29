@@ -4,6 +4,8 @@ Hero section interaktif dengan Astro, shadcn/ui style, dan motion/react.
 
 ## Quick Start
 
+Untuk melihat situs statis tanpa CMS:
+
 ```bash
 pnpm install
 pnpm dev
@@ -11,10 +13,28 @@ pnpm dev
 
 Buka http://localhost:4321
 
+### CMS lokal (Express + MySQL)
+
+```bash
+cp .env.example .env
+docker compose up -d mysql
+npx pnpm@12.15.0 install
+node server/scripts/setup-db.mjs
+npm run dev
+```
+
+Buka `http://localhost:4321/admin/login` dengan `admin@gmail.com` / `admin123`. Panduan lengkap, endpoint API, draft recovery, upload, dan troubleshooting ada di [docs/LOCAL_CMS.md](docs/LOCAL_CMS.md).
+
 ## Build
 
 ```bash
 pnpm build
+```
+
+Build statis untuk GitHub Pages:
+
+```bash
+GITHUB_PAGES=true npx astro build
 ```
 
 ## Struktur File
@@ -72,6 +92,7 @@ public/
 - **lenis** — Smooth scroll
 - **Tailwind CSS v4** — Utility-first styling
 - **shadcn/ui-style** — Component design system
+- **Express + MySQL** — CMS lokal, draft, revisi, dan upload media
 
 ## Keputusan (decisions)
 
