@@ -2,14 +2,70 @@
 
 import type { HeroContent } from "@/content/hero";
 import {
-  AddButton,
   FormShell,
-  ItemCard,
-  Subsection,
+  SettingsDisclosure,
   TextAreaField,
   TextField,
 } from "@/components/admin/admin-fields";
+import {
+  CollectionManager,
+  DetailGrid,
+} from "@/components/admin/collection-manager";
 import { useSectionDraft, type SectionEditorProps } from "@/components/admin/admin-types";
+import { withBase } from "@/lib/paths";
+
+type NavItem = HeroContent["nav"][number];
+
+function createNavItem(): NavItem {
+  return { label: "Link baru", href: "#" };
+}
+
+function NavEditor({
+  item,
+  onChange,
+}: {
+  item: NavItem;
+  onChange: (patch: Partial<NavItem>) => void;
+}) {
+  return (
+    <div className="grid gap-4 md:col-span-2 md:grid-cols-2">
+      <TextField
+        label="Label"
+        value={item.label}
+        onChange={(label) => onChange({ label })}
+      />
+      <TextField
+        label="Link"
+        value={item.href}
+        onChange={(href) => onChange({ href })}
+      />
+    </div>
+  );
+}
+
+function NavDetail({ item }: { item: NavItem }) {
+  return (
+    <DetailGrid
+      fields={[
+        { label: "Label", value: item.label },
+        {
+          label: "Link",
+          value: item.href ? (
+            <a
+              href={withBase(item.href)}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground"
+            >
+              {item.href}
+            </a>
+          ) : undefined,
+          full: true,
+        },
+      ]}
+    />
+  );
+}
 
 export function HeroSection({ section, value, onSave, onReset }: SectionEditorProps<HeroContent>) {
   const {
@@ -30,20 +86,11 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
     });
   }
 
-  function updateNav(index: number, patch: Partial<HeroContent["nav"][number]>) {
-    setDraft((current) => ({
-      ...current,
-      nav: current.nav.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, ...patch } : item
-      ),
-    }));
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / Hero"
       title="Hero"
-      description="Copy utama, call to action, tagline, dan navigasi yang dilihat pertama kali. Kartu orbit tetap memakai komposisi default."
+      description="Navigasi ada di tabel terpisah. Buka detail untuk melihat, lalu edit label atau link tanpa mencari di seluruh form."
       isDirty={isDirty}
       isSaving={isSaving}
       restoredAt={restoredAt}
@@ -51,9 +98,47 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
       onReset={onReset}
       onDiscardDraft={discardDraft}
     >
-      <Subsection
-        title="Identitas & headline"
-        description="Baris pertama tampil tegak, baris kedua tampil miring."
+      <CollectionManager<NavItem>
+        title="Navigasi"
+        description="Link di navbar desktop dan menu mobile. Klik baris untuk detail, lalu edit."
+        items={draft.nav}
+        onChange={(nav) => setDraft((current) => ({ ...current, nav }))}
+        getKey={(item, index) => `${item.label}-${index}`}
+        getTitle={(item) => item.label}
+        getSubtitle={(item) => item.href}
+        searchText={(item) => `${item.label} ${item.href}`}
+        columns={[
+          {
+            key: "label",
+            header: "Label",
+            render: (item) => (
+              <span className="block text-sm font-medium text-foreground">
+                {item.label}
+              </span>
+            ),
+          },
+          {
+            key: "href",
+            header: "Link",
+            render: (item) => (
+              <span className="block max-w-[130px] truncate text-xs text-foreground/50 sm:max-w-[360px]">
+                {item.href}
+              </span>
+            ),
+          },
+        ]}
+        createItem={createNavItem}
+        renderDetail={(item) => <NavDetail item={item} />}
+        renderEditor={(item, patch) => <NavEditor item={item} onChange={patch} />}
+        addLabel="Tambah link"
+        itemLabel="link"
+        emptyLabel="Belum ada link navigasi. Tambahkan link pertama dari tombol di atas."
+        className="mt-8"
+      />
+
+      <SettingsDisclosure
+        title="Konten hero"
+        description="Brand, headline, CTA, tagline, dan CTA navbar. Buka hanya saat perlu mengubah copy utama."
       >
         <div className="grid gap-4 md:grid-cols-2">
           <TextField
@@ -78,11 +163,6 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
             onChange={(subheadline) => setDraft((current) => ({ ...current, subheadline }))}
             className="md:col-span-2"
           />
-        </div>
-      </Subsection>
-
-      <Subsection title="Call to action" description="Dua tombol utama di bawah headline.">
-        <div className="grid gap-4 md:grid-cols-2">
           <TextField
             label="CTA utama — label"
             value={draft.ctaPrimary.label}
@@ -129,11 +209,6 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
             onChange={(trust) => setDraft((current) => ({ ...current, trust }))}
             className="md:col-span-2"
           />
-        </div>
-      </Subsection>
-
-      <Subsection title="Tagline & sticker" description="Detail kecil di sudut halaman.">
-        <div className="grid gap-4 md:grid-cols-2">
           <TextField
             label="Tagline — baris 1"
             value={draft.tagline[0]}
@@ -163,53 +238,6 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
             hint="Teks ini diulang otomatis di badge berputar."
             className="md:col-span-2"
           />
-        </div>
-      </Subsection>
-
-      <Subsection
-        title="Navigasi"
-        description="Link di navbar desktop dan menu mobile."
-        action={
-          <AddButton
-            onClick={() =>
-              setDraft((current) => ({
-                ...current,
-                nav: [...current.nav, { label: "Link baru", href: "#" }],
-              }))
-            }
-          >
-            Tambah link
-          </AddButton>
-        }
-      >
-        <div className="grid gap-4">
-          {draft.nav.map((item, index) => (
-            <ItemCard
-              key={index}
-              index={index}
-              label="Link navigasi"
-              onRemove={() =>
-                setDraft((current) => ({
-                  ...current,
-                  nav: current.nav.filter((_, itemIndex) => itemIndex !== index),
-                }))
-              }
-            >
-              <TextField
-                label="Label"
-                value={item.label}
-                onChange={(label) => updateNav(index, { label })}
-              />
-              <TextField
-                label="Link"
-                value={item.href}
-                onChange={(href) => updateNav(index, { href })}
-              />
-            </ItemCard>
-          ))}
-        </div>
-
-        <div className="mt-4 grid gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-4 md:grid-cols-2 md:p-5">
           <TextField
             label="Navbar CTA — label"
             value={draft.navCta.label}
@@ -231,7 +259,7 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
             }
           />
         </div>
-      </Subsection>
+      </SettingsDisclosure>
     </FormShell>
   );
 }

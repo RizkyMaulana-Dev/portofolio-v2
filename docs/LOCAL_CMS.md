@@ -44,10 +44,13 @@ Admin mengikuti preferensi tema situs. Tombol tema tersedia di halaman login dan
 ## Alur konten
 
 1. Pilih section di sidebar: Hero, About, Work, Videos, atau Contact.
-2. Edit field. Draft langsung disimpan di `localStorage` browser.
-3. Setelah sekitar 900 ms tanpa mengetik, draft juga dikirim ke MySQL.
-4. Klik **Simpan perubahan** untuk menerapkan section ke MySQL dan membersihkan draft.
-5. Kalau tab ditutup di tengah edit, buka lagi halaman admin. Draft dipulihkan otomatis dan muncul banner **dipulihkan otomatis**. Klik **Buang draft** untuk kembali ke versi tersimpan.
+2. Di section dengan lebih dari satu daftar, pilih tab daftar terlebih dahulu (misalnya **Certificates** / **Skill groups** atau **Social links** / **Footer nav**).
+3. Gunakan kolom pencarian di atas tabel untuk menemukan data. Klik baris untuk membuka detail individual.
+4. Klik **Edit** untuk masuk mode edit. Perubahan field langsung masuk ke draft; klik **Selesai edit** untuk kembali ke detail.
+5. Untuk menambah data baru, klik tombol **Tambah…** di kanan atas tabel. Data baru langsung membuka mode edit.
+6. Judul, intro, dan copy section tetap tersedia di panel **Pengaturan section** yang bisa dibuka di bawah tabel.
+7. Setelah selesai, klik **Simpan perubahan** untuk menerapkan section ke MySQL dan membersihkan draft.
+8. Kalau tab ditutup di tengah edit, buka lagi halaman admin. Draft dipulihkan otomatis dan muncul banner **dipulihkan otomatis**. Klik **Buang draft** untuk kembali ke versi tersimpan.
 
 Admin menampilkan status penyimpanan di header:
 

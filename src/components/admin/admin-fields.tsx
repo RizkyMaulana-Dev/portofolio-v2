@@ -599,63 +599,39 @@ export function MediaListField({
   );
 }
 
-export function Subsection({
-  title,
+export function SettingsDisclosure({
+  title = "Pengaturan section",
   description,
   children,
-  action,
 }: {
-  title: string;
+  title?: string;
   description?: string;
   children: ReactNode;
-  action?: ReactNode;
 }) {
   return (
-    <section className="mt-10">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <details className="group mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)]">
+      <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-4 py-4 marker:hidden md:px-5 [&::-webkit-details-marker]:hidden">
         <div>
-          <h3 className="font-display text-2xl leading-none tracking-[-0.01em]">{title}</h3>
+          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/55">
+            {title}
+          </p>
           {description && (
-            <p className="mt-2 max-w-[62ch] text-xs leading-relaxed text-foreground/55">
+            <p className="mt-2 max-w-[62ch] text-xs leading-relaxed text-foreground/50">
               {description}
             </p>
           )}
         </div>
-        {action}
+        <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] text-foreground/45 transition-colors group-hover:text-foreground">
+          <ChevronDown
+            aria-hidden="true"
+            className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
+          />
+        </span>
+      </summary>
+      <div className="border-t border-[var(--color-border)] px-4 py-5 md:px-5">
+        {children}
       </div>
-      <div className="mt-5">{children}</div>
-    </section>
-  );
-}
-
-export function ItemCard({
-  index,
-  label,
-  onRemove,
-  children,
-}: {
-  index: number;
-  label: string;
-  onRemove: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-4 md:p-5">
-      <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)] pb-3">
-        <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/50">
-          {String(index + 1).padStart(2, "0")} / {label}
-        </p>
-        <button
-          type="button"
-          onClick={onRemove}
-          className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors hover:bg-rose/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
-        >
-          <Trash2 aria-hidden="true" className="h-3 w-3" />
-          Hapus
-        </button>
-      </div>
-      <div className="mt-4 grid gap-4 md:grid-cols-2">{children}</div>
-    </div>
+    </details>
   );
 }
 
