@@ -1,9 +1,10 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { about, type AboutContent } from '@/content/about';
 import { hero, type HeroContent } from '@/content/hero';
 import { site, type SiteContentData } from '@/content/site';
 import { videos, type VideoFeedContent } from '@/content/videos';
 import { work, type WorkContent } from '@/content/work';
+import { fetchRemoteContent } from '@/lib/content-api';
 
 export interface SiteContent {
   hero: HeroContent;
@@ -14,6 +15,8 @@ export interface SiteContent {
 }
 
 export type SiteSection = keyof SiteContent;
+
+const SECTION_KEYS: SiteSection[] = ['hero', 'about', 'work', 'videos', 'site'];
 
 const STORAGE_KEY = 'rizky-portfolio-content-v1';
 const CHANGE_EVENT = 'rizky-portfolio-content-change';
@@ -144,6 +147,50 @@ function mergeContent(value: unknown): SiteContent {
   };
 }
 
+export function mergeRemoteSections(
+  sections: Partial<Record<SiteSection, { content: unknown; updatedAt?: string }>> | null | undefined,
+  base: SiteContent = defaultSiteContent
+): SiteContent {
+  if (!sections) return base;
+
+  const raw: Record<string, unknown> = { ...base };
+
+  for (const section of SECTION_KEYS) {
+    const snapshot = sections[section];
+    if (snapshot && isRecord(snapshot.content)) raw[section] = snapshot.content;
+  }
+
+  return mergeContent(raw);
+}
+
+export function hasStoredSiteContent(): boolean {
+  if (typeof window === 'undefined') return false;
+
+  try {
+    return Boolean(window.localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return false;
+  }
+}
+
+let hydrationPromise: Promise<boolean> | null = null;
+
+export function hydrateSiteContentFromServer(): Promise<boolean> {
+  if (typeof window === 'undefined') return Promise.resolve(false);
+  if (hydrationPromise) return hydrationPromise;
+
+  hydrationPromise = (async () => {
+    const sections = await fetchRemoteContent();
+    if (!sections || Object.keys(sections).length === 0) return false;
+
+    const merged = mergeRemoteSections(sections, getSiteContent());
+    saveSiteContent(merged);
+    return true;
+  })();
+
+  return hydrationPromise;
+}
+
 function readStoredContent(): SiteContent {
   if (typeof window === 'undefined') return defaultSiteContent;
 
@@ -227,6 +274,10 @@ function subscribeSiteContent(onStoreChange: () => void): () => void {
 }
 
 export function useSiteContent(): SiteContent {
+  useEffect(() => {
+    void hydrateSiteContentFromServer();
+  }, []);
+
   return useSyncExternalStore(
     subscribeSiteContent,
     getSiteContent,

@@ -13,8 +13,9 @@
     "db:up": "docker compose up -d mysql",
     "db:down": "docker compose down",
     "db:setup": "node server/scripts/setup-db.mjs",
-    "test": "node --test server/tests/*.test.mjs",
+    "test": "node --test server/tests/*.test.mjs && node --import tsx --test tests/*.test.ts",
     "test:server": "node --test server/tests/*.test.mjs",
+    "test:web": "node --import tsx --test tests/*.test.ts",
     "astro": "astro"
   },
   "dependencies": {
