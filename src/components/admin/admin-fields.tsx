@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { ChevronDown, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, History, Loader2, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const inputClass =
@@ -279,33 +279,41 @@ export function FormShell({
   title,
   description,
   isDirty,
+  isSaving = false,
+  restoredAt = null,
   onSave,
   onReset,
+  onDiscardDraft,
   children,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   isDirty: boolean;
-  onSave: () => void;
-  onReset: () => void;
+  isSaving?: boolean;
+  restoredAt?: number | null;
+  onSave: () => void | boolean | Promise<boolean>;
+  onReset: () => void | Promise<void>;
+  onDiscardDraft?: () => void;
   children: ReactNode;
 }) {
   const actions = (
     <>
       <button
         type="button"
-        onClick={onReset}
-        className="inline-flex min-h-10 items-center rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+        onClick={() => void onReset()}
+        disabled={isSaving}
+        className="inline-flex min-h-10 items-center rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
       >
         Reset ke default
       </button>
       <button
         type="submit"
-        disabled={!isDirty}
-        className="inline-flex min-h-10 items-center rounded-full bg-foreground px-5 text-[10px] font-medium uppercase tracking-[0.14em] text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+        disabled={!isDirty || isSaving}
+        className="inline-flex min-h-10 items-center gap-2 rounded-full bg-foreground px-5 text-[10px] font-medium uppercase tracking-[0.14em] text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
       >
-        Simpan perubahan
+        {isSaving && <Loader2 aria-hidden="true" className="h-3.5 w-3.5 animate-spin" />}
+        {isSaving ? "Menyimpan..." : "Simpan perubahan"}
       </button>
     </>
   );
@@ -314,7 +322,7 @@ export function FormShell({
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (isDirty) onSave();
+        if (isDirty && !isSaving) void onSave();
       }}
       className="max-w-5xl pb-16"
     >
@@ -334,11 +342,45 @@ export function FormShell({
         <div className="flex flex-wrap items-center gap-2">{actions}</div>
       </div>
 
+      {restoredAt && (
+        <div
+          role="status"
+          className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-lime/60 bg-lime/20 px-4 py-3"
+        >
+          <p className="flex items-start gap-2.5 text-xs leading-relaxed text-foreground/70">
+            <History aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>
+              Draft dari{" "}
+              <strong className="font-medium text-foreground">
+                {new Date(restoredAt).toLocaleString("id-ID")}
+              </strong>{" "}
+              dipulihkan otomatis. Simpan untuk menerapkannya.
+            </span>
+          </p>
+          {onDiscardDraft && (
+            <button
+              type="button"
+              onClick={onDiscardDraft}
+              className="inline-flex min-h-9 items-center rounded-full border border-foreground/15 bg-white/40 px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/60 transition-colors hover:border-foreground/35 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+            >
+              Buang draft
+            </button>
+          )}
+        </div>
+      )}
+
       {children}
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--color-border)] pt-5">
-        <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45">
-          {isDirty ? "Ada perubahan yang belum disimpan." : "Bagian ini sudah sinkron."}
+        <p
+          aria-live="polite"
+          className="text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45"
+        >
+          {isSaving
+            ? "Menyimpan perubahan..."
+            : isDirty
+              ? "Draft aman otomatis. Klik simpan untuk menerapkan."
+              : "Bagian ini sudah sinkron."}
         </p>
         <div className="flex flex-wrap items-center gap-2">{actions}</div>
       </div>

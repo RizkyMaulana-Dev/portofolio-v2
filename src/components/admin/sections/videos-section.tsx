@@ -34,11 +34,20 @@ const VISUAL_OPTIONS: Array<{ value: VideoVisual; label: string }> = [
 ];
 
 export function VideosSection({
+  section,
   value,
   onSave,
   onReset,
 }: SectionEditorProps<VideoFeedContent>) {
-  const { draft, setDraft, isDirty, markSaved } = useSectionDraft(value);
+  const {
+    draft,
+    setDraft,
+    isDirty,
+    isSaving,
+    restoredAt,
+    save,
+    discardDraft,
+  } = useSectionDraft(section, value, onSave);
 
   function updateHeading(index: 0 | 1, next: string) {
     setDraft((current) => {
@@ -57,18 +66,17 @@ export function VideosSection({
     }));
   }
 
-  function handleSave() {
-    if (onSave(draft)) markSaved();
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / Videos"
       title="Videos"
       description="Section video dan clip yang muncul di homepage. Slug tetap dipakai untuk membuka clip di feed."
       isDirty={isDirty}
-      onSave={handleSave}
+      isSaving={isSaving}
+      restoredAt={restoredAt}
+      onSave={save}
       onReset={onReset}
+      onDiscardDraft={discardDraft}
     >
       <Subsection title="Heading" description="Copy section video di homepage.">
         <div className="grid gap-4 md:grid-cols-2">

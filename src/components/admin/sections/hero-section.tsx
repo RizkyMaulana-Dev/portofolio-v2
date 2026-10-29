@@ -11,8 +11,16 @@ import {
 } from "@/components/admin/admin-fields";
 import { useSectionDraft, type SectionEditorProps } from "@/components/admin/admin-types";
 
-export function HeroSection({ value, onSave, onReset }: SectionEditorProps<HeroContent>) {
-  const { draft, setDraft, isDirty, markSaved } = useSectionDraft(value);
+export function HeroSection({ section, value, onSave, onReset }: SectionEditorProps<HeroContent>) {
+  const {
+    draft,
+    setDraft,
+    isDirty,
+    isSaving,
+    restoredAt,
+    save,
+    discardDraft,
+  } = useSectionDraft(section, value, onSave);
 
   function setHeadline(index: 0 | 1, next: string) {
     setDraft((current) => {
@@ -31,18 +39,17 @@ export function HeroSection({ value, onSave, onReset }: SectionEditorProps<HeroC
     }));
   }
 
-  function handleSave() {
-    if (onSave(draft)) markSaved();
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / Hero"
       title="Hero"
       description="Copy utama, call to action, tagline, dan navigasi yang dilihat pertama kali. Kartu orbit tetap memakai komposisi default."
       isDirty={isDirty}
-      onSave={handleSave}
+      isSaving={isSaving}
+      restoredAt={restoredAt}
+      onSave={save}
       onReset={onReset}
+      onDiscardDraft={discardDraft}
     >
       <Subsection
         title="Identitas & headline"

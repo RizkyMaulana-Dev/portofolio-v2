@@ -26,8 +26,16 @@ const ACCENT_OPTIONS: Array<{ value: Accent; label: string }> = [
   { value: "rose", label: "Rose" },
 ];
 
-export function AboutSection({ value, onSave, onReset }: SectionEditorProps<AboutContent>) {
-  const { draft, setDraft, isDirty, markSaved } = useSectionDraft(value);
+export function AboutSection({ section, value, onSave, onReset }: SectionEditorProps<AboutContent>) {
+  const {
+    draft,
+    setDraft,
+    isDirty,
+    isSaving,
+    restoredAt,
+    save,
+    discardDraft,
+  } = useSectionDraft(section, value, onSave);
 
   function updateHeading(index: 0 | 1, next: string) {
     setDraft((current) => {
@@ -69,18 +77,17 @@ export function AboutSection({ value, onSave, onReset }: SectionEditorProps<Abou
     }));
   }
 
-  function handleSave() {
-    if (onSave(draft)) markSaved();
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / About"
       title="About"
       description="Section capability dan credential. Skill ditulis sebagai daftar yang dipisahkan koma."
       isDirty={isDirty}
-      onSave={handleSave}
+      isSaving={isSaving}
+      restoredAt={restoredAt}
+      onSave={save}
       onReset={onReset}
+      onDiscardDraft={discardDraft}
     >
       <Subsection title="Heading" description="Judul section About di homepage.">
         <div className="grid gap-4 md:grid-cols-2">

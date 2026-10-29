@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   BriefcaseBusiness,
   Clapperboard,
+  Database,
   HardDrive,
   Mail,
   RotateCcw,
@@ -62,13 +63,15 @@ const CONTENT_VIEWS: Array<{
 export function AdminOverview({
   content,
   sessionEmail,
+  storageMode,
   onNavigate,
   onResetAll,
 }: {
   content: SiteContent;
   sessionEmail: string;
+  storageMode: "mysql" | "browser";
   onNavigate: (view: AdminView) => void;
-  onResetAll: () => void;
+  onResetAll: () => void | Promise<void>;
 }) {
   const firstName = content.site.name.split(" ")[0] || "there";
 
@@ -138,19 +141,25 @@ export function AdminOverview({
         <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 md:p-6">
           <div className="flex items-start gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/70 text-foreground/60">
-              <HardDrive aria-hidden="true" className="h-4 w-4" />
+              {storageMode === "mysql" ? (
+                <Database aria-hidden="true" className="h-4 w-4" />
+              ) : (
+                <HardDrive aria-hidden="true" className="h-4 w-4" />
+              )}
             </span>
             <div>
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/45">
-                Demo mode
+                {storageMode === "mysql" ? "MySQL lokal" : "Mode browser"}
               </p>
               <h3 className="mt-2 font-display text-2xl leading-none tracking-[-0.01em]">
-                Tersimpan di browser ini.
+                {storageMode === "mysql"
+                  ? "Tersimpan di MySQL lokal."
+                  : "Tersimpan di browser ini."}
               </h3>
               <p className="mt-3 max-w-[60ch] text-xs leading-relaxed text-foreground/55">
-                Belum ada database. Perubahan disimpan di <code>localStorage</code> browser ini
-                dan langsung dibaca oleh homepage di origin yang sama. Login juga masih hardcoded,
-                jadi jangan pakai sebagai autentikasi produksi.
+                {storageMode === "mysql"
+                  ? "Konten homepage dibaca dari database lokal. Draft otomatis juga disimpan ke MySQL dan browser, jadi aman saat tab ditutup. Login masih hardcoded, jadi jangan pakai sebagai autentikasi produksi."
+                  : "MySQL belum bisa dihubungi. Perubahan disimpan di localStorage browser ini dan draft tetap aman di perangkat yang sama. Jalankan API lokal untuk kembali memakai MySQL."}
               </p>
               <p className="mt-3 text-[10px] uppercase tracking-[0.16em] text-foreground/35">
                 Masuk sebagai {sessionEmail}

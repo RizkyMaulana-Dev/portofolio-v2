@@ -11,8 +11,16 @@ import {
 } from "@/components/admin/admin-fields";
 import { useSectionDraft, type SectionEditorProps } from "@/components/admin/admin-types";
 
-export function ContactSection({ value, onSave, onReset }: SectionEditorProps<SiteContentData>) {
-  const { draft, setDraft, isDirty, markSaved } = useSectionDraft(value);
+export function ContactSection({ section, value, onSave, onReset }: SectionEditorProps<SiteContentData>) {
+  const {
+    draft,
+    setDraft,
+    isDirty,
+    isSaving,
+    restoredAt,
+    save,
+    discardDraft,
+  } = useSectionDraft(section, value, onSave);
 
   function updateHeading(index: 0 | 1, next: string) {
     setDraft((current) => {
@@ -40,18 +48,17 @@ export function ContactSection({ value, onSave, onReset }: SectionEditorProps<Si
     }));
   }
 
-  function handleSave() {
-    if (onSave(draft)) markSaved();
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / Contact"
       title="Contact & footer"
       description="Detail kontak yang muncul di footer homepage dan halaman blog, plus link sosial dan navigasi footer."
       isDirty={isDirty}
-      onSave={handleSave}
+      isSaving={isSaving}
+      restoredAt={restoredAt}
+      onSave={save}
       onReset={onReset}
+      onDiscardDraft={discardDraft}
     >
       <Subsection title="Detail utama" description="Email dan status yang dilihat pengunjung.">
         <div className="grid gap-4 md:grid-cols-2">

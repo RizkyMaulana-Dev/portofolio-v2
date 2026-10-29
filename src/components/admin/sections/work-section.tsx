@@ -27,8 +27,16 @@ const VISUAL_OPTIONS: Array<{ value: WorkVisual; label: string }> = [
   { value: "bars", label: "Bars" },
 ];
 
-export function WorkSection({ value, onSave, onReset }: SectionEditorProps<WorkContent>) {
-  const { draft, setDraft, isDirty, markSaved } = useSectionDraft(value);
+export function WorkSection({ section, value, onSave, onReset }: SectionEditorProps<WorkContent>) {
+  const {
+    draft,
+    setDraft,
+    isDirty,
+    isSaving,
+    restoredAt,
+    save,
+    discardDraft,
+  } = useSectionDraft(section, value, onSave);
 
   function updateHeading(index: 0 | 1, next: string) {
     setDraft((current) => {
@@ -47,18 +55,17 @@ export function WorkSection({ value, onSave, onReset }: SectionEditorProps<WorkC
     }));
   }
 
-  function handleSave() {
-    if (onSave(draft)) markSaved();
-  }
-
   return (
     <FormShell
       eyebrow="Homepage / Work"
       title="Work"
       description="Project yang tampil sebagai kartu sticky di homepage. Setiap project punya cover, ringkasan, tags, dan link."
       isDirty={isDirty}
-      onSave={handleSave}
+      isSaving={isSaving}
+      restoredAt={restoredAt}
+      onSave={save}
       onReset={onReset}
+      onDiscardDraft={discardDraft}
     >
       <Subsection title="Heading" description="Judul dan intro section Work.">
         <div className="grid gap-4 md:grid-cols-2">

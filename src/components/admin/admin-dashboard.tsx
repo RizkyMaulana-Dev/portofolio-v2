@@ -17,11 +17,25 @@ import {
 import { getAdminSession, signOut } from "@/lib/admin-auth";
 import { withBase } from "@/lib/paths";
 import {
+  fetchRemoteContent,
+  fetchRemoteDrafts,
+  resetRemoteContent,
+  saveRemoteContent,
+  saveRemoteSection,
+} from "@/lib/content-api";
+import {
+  clearLocalDraft,
+  seedDraftsFromServer,
+} from "@/lib/content-drafts";
+import {
   defaultSiteContent,
   getSiteContent,
+  hasStoredSiteContent,
+  mergeRemoteSections,
   resetSiteContent,
   saveSiteContent,
   type SiteContent,
+  type SiteSection,
 } from "@/lib/site-content";
 import { AboutSection } from "@/components/admin/sections/about-section";
 import { ContactSection } from "@/components/admin/sections/contact-section";
@@ -54,6 +68,7 @@ const SECTION_LABELS: Record<keyof SiteContent, string> = {
 };
 
 type Toast = { type: "success" | "error"; message: string } | null;
+type StorageMode = "mysql" | "browser";
 
 const INITIAL_SECTION_VERSIONS: Record<keyof SiteContent, number> = {
   hero: 0,
@@ -70,6 +85,7 @@ export function AdminDashboard() {
   const [active, setActive] = useState<AdminView>("overview");
   const [sectionVersions, setSectionVersions] = useState(INITIAL_SECTION_VERSIONS);
   const [toast, setToast] = useState<Toast>(null);
+  const [storageMode, setStorageMode] = useState<StorageMode>("browser");
 
   useEffect(() => {
     const session = getAdminSession();
@@ -84,8 +100,53 @@ export function AdminDashboard() {
     }
 
     setSessionEmail(session.email);
-    setContent(getSiteContent());
-    setReady(true);
+
+    let cancelled = false;
+
+    void (async () => {
+      const [remoteContent, remoteDrafts] = await Promise.all([
+        fetchRemoteContent(),
+        fetchRemoteDrafts(),
+      ]);
+
+      if (cancelled) return;
+
+      seedDraftsFromServer(remoteDrafts);
+
+      const apiAvailable = remoteContent !== null;
+      const hasRemoteContent =
+        apiAvailable && Object.keys(remoteContent ?? {}).length > 0;
+
+      if (hasRemoteContent) {
+        const merged = mergeRemoteSections(remoteContent);
+        saveSiteContent(merged);
+        setContent(merged);
+      } else {
+        const local = getSiteContent();
+        setContent(local);
+
+        if (apiAvailable && hasStoredSiteContent()) {
+          const migrated = await saveRemoteContent(local);
+          if (!cancelled) {
+            setToast({
+              type: migrated ? "success" : "error",
+              message: migrated
+                ? "Konten lokal dipindahkan ke MySQL."
+                : "MySQL aktif, tetapi migrasi konten lokal gagal. Konten tetap aman di browser.",
+            });
+          }
+        }
+      }
+
+      if (!cancelled) {
+        setStorageMode(apiAvailable ? "mysql" : "browser");
+        setReady(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -108,27 +169,46 @@ export function AdminDashboard() {
   }, []);
 
   const handleSave = useCallback(
-    (section: keyof SiteContent, value: SiteContent[keyof SiteContent]) => {
+    async (section: SiteSection, value: SiteContent[SiteSection]) => {
       if (!content) return false;
 
       const next = { ...content, [section]: value } as SiteContent;
-      const stored = saveSiteContent(next);
+      const storedLocally = saveSiteContent(next);
+      const storedInMysql =
+        storageMode === "mysql" ? await saveRemoteSection(section, value) : false;
+
       setContent(next);
 
-      showToast({
-        type: stored ? "success" : "error",
-        message: stored
-          ? `${SECTION_LABELS[section]} berhasil disimpan di browser ini.`
-          : "Perubahan tampil, tapi browser menolak menyimpan. Cek pengaturan penyimpanan.",
-      });
+      if (storedInMysql) {
+        setStorageMode("mysql");
+        showToast({
+          type: "success",
+          message: `${SECTION_LABELS[section]} berhasil disimpan di MySQL lokal.`,
+        });
+        return true;
+      }
 
-      return stored;
+      if (storageMode === "browser") {
+        showToast({
+          type: storedLocally ? "success" : "error",
+          message: storedLocally
+            ? `${SECTION_LABELS[section]} disimpan di browser ini. MySQL tidak tersedia.`
+            : "Perubahan tampil, tapi browser menolak menyimpan. Cek pengaturan penyimpanan.",
+        });
+        return storedLocally;
+      }
+
+      showToast({
+        type: "error",
+        message: `${SECTION_LABELS[section]} gagal disimpan ke MySQL. Perubahan tetap aman sebagai draft; coba simpan lagi.`,
+      });
+      return false;
     },
-    [content, showToast]
+    [content, showToast, storageMode]
   );
 
   const handleResetSection = useCallback(
-    (section: keyof SiteContent) => {
+    async (section: SiteSection) => {
       if (!content) return;
       if (
         !window.confirm(
@@ -138,12 +218,26 @@ export function AdminDashboard() {
         return;
       }
 
+      const defaultValue = cloneValue(defaultSiteContent[section]);
+
+      if (storageMode === "mysql") {
+        const saved = await saveRemoteSection(section, defaultValue);
+        if (!saved) {
+          showToast({
+            type: "error",
+            message: `Reset ${SECTION_LABELS[section]} gagal karena MySQL tidak bisa dihubungi.`,
+          });
+          return;
+        }
+      }
+
       const next = {
         ...content,
-        [section]: cloneValue(defaultSiteContent[section]),
+        [section]: defaultValue,
       } as SiteContent;
 
       saveSiteContent(next);
+      clearLocalDraft(section);
       setContent(next);
       setSectionVersions((current) => ({
         ...current,
@@ -154,10 +248,10 @@ export function AdminDashboard() {
         message: `${SECTION_LABELS[section]} dikembalikan ke default.`,
       });
     },
-    [content, showToast]
+    [content, showToast, storageMode]
   );
 
-  const handleResetAll = useCallback(() => {
+  const handleResetAll = useCallback(async () => {
     if (
       !window.confirm(
         "Reset seluruh konten homepage ke default? Semua perubahan tersimpan dan draft akan hilang."
@@ -166,15 +260,29 @@ export function AdminDashboard() {
       return;
     }
 
+    if (storageMode === "mysql") {
+      const reset = await resetRemoteContent();
+      if (!reset) {
+        showToast({
+          type: "error",
+          message: "Reset gagal karena MySQL tidak bisa dihubungi. Konten lama tetap aman.",
+        });
+        return;
+      }
+    }
+
     resetSiteContent();
+    for (const section of Object.keys(defaultSiteContent) as SiteSection[]) {
+      clearLocalDraft(section);
+    }
     setContent(cloneValue(defaultSiteContent));
     setSectionVersions((current) =>
       Object.fromEntries(
         Object.entries(current).map(([section, version]) => [section, version + 1])
-      ) as Record<keyof SiteContent, number>
+      ) as Record<SiteSection, number>
     );
     showToast({ type: "success", message: "Semua konten dikembalikan ke default." });
-  }, [showToast]);
+  }, [showToast, storageMode]);
 
   function handleLogout() {
     signOut();
@@ -187,7 +295,7 @@ export function AdminDashboard() {
         <div className="flex items-center gap-3">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground" />
           <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-foreground/55">
-            Memeriksa akses
+            Menyiapkan konten & koneksi MySQL
           </span>
         </div>
       </main>
@@ -285,8 +393,12 @@ export function AdminDashboard() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="hidden items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/50 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.12em] text-foreground/45 sm:inline-flex">
-                  <span className="h-1 w-1 rounded-full bg-lime" />
-                  Local preview
+                  <span
+                    className={`h-1 w-1 rounded-full ${
+                      storageMode === "mysql" ? "bg-lime" : "bg-foreground/30"
+                    }`}
+                  />
+                  {storageMode === "mysql" ? "MySQL lokal" : "Browser fallback"}
                 </span>
                 <a
                   href={withBase("/")}
@@ -314,6 +426,7 @@ export function AdminDashboard() {
               <AdminOverview
                 content={content}
                 sessionEmail={sessionEmail}
+                storageMode={storageMode}
                 onNavigate={navigate}
                 onResetAll={handleResetAll}
               />
@@ -322,6 +435,7 @@ export function AdminDashboard() {
             <div className={active === "hero" ? "block" : "hidden"}>
               <HeroSection
                 key={`hero-${sectionVersions.hero}`}
+                section="hero"
                 value={content.hero}
                 onSave={(value) => handleSave("hero", value)}
                 onReset={() => handleResetSection("hero")}
@@ -331,6 +445,7 @@ export function AdminDashboard() {
             <div className={active === "about" ? "block" : "hidden"}>
               <AboutSection
                 key={`about-${sectionVersions.about}`}
+                section="about"
                 value={content.about}
                 onSave={(value) => handleSave("about", value)}
                 onReset={() => handleResetSection("about")}
@@ -340,6 +455,7 @@ export function AdminDashboard() {
             <div className={active === "work" ? "block" : "hidden"}>
               <WorkSection
                 key={`work-${sectionVersions.work}`}
+                section="work"
                 value={content.work}
                 onSave={(value) => handleSave("work", value)}
                 onReset={() => handleResetSection("work")}
@@ -349,6 +465,7 @@ export function AdminDashboard() {
             <div className={active === "videos" ? "block" : "hidden"}>
               <VideosSection
                 key={`videos-${sectionVersions.videos}`}
+                section="videos"
                 value={content.videos}
                 onSave={(value) => handleSave("videos", value)}
                 onReset={() => handleResetSection("videos")}
@@ -358,6 +475,7 @@ export function AdminDashboard() {
             <div className={active === "site" ? "block" : "hidden"}>
               <ContactSection
                 key={`site-${sectionVersions.site}`}
+                section="site"
                 value={content.site}
                 onSave={(value) => handleSave("site", value)}
                 onReset={() => handleResetSection("site")}
