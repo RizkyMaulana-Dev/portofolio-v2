@@ -15,10 +15,10 @@ import { withBase } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 
 export const inputClass =
-  "h-11 w-full rounded-xl border border-[var(--color-border)] bg-white/60 px-3.5 text-sm text-foreground placeholder:text-foreground/35 transition-colors focus:border-foreground/25 focus:bg-white focus:outline-none focus:ring-2 focus:ring-ring/10";
+  "h-11 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-glass)] px-3.5 text-sm text-foreground placeholder:text-foreground/35 transition-colors focus:border-foreground/25 focus:bg-[var(--color-glass-strong)] focus:outline-none focus:ring-2 focus:ring-ring/10";
 
 const textareaClass =
-  "min-h-28 w-full resize-y rounded-xl border border-[var(--color-border)] bg-white/60 px-3.5 py-3 text-sm leading-relaxed text-foreground placeholder:text-foreground/35 transition-colors focus:border-foreground/25 focus:bg-white focus:outline-none focus:ring-2 focus:ring-ring/10";
+  "min-h-28 w-full resize-y rounded-xl border border-[var(--color-border)] bg-[var(--color-glass)] px-3.5 py-3 text-sm leading-relaxed text-foreground placeholder:text-foreground/35 transition-colors focus:border-foreground/25 focus:bg-[var(--color-glass-strong)] focus:outline-none focus:ring-2 focus:ring-ring/10";
 
 function FieldWrap({
   label,
@@ -263,7 +263,7 @@ function MediaPreview({
   return (
     <span
       className={cn(
-        "flex h-full w-full items-center justify-center bg-white/50 text-foreground/45",
+        "flex h-full w-full items-center justify-center bg-[var(--color-glass)] text-foreground/45",
         className
       )}
     >
@@ -362,7 +362,7 @@ export function FileDropField({
           "relative flex min-h-32 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed p-3 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20",
           dragging
             ? "border-foreground/45 bg-lime/20"
-            : "border-[var(--color-border)] bg-white/35 hover:border-foreground/25 hover:bg-white/60",
+            : "border-[var(--color-border)] bg-[var(--color-glass-soft)] hover:border-foreground/25 hover:bg-[var(--color-glass)]",
           uploading && "cursor-wait"
         )}
       >
@@ -521,7 +521,7 @@ export function MediaListField({
           "flex min-h-24 cursor-pointer items-center justify-center rounded-2xl border border-dashed px-4 py-4 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20",
           dragging
             ? "border-foreground/45 bg-lime/20"
-            : "border-[var(--color-border)] bg-white/35 hover:border-foreground/25 hover:bg-white/60",
+            : "border-[var(--color-border)] bg-[var(--color-glass-soft)] hover:border-foreground/25 hover:bg-[var(--color-glass)]",
           uploadingCount > 0 && "cursor-wait"
         )}
       >
@@ -559,9 +559,9 @@ export function MediaListField({
           {items.map((value, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-white/45 p-2"
+              className="flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-2"
             >
-              <span className="h-12 w-16 shrink-0 overflow-hidden rounded-lg bg-white/70">
+              <span className="h-12 w-16 shrink-0 overflow-hidden rounded-lg bg-[var(--color-glass-strong)]">
                 <MediaPreview
                   value={value}
                   kind={kind}
@@ -640,7 +640,7 @@ export function ItemCard({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-[var(--color-border)] bg-white/45 p-4 md:p-5">
+    <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-4 md:p-5">
       <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)] pb-3">
         <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/50">
           {String(index + 1).padStart(2, "0")} / {label}
@@ -670,7 +670,7 @@ export function AddButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-foreground/20 px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors hover:border-foreground/50 hover:bg-white/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-foreground/20 px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors hover:border-foreground/50 hover:bg-[var(--color-glass)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
     >
       <Plus aria-hidden="true" className="h-3.5 w-3.5" />
       {children}
@@ -707,7 +707,7 @@ export function FormShell({
         type="button"
         onClick={() => void onReset()}
         disabled={isSaving}
-        className="inline-flex min-h-10 items-center rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+        className="inline-flex min-h-10 items-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
       >
         Reset ke default
       </button>
@@ -765,7 +765,7 @@ export function FormShell({
             <button
               type="button"
               onClick={onDiscardDraft}
-              className="inline-flex min-h-9 items-center rounded-full border border-foreground/15 bg-white/40 px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/60 transition-colors hover:border-foreground/35 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+              className="inline-flex min-h-9 items-center rounded-full border border-foreground/15 bg-[var(--color-glass-soft)] px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/60 transition-colors hover:border-foreground/35 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
             >
               Buang draft
             </button>

@@ -209,7 +209,7 @@ export function HeroSection({ section, value, onSave, onReset }: SectionEditorPr
           ))}
         </div>
 
-        <div className="mt-4 grid gap-4 rounded-2xl border border-[var(--color-border)] bg-white/30 p-4 md:grid-cols-2 md:p-5">
+        <div className="mt-4 grid gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-4 md:grid-cols-2 md:p-5">
           <TextField
             label="Navbar CTA — label"
             value={draft.navCta.label}

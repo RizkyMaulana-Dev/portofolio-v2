@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { isAdminAuthenticated, signIn } from "@/lib/admin-auth";
 import { withBase } from "@/lib/paths";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function AdminLogin() {
   const [checking, setChecking] = useState(true);
@@ -71,10 +72,13 @@ export function AdminLogin() {
           >
             Rizky°
           </a>
-          <p className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/50">
-            <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />
-            Admin access
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="hidden items-center gap-2 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/50 xs:flex">
+              <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />
+              Admin access
+            </p>
+            <ThemeToggle />
+          </div>
         </header>
 
         <div className="grid flex-1 items-center gap-10 py-10 max-lg:mx-auto max-lg:w-full max-lg:max-w-[430px] md:gap-12 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] lg:gap-24 lg:py-20">
@@ -124,7 +128,7 @@ export function AdminLogin() {
                     Masuk.
                   </h2>
                 </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-white/50">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)]">
                   <LockKeyhole aria-hidden="true" className="h-4 w-4 text-foreground/60" />
                 </span>
               </div>
@@ -150,7 +154,7 @@ export function AdminLogin() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       placeholder="nama@email.com"
-                      className="h-12 w-full rounded-xl border border-[var(--color-border)] bg-white/60 pl-10 pr-3.5 text-sm text-foreground placeholder:text-foreground/30 transition-colors focus:border-foreground/25 focus:bg-white focus:outline-none focus:ring-2 focus:ring-ring/10"
+                      className="h-12 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-glass)] pl-10 pr-3.5 text-sm text-foreground placeholder:text-foreground/30 transition-colors focus:border-foreground/25 focus:bg-[var(--color-glass-strong)] focus:outline-none focus:ring-2 focus:ring-ring/10"
                     />
                   </div>
                 </div>
@@ -175,7 +179,7 @@ export function AdminLogin() {
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       placeholder="••••••••"
-                      className="h-12 w-full rounded-xl border border-[var(--color-border)] bg-white/60 pl-10 pr-11 text-sm text-foreground placeholder:text-foreground/30 transition-colors focus:border-foreground/25 focus:bg-white focus:outline-none focus:ring-2 focus:ring-ring/10"
+                      className="h-12 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-glass)] pl-10 pr-11 text-sm text-foreground placeholder:text-foreground/30 transition-colors focus:border-foreground/25 focus:bg-[var(--color-glass-strong)] focus:outline-none focus:ring-2 focus:ring-ring/10"
                     />
                     <button
                       type="button"
@@ -206,7 +210,7 @@ export function AdminLogin() {
                   className="group flex h-12 w-full items-center justify-between rounded-full bg-foreground pl-5 pr-2 text-[10px] font-medium uppercase tracking-[0.16em] text-background transition-[opacity,scale] duration-200 motion-safe:hover:scale-[1.01] motion-safe:active:scale-[0.99] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
                 >
                   Masuk ke dashboard
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-background/15">
                     <ArrowRight
                       aria-hidden="true"
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"

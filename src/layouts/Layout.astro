@@ -20,12 +20,10 @@ const {
   noindex = false,
   staticReveal = false,
 } = Astro.props;
-
-const isAdminRoute = Astro.url.pathname.split('/').includes('admin');
 ---
 
 <!doctype html>
-<html lang={lang} data-theme-lock={isAdminRoute ? 'light' : undefined}>
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,13 +39,6 @@ const isAdminRoute = Astro.url.pathname.split('/').includes('admin');
     <script is:inline>
       (() => {
         const root = document.documentElement;
-        const lock = root.dataset.themeLock;
-
-        if (lock === 'light' || lock === 'dark') {
-          root.dataset.theme = lock;
-          return;
-        }
-
         const key = 'rizky-theme';
         let stored = null;
 
@@ -108,10 +99,10 @@ const isAdminRoute = Astro.url.pathname.split('/').includes('admin');
     <script is:inline>
       (() => {
         const root = document.documentElement;
-        if (root.dataset.themeLock) return;
-
         const key = 'rizky-theme';
+        const transitionMs = 280;
         const media = window.matchMedia('(prefers-color-scheme: dark)');
+        let transitionTimer;
 
         const syncControls = () => {
           const isDark = root.dataset.theme === 'dark';
@@ -125,6 +116,20 @@ const isAdminRoute = Astro.url.pathname.split('/').includes('admin');
         };
 
         const setTheme = (theme, persist) => {
+          if (root.dataset.theme === theme) {
+            syncControls();
+            return;
+          }
+
+          // Apply a short, global color transition only while the theme changes.
+          // The attribute is removed again so it never interferes with hover,
+          // reveal, or motion transitions during normal use.
+          root.dataset.themeTransition = 'true';
+          window.clearTimeout(transitionTimer);
+          transitionTimer = window.setTimeout(() => {
+            delete root.dataset.themeTransition;
+          }, transitionMs + 20);
+
           root.dataset.theme = theme;
 
           if (persist) {

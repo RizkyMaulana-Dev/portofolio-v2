@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { getAdminSession, signOut } from "@/lib/admin-auth";
 import { withBase } from "@/lib/paths";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   fetchRemoteContent,
   fetchRemoteDrafts,
@@ -319,7 +320,7 @@ export function AdminDashboard() {
               >
                 Rizky°
               </a>
-              <span className="rounded-full border border-[var(--color-border)] bg-white/55 px-2.5 py-1 text-[8px] font-medium uppercase tracking-[0.16em] text-foreground/45">
+              <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-2.5 py-1 text-[8px] font-medium uppercase tracking-[0.16em] text-foreground/45">
                 Admin
               </span>
             </div>
@@ -343,8 +344,8 @@ export function AdminDashboard() {
                       aria-current={isActive ? "page" : undefined}
                       className={
                         isActive
-                          ? "group flex items-center gap-3 rounded-xl bg-white/80 px-3 py-2.5 text-left text-foreground shadow-[0_10px_30px_-24px_rgb(0_0_0/0.5)] transition-colors"
-                          : "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-foreground/50 transition-colors hover:bg-white/50 hover:text-foreground"
+                          ? "group flex items-center gap-3 rounded-xl bg-[var(--color-glass-strong)] px-3 py-2.5 text-left text-foreground shadow-[0_10px_30px_-24px_rgb(0_0_0/0.5)] transition-colors"
+                          : "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-foreground/50 transition-colors hover:bg-[var(--color-glass)] hover:text-foreground"
                       }
                     >
                       <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
@@ -367,7 +368,7 @@ export function AdminDashboard() {
                   href={withBase("/")}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-9 items-center justify-between gap-2 rounded-lg px-2 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:bg-white/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+                  className="inline-flex min-h-9 items-center justify-between gap-2 rounded-lg px-2 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:bg-[var(--color-glass)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
                 >
                   Lihat situs
                   <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -395,7 +396,8 @@ export function AdminDashboard() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="hidden items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/50 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.12em] text-foreground/45 sm:inline-flex">
+                <ThemeToggle />
+                <span className="hidden items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.12em] text-foreground/45 sm:inline-flex">
                   <span
                     className={`h-1 w-1 rounded-full ${
                       storageMode === "mysql" ? "bg-lime" : "bg-foreground/30"
@@ -408,7 +410,7 @@ export function AdminDashboard() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Lihat situs"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-white/50 text-foreground/55 transition-colors hover:border-foreground/25 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 lg:hidden"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] text-foreground/55 transition-colors hover:border-foreground/25 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 lg:hidden"
                 >
                   <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </a>
@@ -416,7 +418,7 @@ export function AdminDashboard() {
                   type="button"
                   onClick={handleLogout}
                   aria-label="Keluar"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-white/50 text-foreground/55 transition-colors hover:border-rose/40 hover:bg-rose/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 lg:hidden"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] text-foreground/55 transition-colors hover:border-rose/40 hover:bg-rose/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 lg:hidden"
                 >
                   <LogOut aria-hidden="true" className="h-4 w-4" />
                 </button>

@@ -39,6 +39,8 @@ Kalau port `4321` sedang dipakai, Astro otomatis memilih port berikutnya. Lihat 
 
 Login ini masih hardcoded dan hanya untuk pemakaian lokal. Jangan memakai alur ini sebagai autentikasi produksi.
 
+Admin mengikuti preferensi tema situs. Tombol tema tersedia di halaman login dan dashboard, dengan transisi warna sekitar 280 ms saat berganti mode.
+
 ## Alur konten
 
 1. Pilih section di sidebar: Hero, About, Work, Videos, atau Contact.

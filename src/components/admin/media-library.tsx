@@ -61,7 +61,7 @@ function MediaThumb({ upload }: { upload: UploadedFile }) {
   }
 
   return (
-    <span className="flex h-full w-full items-center justify-center bg-white/55 text-foreground/40">
+    <span className="flex h-full w-full items-center justify-center bg-[var(--color-glass)] text-foreground/40">
       {kind === "video" ? (
         <Video aria-hidden="true" className="h-7 w-7" />
       ) : (
@@ -183,7 +183,7 @@ export function MediaLibrary() {
           </h2>
           <p className="mt-4 max-w-[58ch] text-sm leading-relaxed text-foreground/55">
             Upload gambar, video, atau PDF ke folder lokal. File tersimpan di{" "}
-            <code className="rounded bg-white/55 px-1.5 py-0.5 text-[0.9em]">uploads/</code> dan
+            <code className="rounded bg-[var(--color-glass)] px-1.5 py-0.5 text-[0.9em]">uploads/</code> dan
             tidak ikut build statis GitHub Pages.
           </p>
         </div>
@@ -191,7 +191,7 @@ export function MediaLibrary() {
           type="button"
           onClick={() => void refresh()}
           disabled={loading}
-          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
         >
           <RefreshCw aria-hidden="true" className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
           Muat ulang
@@ -227,7 +227,7 @@ export function MediaLibrary() {
           "mt-6 flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-8 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20",
           dragging
             ? "border-foreground/45 bg-lime/20"
-            : "border-[var(--color-border)] bg-white/35 hover:border-foreground/25 hover:bg-white/60",
+            : "border-[var(--color-border)] bg-[var(--color-glass-soft)] hover:border-foreground/25 hover:bg-[var(--color-glass)]",
           uploadingCount > 0 && "cursor-wait"
         )}
       >
@@ -282,7 +282,7 @@ export function MediaLibrary() {
           Memuat media...
         </p>
       ) : uploads.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-[var(--color-border)] bg-white/35 px-6 py-10 text-center">
+        <div className="mt-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-6 py-10 text-center">
           <ImageIcon aria-hidden="true" className="mx-auto h-7 w-7 text-foreground/30" />
           <p className="mt-3 text-sm text-foreground/55">Belum ada file yang diunggah.</p>
         </div>
@@ -297,7 +297,7 @@ export function MediaLibrary() {
                 href={withBase(upload.url)}
                 target="_blank"
                 rel="noreferrer"
-                className="block aspect-[4/3] bg-white/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+                className="block aspect-[4/3] bg-[var(--color-glass-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
               >
                 <MediaThumb upload={upload} />
               </a>
@@ -315,7 +315,7 @@ export function MediaLibrary() {
                   <button
                     type="button"
                     onClick={() => void handleCopy(upload)}
-                    className="inline-flex min-h-9 flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-white/45 px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+                    className="inline-flex min-h-9 flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/55 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
                   >
                     {copiedId === upload.id ? (
                       <Check aria-hidden="true" className="h-3.5 w-3.5" />

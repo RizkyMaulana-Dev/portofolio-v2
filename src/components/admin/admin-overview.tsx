@@ -96,7 +96,7 @@ export function AdminOverview({
             href={withBase("/")}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/50 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:border-foreground/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
           >
             Lihat homepage
             <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -112,10 +112,10 @@ export function AdminOverview({
               key={view.id}
               type="button"
               onClick={() => onNavigate(view.id)}
-              className="group flex min-h-[154px] flex-col justify-between rounded-2xl border border-[var(--color-border)] bg-white/45 p-5 text-left transition-colors hover:border-foreground/25 hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+              className="group flex min-h-[154px] flex-col justify-between rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-5 text-left transition-colors hover:border-foreground/25 hover:bg-[var(--color-glass-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
             >
               <div className="flex items-start justify-between gap-4">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-white/60 text-foreground/60 transition-colors group-hover:border-foreground/20 group-hover:text-foreground">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] text-foreground/60 transition-colors group-hover:border-foreground/20 group-hover:text-foreground">
                   <Icon aria-hidden="true" className="h-4 w-4" />
                 </span>
                 <ArrowUpRight
@@ -140,7 +140,7 @@ export function AdminOverview({
       <section className="mt-10 grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 md:p-6">
           <div className="flex items-start gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/70 text-foreground/60">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-glass-strong)] text-foreground/60">
               {storageMode === "mysql" ? (
                 <Database aria-hidden="true" className="h-4 w-4" />
               ) : (
@@ -168,7 +168,7 @@ export function AdminOverview({
           </div>
         </div>
 
-        <div className="flex flex-col justify-between rounded-2xl border border-[var(--color-border)] bg-white/35 p-5">
+        <div className="flex flex-col justify-between rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-5">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/45">
               Reset
@@ -180,7 +180,7 @@ export function AdminOverview({
           <button
             type="button"
             onClick={onResetAll}
-            className="mt-5 inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-white/55 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-rose/50 hover:bg-rose/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
+            className="mt-5 inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass)] px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/55 transition-colors hover:border-rose/50 hover:bg-rose/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20"
           >
             <RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />
             Reset semua konten

@@ -127,6 +127,7 @@
 
 @layer base {
   :root {
+    --theme-transition-duration: 280ms;
     color-scheme: light;
     font-family: var(--font-ui);
     background-color: var(--color-background);
@@ -183,8 +184,23 @@
   body {
     @apply antialiased;
     transition:
-      background-color 280ms ease,
-      color 280ms ease;
+      background-color var(--theme-transition-duration) ease,
+      color var(--theme-transition-duration) ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Theme changes set this attribute for one transition window. Keeping it
+       temporary means the rest of the site keeps its own motion timings. */
+    html[data-theme-transition],
+    html[data-theme-transition] body,
+    html[data-theme-transition] body *,
+    html[data-theme-transition] body *::before,
+    html[data-theme-transition] body *::after {
+      transition-property:
+        background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
+      transition-duration: var(--theme-transition-duration);
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
   }
 
   .theme-icon-sun {
