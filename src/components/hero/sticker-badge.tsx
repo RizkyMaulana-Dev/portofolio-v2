@@ -44,7 +44,7 @@ export function StickerBadge({ sticker }: { sticker: string }) {
           />
         </defs>
         <text
-          className="text-xs text-muted-foreground/60"
+          className="fill-current text-xs text-muted-foreground/60"
           aria-hidden="true"
         >
           <textPath
@@ -61,7 +61,7 @@ export function StickerBadge({ sticker }: { sticker: string }) {
           y="95"
           textAnchor="middle"
           dominantBaseline="middle"
-          className="text-2xl text-muted-foreground/30"
+          className="fill-current text-2xl text-muted-foreground/30"
           aria-hidden="true"
         >
           ✦
