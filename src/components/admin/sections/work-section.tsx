@@ -4,8 +4,10 @@ import type { Project, WorkAccent, WorkContent, WorkVisual } from "@/content/wor
 import {
   AddButton,
   CommaListField,
+  FileDropField,
   FormShell,
   ItemCard,
+  MediaListField,
   SelectField,
   Subsection,
   TextAreaField,
@@ -169,12 +171,6 @@ export function WorkSection({ section, value, onSave, onReset }: SectionEditorPr
                 value={project.href}
                 onChange={(href) => updateProject(index, { href })}
               />
-              <TextField
-                label="Cover image"
-                value={project.cover ?? ""}
-                onChange={(cover) => updateProject(index, { cover })}
-                hint="Path seperti /images/work/slug/cover.webp. Kosongkan untuk memakai cover abstrak."
-              />
               <SelectField
                 label="Accent"
                 value={project.accent}
@@ -197,6 +193,42 @@ export function WorkSection({ section, value, onSave, onReset }: SectionEditorPr
                 label="Ringkasan"
                 value={project.summary}
                 onChange={(summary) => updateProject(index, { summary })}
+                className="md:col-span-2"
+              />
+              <FileDropField
+                label="Cover image"
+                value={project.cover ?? ""}
+                onChange={(cover) => updateProject(index, { cover: cover || undefined })}
+                accept="image/*"
+                kind="image"
+                hint="Tarik gambar ke area di atas atau tempel path seperti /images/work/slug/cover.webp."
+                className="md:col-span-2"
+              />
+              <FileDropField
+                label="Video utama"
+                value={project.video ?? ""}
+                onChange={(video) => updateProject(index, { video: video || undefined })}
+                accept="video/*"
+                kind="video"
+                hint="Video pendek untuk halaman detail project. Format MP4/WebM/MOV."
+                className="md:col-span-2"
+              />
+              <MediaListField
+                label="Gallery gambar"
+                values={project.gallery ?? []}
+                onChange={(gallery) => updateProject(index, { gallery })}
+                accept="image/*"
+                kind="image"
+                hint="Urutan gambar mengikuti urutan di halaman detail project."
+                className="md:col-span-2"
+              />
+              <MediaListField
+                label="Video tambahan"
+                values={project.videos ?? []}
+                onChange={(videos) => updateProject(index, { videos })}
+                accept="video/*"
+                kind="video"
+                hint="Opsional. Beberapa video bisa ditambahkan di sini."
                 className="md:col-span-2"
               />
             </ItemCard>

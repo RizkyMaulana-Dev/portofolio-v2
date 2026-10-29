@@ -9,6 +9,7 @@ import type {
 import {
   AddButton,
   CommaListField,
+  FileDropField,
   FormShell,
   ItemCard,
   SelectField,
@@ -291,16 +292,29 @@ export function AboutSection({ section, value, onSave, onReset }: SectionEditorP
                 value={certificate.credentialId}
                 onChange={(credentialId) => updateCertificate(index, { credentialId })}
               />
-              <TextField
-                label="Link PDF"
-                value={certificate.href}
-                onChange={(href) => updateCertificate(index, { href })}
-              />
               <SelectField
                 label="Accent"
                 value={certificate.accent}
                 onChange={(accent) => updateCertificate(index, { accent })}
                 options={ACCENT_OPTIONS}
+              />
+              <FileDropField
+                label="Gambar certificate"
+                value={certificate.image ?? ""}
+                onChange={(image) => updateCertificate(index, { image: image || undefined })}
+                accept="image/*"
+                kind="image"
+                hint="Preview kartu certificate. Bisa upload atau tempel path gambar."
+                className="md:col-span-2"
+              />
+              <FileDropField
+                label="File PDF certificate"
+                value={certificate.href}
+                onChange={(href) => updateCertificate(index, { href })}
+                accept="application/pdf"
+                kind="document"
+                hint="Dokumen yang dibuka saat certificate diklik."
+                className="md:col-span-2"
               />
               <SelectField
                 label="Selected badge"

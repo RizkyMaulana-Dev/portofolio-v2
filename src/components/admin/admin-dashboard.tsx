@@ -7,6 +7,7 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Clapperboard,
+  Image as ImageIcon,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -43,6 +44,7 @@ import { HeroSection } from "@/components/admin/sections/hero-section";
 import { VideosSection } from "@/components/admin/sections/videos-section";
 import { WorkSection } from "@/components/admin/sections/work-section";
 import { AdminOverview } from "@/components/admin/admin-overview";
+import { MediaLibrary } from "@/components/admin/media-library";
 import { cloneValue, type AdminView } from "@/components/admin/admin-types";
 
 const NAV: Array<{
@@ -52,6 +54,7 @@ const NAV: Array<{
   icon: LucideIcon;
 }> = [
   { id: "overview", label: "Ringkasan", caption: "Status konten", icon: LayoutDashboard },
+  { id: "media", label: "Media", caption: "Upload & file", icon: ImageIcon },
   { id: "hero", label: "Hero", caption: "Headline & CTA", icon: Sparkles },
   { id: "about", label: "About", caption: "Skill & certificate", icon: UserRound },
   { id: "work", label: "Work", caption: "Project & cover", icon: BriefcaseBusiness },
@@ -431,6 +434,8 @@ export function AdminDashboard() {
                 onResetAll={handleResetAll}
               />
             )}
+
+            {active === "media" && <MediaLibrary />}
 
             <div className={active === "hero" ? "block" : "hidden"}>
               <HeroSection
