@@ -5,7 +5,7 @@ import path from 'node:path';
 import multer from 'multer';
 import { config } from '../config.mjs';
 
-const MIME_EXTENSIONS = new Map([
+export const MIME_EXTENSIONS = new Map([
   ['image/jpeg', '.jpg'],
   ['image/png', '.png'],
   ['image/webp', '.webp'],

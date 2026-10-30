@@ -7,6 +7,7 @@
     "dev": "node scripts/dev.mjs",
     "dev:web": "astro dev",
     "dev:api": "node --watch server/index.mjs",
+    "mcp": "node --import tsx server/mcp/index.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint . --max-warnings 0",
@@ -19,6 +20,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@radix-ui/react-dialog": "^1.1.0",
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-slot": "^1.5.0",
@@ -35,12 +37,12 @@
     "mysql2": "^3.24.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^2.5.0"
+    "tailwind-merge": "^2.5.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@astrojs/react": "^4.4.2",
-
     "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",

@@ -25,6 +25,15 @@ npm run dev
 
 Buka `http://localhost:4321/admin/login` dengan `admin@gmail.com` / `admin123`. Panduan lengkap, endpoint API, draft recovery, upload, dan troubleshooting ada di [docs/LOCAL_CMS.md](docs/LOCAL_CMS.md).
 
+### MCP server untuk agen AI
+
+CMS yang sama juga tersedia sebagai MCP server lokal berbasis stdio, sehingga agen AI bisa membaca section, mengedit item, upload file, dan publish lewat draft. Konfigurasi OpenCode project-local sudah ada di [`opencode.json`](opencode.json); detail tool dan alur draft/publish ada di [docs/LOCAL_CMS.md#mcp-server-untuk-agen-ai](docs/LOCAL_CMS.md#mcp-server-untuk-agen-ai).
+
+```bash
+opencode mcp list
+# portfolio-cms connected
+```
+
 ## Build
 
 ```bash
